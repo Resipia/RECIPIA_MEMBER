@@ -16,11 +16,11 @@ public class MemberFile extends UpdateDateTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_file_id", nullable = false)
+    @Column(name = "member_file_id", nullable = false)
     private Long id;                // 회원 파일 pk
 
     @ToString.Exclude
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;              // 회원 pk
 

@@ -17,11 +17,11 @@ public class MemberHistoryLog extends CreateDateTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_hist_log_id", nullable = false)
+    @Column(name = "member_hist_log_id", nullable = false)
     private Long id;            // 회원 히스토리 로그 pk
 
     @ToString.Exclude
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;          // 회원 pk
 

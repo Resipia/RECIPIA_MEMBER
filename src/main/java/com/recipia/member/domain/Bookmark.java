@@ -20,7 +20,7 @@ public class Bookmark extends CreateDateTime {
     private Long id;            // 북마크 pk
 
     @ToString.Exclude
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;          // 회원 pk
 

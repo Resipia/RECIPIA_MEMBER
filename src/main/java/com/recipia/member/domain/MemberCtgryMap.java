@@ -16,11 +16,11 @@ public class MemberCtgryMap extends UpdateDateTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_ctgry_map_id", nullable = false)
+    @Column(name = "member_ctgry_map_id", nullable = false)
     private Long id;        // 회원 카테고리 매핑 pk
 
     @ToString.Exclude
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;      // 회원 pk
 

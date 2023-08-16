@@ -15,11 +15,11 @@ public class MemberBadgeMap {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_badge_map_id", nullable = false)
+    @Column(name = "member_badge_map_id", nullable = false)
     private Long id;                  // 회원 뱃지 매핑 pk
 
     @ToString.Exclude
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;                // 회원 pk
 

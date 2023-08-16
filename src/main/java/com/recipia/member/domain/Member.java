@@ -19,7 +19,7 @@ public class Member extends UpdateDateTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "member_id", nullable = false)
     private Long id;                // 회원 pk
 
     @Column(name = "id", nullable = false)

@@ -21,12 +21,12 @@ public class Follow extends CreateDateTime {
     private Long id;            // 팔로우 pk
 
     @ToString.Exclude
-    @JoinColumn(name = "follower_user_id", nullable = false)
+    @JoinColumn(name = "follower_member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member followerMember;  // 팔로워 회원 pk
 
     @ToString.Exclude
-    @JoinColumn(name = "following_user_id", nullable = false)
+    @JoinColumn(name = "following_member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member followingMember; // 팔로잉 회원 pk
 

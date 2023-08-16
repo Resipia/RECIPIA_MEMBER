@@ -16,16 +16,16 @@ public class MemberBlock extends CreateDateTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_block_id", nullable = false)
+    @Column(name = "member_block_id", nullable = false)
     private Long id;        // 회원 차단 pk
 
     @ToString.Exclude
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;      // 회원 pk
 
     @ToString.Exclude
-    @JoinColumn(name = "block_user_id", nullable = false)
+    @JoinColumn(name = "block_member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Member blockMember; // 차단 회원 pk
 
