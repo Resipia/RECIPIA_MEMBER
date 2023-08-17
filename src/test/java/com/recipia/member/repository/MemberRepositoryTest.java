@@ -18,7 +18,7 @@ class MemberRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
 
-    @DisplayName("데이터베이스에 멤버 엔티티를 저장하면 저장성공한 엔티티를 반환받는다.시발거")
+    @DisplayName("데이터베이스에 멤버 엔티티를 저장하면 저장성공한 엔티티를 반환받는다.")
     @Transactional
     @Test
     void memberSave() {
