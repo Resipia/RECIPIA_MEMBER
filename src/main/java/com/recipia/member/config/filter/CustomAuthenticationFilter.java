@@ -6,19 +6,27 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.recipia.member.dto.MemberDto;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
+import com.recipia.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    // ObjectMapper는 스레드에 안전하여 한 번만 생성하고 재사용하는 것이 효율적이다.
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+    /**
+     * 생성자. AuthenticationManager를 인자로 받아 상위 클래스에 전달한다.
+     * @param authenticationManager 스프링 시큐리티의 인증을 처리하는 관리 객체
+     */
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
@@ -50,17 +58,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
      * HttpServletRequest에서 MemberDto에 관련된 데이터 추출하기
      */
     private UsernamePasswordAuthenticationToken getAuthRequest (HttpServletRequest request) {
-
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
-            objectMapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
-
             MemberDto memberDto = objectMapper.readValue(request.getInputStream(), MemberDto.class);
-
             return new UsernamePasswordAuthenticationToken(memberDto.username(), memberDto.password());
-        } catch (UsernameNotFoundException e) {
-            throw new UsernameNotFoundException(e.getMessage());
         } catch (Exception e) {
             throw new MemberApplicationException(ErrorCode.IO_ERROR);
         }
