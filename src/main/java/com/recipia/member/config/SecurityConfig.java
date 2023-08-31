@@ -1,9 +1,11 @@
 package com.recipia.member.config;
 
 import com.recipia.member.config.filter.CustomAuthenticationFilter;
+import com.recipia.member.config.filter.JwtAuthorizationFilter;
 import com.recipia.member.config.handler.CustomAuthFailureHandler;
 import com.recipia.member.config.handler.CustomAuthSuccessHandler;
 import com.recipia.member.config.handler.CustomAuthenticationProvider;
+import com.recipia.member.service.security.CustomUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +54,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+        // fixme: cors.setAllowedOrigins(Arrays.asList("<YOUR_DOMAIN>")); // 예: "https://your-ios-app.com"
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("X-Requested-With", "Content-Type", "Authorization", "X-XSRF-token"));
@@ -75,7 +78,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                                new AntPathRequestMatcher("/resources/**")
+                                new AntPathRequestMatcher("/resources/**"),
+                                new AntPathRequestMatcher("/login")
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -150,12 +154,12 @@ public class SecurityConfig {
     }
 
     /**
-     * "JWT 토큰을 통하여서 사용자를 인증한다." -> 이 메서드는 JWT 인증 필터를 생성한다.
+     * "JWT 토큰을 통해 사용자를 인증한다." -> 이 메서드는 JWT 인증 필터를 생성한다.
      * JWT 인증 필터는 요청 헤더의 JWT 토큰을 검증하고, 토큰이 유효하면 토큰에서 사용자의 정보와 권한을 추출하여 SecurityContext에 저장한다.
      */
     @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter(CustomUserDetailsService userDetailsService) {
-        return new JwtAuthorizationFilter(userDetailsService);
+    public JwtAuthorizationFilter jwtAuthorizationFilter() {
+        return new JwtAuthorizationFilter();
     }
 
     /**
