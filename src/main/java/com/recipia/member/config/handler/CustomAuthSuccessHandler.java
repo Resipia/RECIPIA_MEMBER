@@ -47,7 +47,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
 
         HashMap<String, Object> responseMap = new HashMap<>();
 
-        responseMap.put("memberInfo", memberDtoMap);
+//        responseMap.put("memberInfo", memberDtoMap);
         responseMap.put("resultCode", 200);
         responseMap.put("failMessage", null);
 
