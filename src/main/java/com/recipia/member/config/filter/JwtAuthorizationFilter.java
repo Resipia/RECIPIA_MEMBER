@@ -24,6 +24,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     /**
      * 문자열 리터럴은 상수로 선언하여 사용하는 것이 좋다. 이렇게 하면 코드의 가독성이 향상되며, 나중에 변경이 필요할 때 한 곳에서만 수정하면 된다.
      */
+    // fixme: 우리는 지금 cookie를 사용하지 않으니까 수정
     private static final String JWT_COOKIE_NAME = "jwt";
 
 
