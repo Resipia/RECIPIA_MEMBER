@@ -1,6 +1,7 @@
 package com.recipia.member.domain;
 
 import com.recipia.member.domain.auditingfield.UpdateDateTime;
+import com.recipia.member.dto.MemberDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class Member extends UpdateDateTime {
     @Column(name = "member_id", nullable = false)
     private Long id;                // 회원 pk
 
-    @Column(name = "id", nullable = false)
+    @Column(name = "username", nullable = false)
     private String username;          // 회원 로그인 id
 
     @Column(name = "password", nullable = false)
@@ -109,6 +110,10 @@ public class Member extends UpdateDateTime {
     // 생성자 factory method of 선언
     public static Member of(String username, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
         return new Member(username, password, fullName, nickname, introduction, telNo, address1, address2, email, protectionYn, collectionYn);
+    }
+
+    public static Member dtoToEntity(MemberDto dto) {
+        return of(dto.username(), dto.password(), dto.fullName(), dto.nickname(), dto.introduction(), dto.telNo(), dto.address1(), dto.address2(), dto.email(), dto.protectionYn(), dto.collectionYn());
     }
 
 
