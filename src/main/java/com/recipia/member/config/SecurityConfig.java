@@ -5,7 +5,8 @@ import com.recipia.member.config.filter.JwtAuthorizationFilter;
 import com.recipia.member.config.handler.CustomAuthFailureHandler;
 import com.recipia.member.config.handler.CustomAuthSuccessHandler;
 import com.recipia.member.config.handler.CustomAuthenticationProvider;
-import com.recipia.member.service.security.CustomUserDetailsService;
+import com.recipia.member.service.JwtService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -36,8 +36,11 @@ import java.util.Collections;
 import java.util.function.Supplier;
 
 @Slf4j
+@RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
+
+    private final JwtService jwtService;
 
 
     /**
@@ -141,7 +144,7 @@ public class SecurityConfig {
      */
     @Bean
     public CustomAuthSuccessHandler customLoginSuccessHandler() {
-        return new CustomAuthSuccessHandler();
+        return new CustomAuthSuccessHandler(jwtService);
     }
 
     /**
