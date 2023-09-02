@@ -42,12 +42,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         // 사용자 정보 가져오기
         MemberDto memberDto = ((SecurityUserDetailsDto) authentication.getPrincipal()).getMemberDto();
 
-        // 사용자 정보를 맵으로 변환
-        HashMap<String, Object> memberDtoMap = objectMapper.readValue(objectMapper.writeValueAsString(memberDto), HashMap.class);
-
         HashMap<String, Object> responseMap = new HashMap<>();
-
-//        responseMap.put("memberInfo", memberDtoMap);
         responseMap.put("resultCode", 200);
         responseMap.put("failMessage", null);
 
