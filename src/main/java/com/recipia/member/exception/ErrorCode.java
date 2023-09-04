@@ -14,6 +14,7 @@ public enum ErrorCode {
     // 1.0
     USER_NOT_FOUND(404, "1001", "유저를 찾을수 없습니다."),
     INVALID_PASSWORD(404, "1002", "패스워드가 틀렸습니다."),
+    USERNAME_PASSWORD_AUTHENTICATION_TOKEN_ERROR(404, "1003", "attemptAuthentication 인증 에러"),
     //    INVALID_PERMISSION(404, "1003", "접근권한이 없습니다."),
 
     // JWT
@@ -32,6 +33,11 @@ public enum ErrorCode {
     FILE_NOT_FOUND(404, "8002", "파일 경로에 파일이 존재하지 않습니다."),
     FILE_DUPLICATED(404, "8003", "중복된 파일입니다."),
     DB_ERROR(500, "8004", "DB ERROR"),
+
+
+    // COMMON 8.0
+    IO_ERROR(404, "9005", "INPUT/OUTPUT ERROR"),
+
 
     // EXTERNAL 9.0
     RECIPE_SERVICE_ERROR(500, "9002", "RECIPE 서비스 에러"),

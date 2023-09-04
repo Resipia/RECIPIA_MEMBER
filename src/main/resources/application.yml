@@ -5,22 +5,22 @@ logging:
     org.hibernate.orm.jdbc.bind: trace
 
 spring:
-#  datasource:
-#    url: ${LOCAL_DB_URL}
-#    username: ${LOCAL_DB_USERNAME}
-#    password: ${LOCAL_DB_PASSWORD}
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-
   datasource:
-    url: jdbc:h2:mem:~/RecipiaMember
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: ${LOCAL_DB_URL}
+    username: ${LOCAL_DB_USERNAME}
+    password: ${LOCAL_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#  datasource:
+#    url: jdbc:h2:mem:~/RecipiaMember
+#    driver-class-name: org.h2.Driver
+#    username: sa
+#    password:
 
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     open-in-view: false
     show-sql: true
     properties:
