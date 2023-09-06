@@ -5,6 +5,7 @@ import com.recipia.member.config.filter.JwtAuthorizationFilter;
 import com.recipia.member.config.handler.CustomAuthFailureHandler;
 import com.recipia.member.config.handler.CustomAuthSuccessHandler;
 import com.recipia.member.config.handler.CustomAuthenticationProvider;
+import com.recipia.member.config.jwt.TokenValidator;
 import com.recipia.member.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ import java.util.function.Supplier;
 public class SecurityConfig {
 
     private final JwtService jwtService;
-
+    private final TokenValidator tokenValidator;
 
     /**
      * 이 메서드는 정적 자원에 대해 보안을 적용하지 않도록 설정한다.
@@ -165,7 +166,7 @@ public class SecurityConfig {
      */
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter();
+        return new JwtAuthorizationFilter(tokenValidator);
     }
 
     /**

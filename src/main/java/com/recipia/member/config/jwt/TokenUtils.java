@@ -77,30 +77,20 @@ public class TokenUtils {
         return Pair.of(builder.compact(), expiryDate);
     }
 
-    /**
-     * 토큰을 기반으로 사용자의 정보를 반환해주는 메서드
-     */
-    public boolean isValidToken(String token, String tokenType) {
-        try {
-            Claims claims = getClaimsFromToken(token);
-            String type = claims.get("type", String.class);
-            if (!type.equals(tokenType)) {
-                return false;
-            }
-            log.info("isValidToken - Token is valid for username: " + claims.get(USERNAME));
-            return true;
-        } catch (ExpiredJwtException expiredJwtException) {
-            log.error("isValidToken - Token Expired", expiredJwtException);
-            return false;
-        } catch (JwtException jwtException) {
-            log.error("isValidToken - Token Tampered", jwtException);
-            return false;
-        } catch (NullPointerException npe) {
-            log.error("isValidToken - Token is null", npe);
-            return false;
-        }
+    public static String getUsernameFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.get(USERNAME, String.class);
     }
 
+    public static String getNicknameFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.get(NICKNAME, String.class);
+    }
+
+    public static String getRoleFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.get(ROLE, String.class);
+    }
 
     /**
      * 사용자 정보를 기반으로 클래임을 생성해주는 메서드
@@ -122,7 +112,7 @@ public class TokenUtils {
      * 토큰 정보를 기반으로 Claims 정보를 반환받는 메서드
      * @return Claims : Claims
      */
-    private Claims getClaimsFromToken(String token) {
+    public static Claims getClaimsFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key)
                 .build().parseClaimsJws(token).getBody();
     }
