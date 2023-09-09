@@ -29,6 +29,19 @@ spring:
         default_batch_fetch_size: 10
         highlight_sql: true
 
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      group-id: recipia
+
+
+
   sql.init.mode: always
 
 ---

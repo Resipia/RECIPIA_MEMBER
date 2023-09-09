@@ -61,6 +61,11 @@ dependencies {
 
 	implementation 'org.json:json:20210307'
 
+	// kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+
 }
 
 tasks.named('test') {
