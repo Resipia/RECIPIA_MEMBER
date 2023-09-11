@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+/**
+ * kafka - Consumer 클래스
+ * Producer가 보낸 정보를 받는다.
+ */
 @RequiredArgsConstructor
 @Service
 public class MemberKafkaConsumer {
