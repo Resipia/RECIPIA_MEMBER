@@ -1,6 +1,7 @@
 package com.recipia.member.domain;
 
 import com.recipia.member.domain.auditingfield.UpdateDateTime;
+import com.recipia.member.domain.constant.MemberStatus;
 import com.recipia.member.dto.MemberDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -28,6 +29,10 @@ public class Member extends UpdateDateTime {
 
     @Column(name = "password", nullable = false)
     private String password;        // 회원 비밀번호
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;        // 회원 등록 상태
 
     @Column(name = "full_name", nullable = false)
     private String fullName;        // 회원이름
@@ -93,7 +98,7 @@ public class Member extends UpdateDateTime {
     private List<MemberBadgeMap> badgeMapList = new ArrayList<>();    // 회원 뱃지 매핑 리스트
 
 
-    private Member(String username, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
+    private Member(String username, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, MemberStatus status) {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
@@ -105,15 +110,16 @@ public class Member extends UpdateDateTime {
         this.email = email;
         this.protectionYn = protectionYn;
         this.collectionYn = collectionYn;
+        this.status = status;
     }
 
     // 생성자 factory method of 선언
-    public static Member of(String username, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
-        return new Member(username, password, fullName, nickname, introduction, telNo, address1, address2, email, protectionYn, collectionYn);
+    public static Member of(String username, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, MemberStatus status) {
+        return new Member(username, password, fullName, nickname, introduction, telNo, address1, address2, email, protectionYn, collectionYn, status);
     }
 
     public static Member dtoToEntity(MemberDto dto) {
-        return of(dto.username(), dto.password(), dto.fullName(), dto.nickname(), dto.introduction(), dto.telNo(), dto.address1(), dto.address2(), dto.email(), dto.protectionYn(), dto.collectionYn());
+        return of(dto.username(), dto.password(), dto.fullName(), dto.nickname(), dto.introduction(), dto.telNo(), dto.address1(), dto.address2(), dto.email(), dto.protectionYn(), dto.collectionYn(), dto.status());
     }
 
 
