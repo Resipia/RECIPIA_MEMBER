@@ -65,7 +65,21 @@ dependencies {
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 
 
+	// zipkin
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
+	// kafka, zipkin 연동용
+	implementation 'io.zipkin.brave:brave-instrumentation-kafka-clients'
 }
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.3"
+	}
+}
+
 
 tasks.named('test') {
 	useJUnitPlatform()

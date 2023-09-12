@@ -3,6 +3,11 @@ logging:
     com.recipia.member: debug
     org.springframework.web.servlet: debug
     org.hibernate.orm.jdbc.bind: trace
+    org.springframework.cloud.sleuth: info
+
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+
 
 spring:
   datasource:
@@ -41,7 +46,17 @@ spring:
       group-id: recipia
 
 
-  sql.init.mode: always
+  application:
+    name: member
+
+  zipkin:
+    base-url: http://localhost:9411/
+
+  sleuth:
+    enabled: true
+    sampler:
+      probability: 1.0
+
 
 server:
   port: 8081
