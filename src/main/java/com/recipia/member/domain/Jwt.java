@@ -24,7 +24,7 @@ public class Jwt {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;          // 회원 pk
 
-    @Column(name = "refresh_token", nullable = false)
+    @Column(name = "refresh_token", nullable = false, length = 500)
     private String refreshToken;
 
     @Column(name = "expired_dttm", nullable = false)
