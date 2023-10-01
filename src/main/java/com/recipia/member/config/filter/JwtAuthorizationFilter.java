@@ -51,12 +51,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     // 토큰에서 사용자 정보를 추출하여 UsernamePasswordAuthenticationToken 객체로 반환하는 메서드
     private UsernamePasswordAuthenticationToken extractUserDetails(String token) {
         // JWT 토큰에서 사용자 정보를 추출
-        String username = TokenUtils.getUsernameFromToken(token);
+        Long memberId = TokenUtils.getMemberIdFromToken(token);
         // 사용자의 권한을 토큰에서 직접 추출
         String role = TokenUtils.getRoleFromToken(token);
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
 
-        return new UsernamePasswordAuthenticationToken(username, null, authorities);
+        // todo: 원래 username 넣어줬는데 지금 memberId로 수정
+        return new UsernamePasswordAuthenticationToken(memberId, null, authorities);
     }
 
 }

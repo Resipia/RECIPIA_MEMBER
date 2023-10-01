@@ -30,7 +30,7 @@ public class TokenUtils {
     private static final Key key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
     private static final String JWT_TYPE = "JWT";
     private static final String ALGORITHM = "HS256";
-    private static final String USERNAME = "username";
+    private static final String MEMBER_ID = "memberId";
     private static final String NICKNAME = "nickname";
     private static final String ROLE = "role";
 
@@ -77,9 +77,9 @@ public class TokenUtils {
         return Pair.of(builder.compact(), expiryDate);
     }
 
-    public static String getUsernameFromToken(String token) {
+    public static Long getMemberIdFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
-        return claims.get(USERNAME, String.class);
+        return claims.get(MEMBER_ID, Long.class);
     }
 
     public static String getNicknameFromToken(String token) {
@@ -99,7 +99,7 @@ public class TokenUtils {
      */
     private static Map<String, Object> createClaims(MemberDto memberDto, String tokenType) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(USERNAME, memberDto.username());
+        claims.put(MEMBER_ID, memberDto.id());
         claims.put(NICKNAME, memberDto.nickname());
         claims.put("type", tokenType); // Token 종류를 저장
         // fixme: 추후에는 아래 주석 해제
