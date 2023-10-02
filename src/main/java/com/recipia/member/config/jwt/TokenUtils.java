@@ -31,6 +31,7 @@ public class TokenUtils {
     private static final String JWT_TYPE = "JWT";
     private static final String ALGORITHM = "HS256";
     private static final String MEMBER_ID = "memberId";
+    private static final String USERNAME = "username";
     private static final String NICKNAME = "nickname";
     private static final String ROLE = "role";
 
@@ -100,6 +101,7 @@ public class TokenUtils {
     private static Map<String, Object> createClaims(MemberDto memberDto, String tokenType) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(MEMBER_ID, memberDto.id());
+        claims.put(USERNAME, memberDto.username()); // 이걸 넣어주면 해결이긴 하다.
         claims.put(NICKNAME, memberDto.nickname());
         claims.put("type", tokenType); // Token 종류를 저장
         // fixme: 추후에는 아래 주석 해제
