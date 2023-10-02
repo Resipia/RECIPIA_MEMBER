@@ -42,7 +42,7 @@ public class MemberService {
                     try {
                         // Kafka에 "member-updated" 토픽으로 메시지 전송
                         kafkaTemplate.send("member-updated", memberDto.username()).get();
-                        log.info("Successfully sent message: {}", memberDto.username()); // 성공 로그
+                        log.debug("[kafka] member-updated 이벤트 발행, 업데이트한 유저 아이디 : {}", memberDto.username()); // 성공 로그
                     } catch (Exception e) {
                         log.error("Failed to send message: {}", e.getMessage()); // 실패 로그
                     }
@@ -51,7 +51,7 @@ public class MemberService {
                     if (ex != null) {
                         log.error("An exception occurred: {}", ex.getMessage()); // 예외 발생시 로그
                     } else {
-                        log.info("Operation successfully completed."); // 성공시 로그
+                        log.debug("[kafka] member-updated 이벤트 발행완료"); // 성공시 로그
                     }
                 });
     }

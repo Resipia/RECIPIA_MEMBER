@@ -33,7 +33,7 @@ public class TopicLister {
 
             // 각 토픽 이름을 로그로 출력한다.
             for (String topicName : topicNames) {
-                log.info("발견된 토픽: {}", topicName);
+                log.debug("발견된 토픽: {}", topicName);
             }
         } catch (InterruptedException | ExecutionException e) {
             // 예외 상황에 대한 로깅을 한다.
