@@ -13,20 +13,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/member")
 @RestController
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/getUser")
-    public ResponseEntity<ResponseDto<MemberDto>> getUser(
-            @RequestParam("userId") Long userId
+    @GetMapping("/getMember")
+    public ResponseEntity<ResponseDto<MemberDto>> getMember(
+            @RequestParam("username") String username
     ) {
 
-        MemberDto user = memberService.findMember(userId);
-        return ResponseEntity.ok(ResponseDto.success(user));
+        MemberDto member = memberService.findMember(username);
+        return ResponseEntity.ok(ResponseDto.success(member));
     }
+
+    // todo: member의 nickname이 변경되면 recipe서버나 다른 서버에 kafka이벤트를 발행해서 보낸다.
+
 
 
 
