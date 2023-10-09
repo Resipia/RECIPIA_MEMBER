@@ -13,6 +13,7 @@ import java.util.Map;
 
 /**
  * Kafka의 topic을 관리하는 클래스
+ * todo: 앞으로는 producerm, consumer 두개의 클래스를 통해 관리해야 하므로 이 클래스는 수정이 필요하다.
  */
 @Configuration
 public class KafkaTopicConfig {
