@@ -36,6 +36,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             token = token.substring(7); // Remove "Bearer " prefix
 
             if (validateToken(token)) {
+                //todo: 여길를 안타네?
                 UsernamePasswordAuthenticationToken authenticationToken = extractUserDetails(token);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
@@ -45,6 +46,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     // 토큰의 유효성을 검증하는 메서드
     private boolean validateToken(String token) {
+        log.info("start");
         return tokenValidator.isValidToken(token, ACCESS_TOKEN_TYPE);
     }
 
