@@ -36,7 +36,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             token = token.substring(7); // Remove "Bearer " prefix
 
             if (validateToken(token)) {
-                //todo: 여길를 안타네?
                 UsernamePasswordAuthenticationToken authenticationToken = extractUserDetails(token);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
