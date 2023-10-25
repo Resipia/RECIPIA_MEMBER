@@ -57,7 +57,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String role = TokenUtils.getRoleFromToken(token);
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
 
-        // todo: 원래 username 넣어줬는데 지금 memberId로 수정
+        // 원래 username 넣어줬는데 지금 memberId로 수정
         return new UsernamePasswordAuthenticationToken(memberId, null, authorities);
     }
 
