@@ -10,3 +10,4 @@ ADD ${JAR_FILE} member-api.jar
 
 # Run the JAR file
 ENTRYPOINT ["java", "-jar", "/member-api.jar"]
+
