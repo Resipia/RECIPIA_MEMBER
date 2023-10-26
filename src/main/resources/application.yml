@@ -10,17 +10,17 @@ logging:
 
 
 spring:
-  datasource:
-    url: ${LOCAL_DB_URL}
-    username: ${LOCAL_DB_USERNAME}
-    password: ${LOCAL_DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
 #  datasource:
-#    url: jdbc:h2:mem:~/RecipiaMember
-#    driver-class-name: org.h2.Driver
-#    username: sa
-#    password:
+#    url: ${LOCAL_DB_URL}
+#    username: ${LOCAL_DB_USERNAME}
+#    password: ${LOCAL_DB_PASSWORD}
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  datasource:
+    url: jdbc:h2:mem:~/RecipiaMember
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
 
   jpa:
     defer-datasource-initialization: true
@@ -35,27 +35,27 @@ spring:
         highlight_sql: true
 
 
-  kafka:
-    bootstrap-servers: localhost:9095
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    consumer:
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      group-id: recipia
+#  kafka:
+#    bootstrap-servers: localhost:9095
+#    producer:
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#    consumer:
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      group-id: recipia
 
 
   application:
     name: member
 
-  zipkin:
-    base-url: http://localhost:9411/
-
-  sleuth:
-    enabled: true
-    sampler:
-      probability: 1.0
+#  zipkin:
+#    base-url: http://localhost:9411/
+#
+#  sleuth:
+#    enabled: true
+#    sampler:
+#      probability: 1.0
 
 
 server:
