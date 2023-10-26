@@ -16,11 +16,11 @@ public class MemberApplication {
 	/**
 	 * 애플리케이션 시작 시에 TopicLister의 listTopics() 메서드가 실행되어 Kafka 토픽 목록을 출력한다.
 	 */
-	@Bean
-	public CommandLineRunner run(TopicLister topicLister) {
-		return args -> {
-			topicLister.listTopics();
-		};
-	}
+//	@Bean
+//	public CommandLineRunner run(TopicLister topicLister) {
+//		return args -> {
+//			topicLister.listTopics();
+//		};
+//	}
 
 }

@@ -19,17 +19,19 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/getMember")
-    public ResponseEntity<ResponseDto<String>> getMember(
-            @RequestParam("username") String username
-    ) {
+//    @GetMapping("/getMember")
+//    public ResponseEntity<ResponseDto<String>> getMember(
+//            @RequestParam("username") String username
+//    ) {
+//
+//        String result = memberService.memberUpdateEventPublish(username);
+//        return ResponseEntity.ok(ResponseDto.success(result));
+//    }
 
-        String result = memberService.memberUpdateEventPublish(username);
-        return ResponseEntity.ok(ResponseDto.success(result));
+    @GetMapping("/test")
+    public String test() {
+        return "aws test success";
     }
-
-    // todo: member의 nickname이 변경되면 recipe서버나 다른 서버에 kafka이벤트를 발행해서 보낸다.
-
 
 
 
