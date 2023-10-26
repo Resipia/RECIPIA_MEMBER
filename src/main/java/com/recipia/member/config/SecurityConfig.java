@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -96,6 +97,29 @@ public class SecurityConfig {
                 .build();
 
     }
+
+
+        @Bean
+        public SecurityFilterChain basicSecurityFilterChain(HttpSecurity http) throws Exception {
+            return http
+                    .authorizeHttpRequests(authz -> authz
+                            .anyRequest().authenticated()
+                    ).httpBasic(Customizer.withDefaults())
+                    .build();
+        }
+
+    @Bean
+    public SecurityFilterChain formSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(authz -> authz
+                        .anyRequest().authenticated()
+                ).formLogin(Customizer.withDefaults());
+        return http.build();
+    }
+
+
+
+
 
 
     /**

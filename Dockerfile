@@ -1,5 +1,5 @@
-# Use OpenJDK 17 as the base image
-FROM openjdk:17-jdk-alpine
+# Use Amazon Corretto 17 as the base image
+FROM amazoncorretto:17-al2-jdk
 
 # Make port 8081 available to the world outside this container
 EXPOSE 8081
