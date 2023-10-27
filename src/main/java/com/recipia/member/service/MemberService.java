@@ -1,18 +1,9 @@
 package com.recipia.member.service;
 
-import com.recipia.member.dto.MemberDto;
-import com.recipia.member.exception.ErrorCode;
-import com.recipia.member.exception.MemberApplicationException;
 import com.recipia.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
 
 @Slf4j
 @Service

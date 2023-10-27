@@ -60,18 +60,18 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-	// kafka
-	implementation 'org.springframework.kafka:spring-kafka'
-	testImplementation 'org.springframework.kafka:spring-kafka-test'
-
-
-	// zipkin
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
-	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
-
-	// kafka, zipkin 연동용
-	implementation 'io.zipkin.brave:brave-instrumentation-kafka-clients'
+//	// kafka
+//	implementation 'org.springframework.kafka:spring-kafka'
+//	testImplementation 'org.springframework.kafka:spring-kafka-test'
+//
+//
+//	// zipkin
+//	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+//	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+//
+//	// kafka, zipkin 연동용
+//	implementation 'io.zipkin.brave:brave-instrumentation-kafka-clients'
 }
 
 dependencyManagement {

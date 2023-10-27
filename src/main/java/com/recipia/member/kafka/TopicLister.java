@@ -2,12 +2,7 @@ package com.recipia.member.kafka;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.admin.AdminClient;
-import org.apache.kafka.clients.admin.ListTopicsResult;
 import org.springframework.stereotype.Component;
-
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Kafka 토픽을 나열하는 클래스이다.

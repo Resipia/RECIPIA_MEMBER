@@ -87,7 +87,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 new AntPathRequestMatcher("/resources/**"),
-                                new AntPathRequestMatcher("/login")
+                                new AntPathRequestMatcher("/login"),
+                                new AntPathRequestMatcher("/member/test")
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
