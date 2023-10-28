@@ -1,0 +1,6 @@
+[
+  {
+    "name": "recipia-member-alb",
+    "imageUri": "473709498430.dkr.ecr.ap-northeast-2.amazonaws.com/recipia-repository:latest"
+  }
+]
