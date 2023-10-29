@@ -5,6 +5,7 @@ FROM amazoncorretto:17-al2-jdk
 EXPOSE 8081
 
 
+
 # Specify the built JAR file path and add it to the container as member-api.jar
 ARG JAR_FILE=build/libs/member-0.0.1-SNAPSHOT.jar
 ADD ${JAR_FILE} member-api.jar
