@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 class MemberRepositoryTest {
 
-    @Autowired
-    private MemberRepository memberRepository;
-
+//    @Autowired
+//    private MemberRepository memberRepository;
+//
 //    @DisplayName("데이터베이스에 멤버 엔티티를 저장하면 저장성공한 엔티티를 반환받는다.")
 //    @Transactional
 //    @Test
@@ -29,8 +29,8 @@ class MemberRepositoryTest {
 //        assertThat(savedMember).isInstanceOf(Member.class);
 //
 //    }
-
-
+//
+//
 //    private Member createMember() {
 //        return Member.of(
 //                "yjkim",
