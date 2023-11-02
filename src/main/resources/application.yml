@@ -16,12 +16,6 @@ spring:
     username: {username}
     password: {password}
 
-#  datasource:
-#    url: jdbc:h2:mem:~/RecipiaMember
-#    driver-class-name: org.h2.Driver
-#    username: sa
-#    password:
-
   jpa:
     defer-datasource-initialization: true
     hibernate:
