@@ -51,6 +51,9 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	// postgreSQL
+	runtimeOnly 'org.postgresql:postgresql'
+
 	// dev + code
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
