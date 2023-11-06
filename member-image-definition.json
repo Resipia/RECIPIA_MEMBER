@@ -1,6 +1,6 @@
 [
   {
     "name": "recipia-member-container",
-    "imageUri": "473709498430.dkr.ecr.ap-northeast-2.amazonaws.com/recipia-repository:latest"
+    "imageUri": "473709498430.dkr.ecr.ap-northeast-2.amazonaws.com/recipia-member:latest"
   }
 ]
