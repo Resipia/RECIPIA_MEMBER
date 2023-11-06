@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import software.amazon.awssdk.services.sns.model.PublishResponse;
 
 import java.util.Map;
 
@@ -19,8 +20,12 @@ public class MessageController {
 
     @PostMapping("/publish")
     public ResponseEntity<String> publishMessage(@RequestBody Map<String, Object> messageMap) {
-        snsService.publishNicknameToTopic(messageMap);
-        return ResponseEntity.ok("Message published to SNS topic.");
+        // 1. SnsService를 사용해서 메시지 발행
+        PublishResponse response =  snsService.publishNicknameToTopic(messageMap);
+
+        // 2. 발행 결과를 HTTP 응답으로 반환
+        return ResponseEntity.ok().body(response.messageId());
+
     }
 
 }
