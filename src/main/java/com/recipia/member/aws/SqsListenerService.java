@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SqsListenerService {
@@ -26,8 +27,8 @@ public class SqsListenerService {
             // Assuming the "Message" is also a JSON string, we parse it to print as JSON object
             JsonNode message = objectMapper.readTree(messageContent);
 
-            System.out.println("Topic ARN: " + topicArn);
-            System.out.println("Message: " + message.toString());
+            log.info("Topic ARN: {}", topicArn);
+            log.info("Message:  {}", message.toString());
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Error parsing message JSON", e);
