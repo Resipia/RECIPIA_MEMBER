@@ -13,7 +13,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${MEMBER_DB_URL}
-    username: ${DB_MASTSER_USERNAME}
+    username: ${DB_MASTER_USERNAME}
     password: ${DB_MASTER_PASSWORD}
 
   jpa:
