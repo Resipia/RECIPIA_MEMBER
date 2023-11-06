@@ -61,6 +61,11 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
+	// AWS
+	implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.1")
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sns'
+
 //	// kafka
 //	implementation 'org.springframework.kafka:spring-kafka'
 //	testImplementation 'org.springframework.kafka:spring-kafka-test'

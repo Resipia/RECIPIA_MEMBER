@@ -19,7 +19,7 @@ spring:
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     open-in-view: false
     show-sql: true
     properties:
@@ -42,6 +42,21 @@ spring:
 
   application:
     name: member
+
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      region:
+        static: ${REGION}
+      sns:
+        topics:
+          nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:sns-test
+#          topic1: arn:aws:sns:${REGION}:${ACCOUNT_ID}:topic1
+      sqs:
+        nickname-sqs-name: sqs-test
+
 
 #  zipkin:
 #    base-url: http://localhost:9411/
