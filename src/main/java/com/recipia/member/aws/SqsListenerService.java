@@ -27,6 +27,7 @@ public class SqsListenerService {
             // Assuming the "Message" is also a JSON string, we parse it to print as JSON object
             JsonNode message = objectMapper.readTree(messageContent);
 
+            
             log.info("Topic ARN: {}", topicArn);
             log.info("Message:  {}", message.toString());
         } catch (IOException e) {
