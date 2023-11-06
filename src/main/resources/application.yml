@@ -12,9 +12,9 @@ logging:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${url}
-    username: ${username}
-    password: ${password}
+    url: ${MEMBER_DB_URL}
+    username: ${DB_MASTSER_USERNAME}
+    password: ${DB_MASTER_PASSWORD}
 
   jpa:
     defer-datasource-initialization: true
