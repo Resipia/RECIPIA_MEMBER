@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import software.amazon.awssdk.services.sns.model.PublishResponse;
+
 import java.util.Map;
 
 
@@ -18,15 +20,16 @@ public class SnsService {
     private final AwsSnsConfig awsSnsConfig;
     private final ObjectMapper objectMapper;
 
-    public void publishNicknameToTopic(Map<String, Object> messageMap) {
+    public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
         String messageJson = convertMapToJson(messageMap);
         PublishRequest publishRequest = PublishRequest.builder()
                 .message(messageJson)
                 .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
                 .build();
 
-        snsClient.publish(publishRequest);
+        return snsClient.publish(publishRequest);
     }
+
 
 //    public void publishOneToTopic(Map<String, Object> messageMap) {
 //        String messageJson = convertMapToJson(messageMap);
