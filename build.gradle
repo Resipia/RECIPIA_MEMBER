@@ -66,23 +66,23 @@ dependencies {
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sns'
 
-//	// kafka
-//	implementation 'org.springframework.kafka:spring-kafka'
-//	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	// XRAY
+	// AWS X-Ray SDK Jakarta dependencies
+	// https://mvnrepository.com/artifact/com.amazonaws/aws-xray-recorder-sdk-core
+//	implementation 'com.amazonaws:aws-xray-recorder-sdk-core:2.14.0'
 //
-//
-//	// zipkin
-//	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-//	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
-//	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
-//
-//	// kafka, zipkin 연동용
-//	implementation 'io.zipkin.brave:brave-instrumentation-kafka-clients'
+//	implementation 'com.amazonaws:aws-xray-recorder-sdk-core'
+//	implementation 'com.amazonaws:aws-xray-recorder-sdk-aws-sdk'
+//	implementation 'com.amazonaws:aws-xray-recorder-sdk-aws-sdk-instrumentor'
+//	implementation 'com.amazonaws:aws-xray-recorder-sdk-sql-postgres'
+
 }
 
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.3"
+//		mavenBom('com.amazonaws:aws-xray-recorder-sdk-bom:2.11.0')
+
 	}
 }
 
