@@ -3,11 +3,6 @@ logging:
     com.recipia.member: debug
     org.springframework.web.servlet: debug
     org.hibernate.orm.jdbc.bind: trace
-#    org.springframework.cloud.sleuth: info
-
-#  pattern:
-#    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
-
 
 spring:
   datasource:
@@ -28,18 +23,6 @@ spring:
         default_batch_fetch_size: 10
         highlight_sql: true
 
-
-#  kafka:
-#    bootstrap-servers: localhost:9095
-#    producer:
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-#    consumer:
-#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      group-id: recipia
-
-
   application:
     name: member
 
@@ -58,16 +41,6 @@ spring:
         nickname-sqs-name: sqs-test
 
 
-#  zipkin:
-#    base-url: http://localhost:9411/
-#
-#  sleuth:
-#    enabled: true
-#    sampler:
-#      probability: 1.0
-
-
 server:
   port: 8081
----
 
