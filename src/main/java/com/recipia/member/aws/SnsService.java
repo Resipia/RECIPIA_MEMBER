@@ -66,7 +66,16 @@ public class SnsService {
                 .build();
 
         AWSXRayRecorder recorder = AWSXRay.getGlobalRecorder();
-        Segment segment = recorder.beginSegment("publishNicknameToTopicSegment");
+
+        // 현재 활성화된 세그먼트가 있는지 확인
+        Segment currentSegment = recorder.getCurrentSegmentOptional().orElse(null);
+        boolean newSegmentCreated = false;
+
+        if (currentSegment == null) {
+            // 현재 세그먼트가 없으면 새로운 세그먼트 시작
+            currentSegment = recorder.beginSegment("publishNicknameToTopicSegment");
+            newSegmentCreated = true;
+        }
 
         try {
             // 서브세그먼트 생성
@@ -87,14 +96,12 @@ public class SnsService {
                 // 서브세그먼트 종료
                 recorder.endSubsegment();
             }
-        } catch (SegmentNotFoundException e) {
-            // 세그먼트를 찾을 수 없는 경우의 예외 처리
-            // 로그 찍기 또는 복구 로직
         } finally {
-            // 부모 세그먼트 종료
-            recorder.endSegment();
+            // 새로운 세그먼트가 시작되었다면 종료
+            if (newSegmentCreated) {
+                recorder.endSegment();
+            }
         }
-        return null;
     }
 
 
