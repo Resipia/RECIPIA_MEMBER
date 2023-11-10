@@ -1,6 +1,7 @@
 package com.recipia.member.aws;
 
 import com.amazonaws.xray.AWSXRay;
+import com.amazonaws.xray.entities.Segment;
 import com.amazonaws.xray.entities.Subsegment;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.config.aws.AwsSnsConfig;
@@ -22,31 +23,34 @@ public class SnsService {
     private final AwsSnsConfig awsSnsConfig;
     private final ObjectMapper objectMapper;
 
+
     public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
-
-        // X-ray에서 새로운 Subsegment 시작
-        Subsegment subsegment = AWSXRay.beginSubsegment("publishNicknameToTopic");
-
+        // 부모 세그먼트 생성
+        Segment segment = AWSXRay.beginSegment("publishNicknameToTopicSegment");
 
         try {
-            String messageJson = convertMapToJson(messageMap);
-            PublishRequest publishRequest = PublishRequest.builder()
-                    .message(messageJson)
-                    .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
-                    .build();
+            // 여기서 서브세그먼트 생성
+            Subsegment subsegment = AWSXRay.beginSubsegment("publishToSns");
 
-            return snsClient.publish(publishRequest);
-        } catch (Exception e) {
-            // 예외가 발생한 경우, Subsegment에 예외 정보를 추가
-            subsegment.addException(e);
-            throw e;
+            try {
+                String messageJson = convertMapToJson(messageMap);
+                PublishRequest publishRequest = PublishRequest.builder()
+                        .message(messageJson)
+                        .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
+                        .build();
+
+                return snsClient.publish(publishRequest);
+            } catch (Exception e) {
+                subsegment.addException(e);
+                throw e;
+            } finally {
+                // 서브세그먼트 종료
+                AWSXRay.endSubsegment();
+            }
         } finally {
-            // Subsegment를 종료.
-            // 이는 이 코드 블록의 추적이 완료되었음을 의미
-            AWSXRay.endSubsegment();
-
+            // 부모 세그먼트 종료
+            AWSXRay.endSegment();
         }
-
     }
 
 
