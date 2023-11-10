@@ -3,6 +3,7 @@ package com.recipia.member.aws;
 import com.amazonaws.xray.AWSXRay;
 import com.amazonaws.xray.entities.Segment;
 import com.amazonaws.xray.entities.Subsegment;
+import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.config.aws.AwsSnsConfig;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
 
 import java.util.Map;
 
-
+@XRayEnabled
 @RequiredArgsConstructor
 @Service
 public class SnsService {

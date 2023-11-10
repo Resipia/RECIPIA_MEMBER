@@ -76,6 +76,11 @@ dependencies {
 	implementation 'com.amazonaws:aws-xray-recorder-sdk-aws-sdk'
 	implementation 'com.amazonaws:aws-xray-recorder-sdk-aws-sdk-instrumentor'
 	implementation 'com.amazonaws:aws-xray-recorder-sdk-sql-postgres'
+
+	// xray 공식 문서 참조(https://docs.aws.amazon.com/ko_kr/xray/latest/devguide/xray-sdk-java-aop-spring.html)
+	// https://mvnrepository.com/artifact/com.amazonaws/aws-xray-recorder-sdk-spring
+	implementation 'com.amazonaws:aws-xray-recorder-sdk-spring:2.11.2'
+
 }
 
 dependencyManagement {
