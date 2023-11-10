@@ -69,9 +69,6 @@ public class SnsService {
         Segment segment = recorder.beginSegment("publishNicknameToTopicSegment");
 
         try {
-            // SNS 요청 메타데이터 추가
-            segment.putMetadata("SNSRequest", messageMap);
-
             // 서브세그먼트 생성
             Subsegment subsegment = recorder.beginSubsegment("publishToSns");
 
@@ -79,10 +76,8 @@ public class SnsService {
                 // 실제 SNS 발행
                 PublishResponse response = snsClient.publish(publishRequest);
 
-                // 성공 메타데이터 추가
-                subsegment.putMetadata("SNSResponse", response);
-                subsegment.putAnnotation("ResponseId", response.messageId());
-
+                // 성공한 응답의 Message ID만 추적 로그로 남김
+                subsegment.putAnnotation("MessageID", response.messageId());
                 return response;
             } catch (Exception e) {
                 // 에러 추적
