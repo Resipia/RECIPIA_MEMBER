@@ -1,13 +1,17 @@
 package com.recipia.member.config.aws;
 
+import com.amazonaws.xray.interceptors.TracingInterceptor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
+
 
 @Getter
 @Configuration
@@ -28,13 +32,25 @@ public class AwsSnsConfig {
 //    @Value("${spring.cloud.aws.sns.topics.topic1}")
 //    private String snsTopic1ARN;
 
-    @Bean
-    public SnsClient getSnsClient() {
-        return SnsClient.builder()
-                .region(Region.of(awsRegion)) // 리전 설정 추가
-                .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(awsAccessKey, awsSecretKey)))
-                .build();
-    }
+//    @Bean
+//    public SnsClient getSnsClient() {
+//        return SnsClient.builder()
+//                .region(Region.of(awsRegion)) // 리전 설정 추가
+//                .credentialsProvider(StaticCredentialsProvider.create(
+//                        AwsBasicCredentials.create(awsAccessKey, awsSecretKey)))
+//                .build();
+//    }
+
+//    @Bean
+//    public SnsClient getSnsClient() {
+//        return SnsClient.builder()
+//                .region(Region.of(awsRegion))
+//                .credentialsProvider(StaticCredentialsProvider.create(
+//                        AwsBasicCredentials.create(awsAccessKey, awsSecretKey)))
+//                .overrideConfiguration(ClientOverrideConfiguration.builder()
+//                        .addExecutionInterceptor(new TracingInterceptor())
+//                        .build())
+//                .build();
+//    }
 
 }
