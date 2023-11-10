@@ -28,9 +28,6 @@ public class AwsSnsConfig {
     @Value("${spring.cloud.aws.sns.topics.nickname-change}")
     private String snsTopicNicknameChangeARN;
 
-//    @Value("${spring.cloud.aws.sns.topics.topic1}")
-//    private String snsTopic1ARN;
-
     @Bean
     public SnsClient getSnsClient() {
         return SnsClient.builder()
