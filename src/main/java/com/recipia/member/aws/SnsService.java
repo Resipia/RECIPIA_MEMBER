@@ -1,20 +1,21 @@
 package com.recipia.member.aws;
 
-import com.amazonaws.xray.AWSXRay;
 import com.amazonaws.xray.AWSXRayRecorder;
+import com.amazonaws.xray.AWSXRayRecorderBuilder;
+import com.amazonaws.xray.emitters.Emitter;
 import com.amazonaws.xray.entities.Segment;
 import com.amazonaws.xray.entities.Subsegment;
-import com.amazonaws.xray.exceptions.SegmentNotFoundException;
 import com.amazonaws.xray.spring.aop.XRayEnabled;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.config.aws.AwsSnsConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
 
+import java.io.IOException;
 import java.util.Map;
 
 @XRayEnabled
@@ -58,14 +59,17 @@ public class SnsService {
 //    }
 
 
-    public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
+    public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) throws IOException {
         String messageJson = convertMapToJson(messageMap);
         PublishRequest publishRequest = PublishRequest.builder()
                 .message(messageJson)
                 .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
                 .build();
 
-        AWSXRayRecorder recorder = AWSXRay.getGlobalRecorder();
+//        AWSXRayRecorder recorder = AWSXRay.getGlobalRecorder();
+        AWSXRayRecorder recorder = AWSXRayRecorderBuilder.standard()
+                .withEmitter(Emitter.create())
+                .build();
 
         // 현재 활성화된 세그먼트가 있는지 확인
         Segment currentSegment = recorder.getCurrentSegmentOptional().orElse(null);
