@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RequiredArgsConstructor

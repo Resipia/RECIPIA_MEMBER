@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class MessageController {
     private final SnsService snsService;
 
     @PostMapping("/publish")
-    public ResponseEntity<String> publishMessage(@RequestBody Map<String, Object> messageMap) {
+    public ResponseEntity<String> publishMessage(@RequestBody Map<String, Object> messageMap) throws IOException {
         // 1. SnsService를 사용해서 메시지 발행
         PublishResponse response =  snsService.publishNicknameToTopic(messageMap);
 
