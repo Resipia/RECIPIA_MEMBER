@@ -1,8 +1,10 @@
 package com.recipia.member.aws;
 
 import com.amazonaws.xray.AWSXRay;
+import com.amazonaws.xray.AWSXRayRecorder;
 import com.amazonaws.xray.entities.Segment;
 import com.amazonaws.xray.entities.Subsegment;
+import com.amazonaws.xray.exceptions.SegmentNotFoundException;
 import com.amazonaws.xray.spring.aop.XRayEnabled;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.config.aws.AwsSnsConfig;
@@ -24,46 +26,82 @@ public class SnsService {
     private final AwsSnsConfig awsSnsConfig;
     private final ObjectMapper objectMapper;
 
+//
+//    public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
+//
+//        String messageJson = convertMapToJson(messageMap);
+//        PublishRequest publishRequest = PublishRequest.builder()
+//                .message(messageJson)
+//                .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
+//                .build();
+//
+//        // 부모 세그먼트 생성
+//        Segment segment = AWSXRay.beginSegment("publishNicknameToTopicSegment");
+//        try {
+//            // 여기서 서브세그먼트 생성
+//            Subsegment subsegment = AWSXRay.beginSubsegment("publishToSns");
+//
+//            try {
+//                return snsClient.publish(publishRequest);
+//            }catch (Exception e) {
+//                subsegment.addException(e);
+//                throw e;
+//            } finally {
+//                // 서브세그먼트 종료
+//                AWSXRay.endSubsegment();
+//            }
+//        } finally {
+//
+//            // 부모 세그먼트 종료
+//            AWSXRay.endSegment();
+//        }
+//    }
+
 
     public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
-        // 부모 세그먼트 생성
-        Segment segment = AWSXRay.beginSegment("publishNicknameToTopicSegment");
+        String messageJson = convertMapToJson(messageMap);
+        PublishRequest publishRequest = PublishRequest.builder()
+                .message(messageJson)
+                .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
+                .build();
+
+        AWSXRayRecorder recorder = AWSXRay.getGlobalRecorder();
+        Segment segment = recorder.beginSegment("publishNicknameToTopicSegment");
 
         try {
-            // 여기서 서브세그먼트 생성
-            Subsegment subsegment = AWSXRay.beginSubsegment("publishToSns");
+            // SNS 요청 메타데이터 추가
+            segment.putMetadata("SNSRequest", messageMap);
+
+            // 서브세그먼트 생성
+            Subsegment subsegment = recorder.beginSubsegment("publishToSns");
 
             try {
-                String messageJson = convertMapToJson(messageMap);
-                PublishRequest publishRequest = PublishRequest.builder()
-                        .message(messageJson)
-                        .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
-                        .build();
+                // 실제 SNS 발행
+                PublishResponse response = snsClient.publish(publishRequest);
 
-                return snsClient.publish(publishRequest);
+                // 성공 메타데이터 추가
+                subsegment.putMetadata("SNSResponse", response);
+                subsegment.putAnnotation("ResponseId", response.messageId());
+
+                return response;
             } catch (Exception e) {
+                // 에러 추적
                 subsegment.addException(e);
                 throw e;
             } finally {
                 // 서브세그먼트 종료
-                AWSXRay.endSubsegment();
+                recorder.endSubsegment();
             }
+        } catch (SegmentNotFoundException e) {
+            // 세그먼트를 찾을 수 없는 경우의 예외 처리
+            // 로그 찍기 또는 복구 로직
         } finally {
             // 부모 세그먼트 종료
-            AWSXRay.endSegment();
+            recorder.endSegment();
         }
+        return null;
     }
 
-
-//    public void publishOneToTopic(Map<String, Object> messageMap) {
-//        String messageJson = convertMapToJson(messageMap);
-//        PublishRequest publishRequest = PublishRequest.builder()
-//                .message(messageJson)
-//                .topicArn(awsSnsConfig.getSnsTopic1ARN())
-//                .build();
-//
-//        snsClient.publish(publishRequest);
-//    }
 
     private String convertMapToJson(Map<String, Object> messageMap) {
         try {
