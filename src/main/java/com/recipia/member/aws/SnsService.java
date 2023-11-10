@@ -1,5 +1,7 @@
 package com.recipia.member.aws;
 
+import com.amazonaws.xray.AWSXRay;
+import com.amazonaws.xray.entities.Subsegment;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.config.aws.AwsSnsConfig;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +23,30 @@ public class SnsService {
     private final ObjectMapper objectMapper;
 
     public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
-        String messageJson = convertMapToJson(messageMap);
-        PublishRequest publishRequest = PublishRequest.builder()
-                .message(messageJson)
-                .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
-                .build();
 
-        return snsClient.publish(publishRequest);
+        // X-ray에서 새로운 Subsegment 시작
+        Subsegment subsegment = AWSXRay.beginSubsegment("publishNicknameToTopic");
+
+
+        try {
+            String messageJson = convertMapToJson(messageMap);
+            PublishRequest publishRequest = PublishRequest.builder()
+                    .message(messageJson)
+                    .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
+                    .build();
+
+            return snsClient.publish(publishRequest);
+        } catch (Exception e) {
+            // 예외가 발생한 경우, Subsegment에 예외 정보를 추가
+            subsegment.addException(e);
+            throw e;
+        } finally {
+            // Subsegment를 종료.
+            // 이는 이 코드 블록의 추적이 완료되었음을 의미
+            AWSXRay.endSubsegment();
+
+        }
+
     }
 
 
