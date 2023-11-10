@@ -1,6 +1,5 @@
 package com.recipia.member.config.aws;
 
-import com.amazonaws.xray.interceptors.TracingInterceptor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,14 +31,14 @@ public class AwsSnsConfig {
 //    @Value("${spring.cloud.aws.sns.topics.topic1}")
 //    private String snsTopic1ARN;
 
-//    @Bean
-//    public SnsClient getSnsClient() {
-//        return SnsClient.builder()
-//                .region(Region.of(awsRegion)) // 리전 설정 추가
-//                .credentialsProvider(StaticCredentialsProvider.create(
-//                        AwsBasicCredentials.create(awsAccessKey, awsSecretKey)))
-//                .build();
-//    }
+    @Bean
+    public SnsClient getSnsClient() {
+        return SnsClient.builder()
+                .region(Region.of(awsRegion)) // 리전 설정 추가
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(awsAccessKey, awsSecretKey)))
+                .build();
+    }
 
 //    @Bean
 //    public SnsClient getSnsClient() {
