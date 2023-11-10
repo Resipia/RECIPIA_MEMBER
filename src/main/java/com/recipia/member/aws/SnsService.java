@@ -24,25 +24,49 @@ public class SnsService {
     private final AwsSnsConfig awsSnsConfig;
     private final ObjectMapper objectMapper;
 
-    public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
+//    public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
+//
+//        // X-ray
+//        Subsegment subsegment = AWSXRay.beginSubsegment("publishNicknameToTopic");
+//        try {
+//            String messageJson = convertMapToJson(messageMap);
+//            PublishRequest publishRequest = PublishRequest.builder()
+//                    .message(messageJson)
+//                    .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
+//                    .build();
+//
+//            return snsClient.publish(publishRequest);
+//        } catch (Exception e) {
+//            subsegment.addException(e);
+//            throw e;
+//        } finally {
+//            AWSXRay.endSubsegment();
+//        }
+//
+//    }
 
-        // X-ray
-        Subsegment subsegment = AWSXRay.beginSubsegment("publishNicknameToTopic");
+    public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
+        Subsegment subsegment = AWSXRay.beginSubsegment("Publish SNS Message");
         try {
+            // 메시지를 JSON 형태로 변환
             String messageJson = convertMapToJson(messageMap);
+
+            // SNS 발행 요청 생성
             PublishRequest publishRequest = PublishRequest.builder()
                     .message(messageJson)
                     .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
                     .build();
 
+            // SNS 클라이언트를 통해 메시지 발행
             return snsClient.publish(publishRequest);
         } catch (Exception e) {
-            subsegment.addException(e);
+            // 오류 발생 시 X-Ray에 오류 정보 추가
+            AWSXRay.getCurrentSegment().addException(e);
             throw e;
         } finally {
+            // X-Ray 서브세그먼트 종료
             AWSXRay.endSubsegment();
         }
-
     }
 
     private String convertMapToJson(Map<String, Object> messageMap) {

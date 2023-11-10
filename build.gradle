@@ -67,8 +67,6 @@ dependencies {
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sns'
 
 	// XRAY
-	// AWS X-Ray SDK Jakarta dependencies
-	// https://mvnrepository.com/artifact/com.amazonaws/aws-xray-recorder-sdk-core
 //	implementation 'com.amazonaws:aws-xray-recorder-sdk-core:2.14.0'
 
 	// AWS XRAY - spring3.x.x
