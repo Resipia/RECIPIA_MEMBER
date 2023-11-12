@@ -2,9 +2,5 @@
   {
     "name": "recipia-member-container",
     "imageUri": "473709498430.dkr.ecr.ap-northeast-2.amazonaws.com/recipia-member:latest"
-  },
-  {
-    "name": "member-xray-container",
-    "imageUri": "amazon/aws-xray-daemon"
   }
 ]
