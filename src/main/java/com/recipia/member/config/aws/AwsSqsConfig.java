@@ -35,24 +35,34 @@ public class AwsSqsConfig {
 //                .build();
 //    }
 
+
     @Bean
-    public SqsAsyncClient sqsClient() {
+    public SqsAsyncClient sqsAsyncClient() {
         return SqsAsyncClient.builder()
-                .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(awsAccessKey, awsSecretKey)))
+                .credentialsProvider(() -> new AwsCredentials() {
+                    @Override
+                    public String accessKeyId() {
+                        return awsAccessKey;
+                    }
+
+                    @Override
+                    public String secretAccessKey() {
+                        return awsSecretKey;
+                    }
+                })
                 .region(Region.of(awsRegion))
                 .build();
     }
-
-
 
     // Listener Factory 설정 (Listener쪽에서만 설정하면 됨)
     @Bean
     public SqsMessageListenerContainerFactory<Object> defaultSqsListenerContainerFactory() {
         return SqsMessageListenerContainerFactory
                 .builder()
+                .sqsAsyncClient(sqsAsyncClient())
                 .build();
     }
+
 
 //    // 메세지 발송을 위한 SQS 템플릿 설정 (Sender쪽에서만 설정하면 됨)
 //    @Bean
