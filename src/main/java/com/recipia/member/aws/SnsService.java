@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
+import brave.Span;
+import brave.Tracer;
 
 import java.util.Map;
 
@@ -20,6 +22,7 @@ public class SnsService {
     private final SnsClient snsClient;
     private final AwsSnsConfig awsSnsConfig;
     private final ObjectMapper objectMapper;
+    private final Tracer tracer;
 
 
     public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
@@ -37,6 +40,14 @@ public class SnsService {
 
         // messageId 로깅
         log.info("[MEMBER] Published message to SNS with messageId: {}", response.messageId());
+
+        // 새로운 Span 생성 및 시작
+        Span newSpan = tracer.nextSpan().name(response.messageId()).start(); // Span 이름을 SNS 메시지 ID로 설정
+        try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan)) {
+            // 별도의 추가 작업 없음
+        } finally {
+            newSpan.finish(); // Span 완료
+        }
 
         return response;
     }
