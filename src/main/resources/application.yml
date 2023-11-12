@@ -3,6 +3,10 @@ logging:
     com.recipia.member: debug
     org.springframework.web.servlet: debug
     org.hibernate.orm.jdbc.bind: trace
+    org.springframework.cloud.sleuth: info
+
+    pattern:
+      level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 
 spring:
   datasource:
@@ -26,6 +30,14 @@ spring:
   application:
     name: member
 
+  zipkin:
+    base-url: http://${EC2_PUBLIC_DNS}:9411/
+
+  sleuth:
+    enabled: true
+    sampler:
+      probability: 1.0
+
   cloud:
     aws:
       credentials:
@@ -36,7 +48,6 @@ spring:
       sns:
         topics:
           nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:sns-test
-#          topic1: arn:aws:sns:${REGION}:${ACCOUNT_ID}:topic1
       sqs:
         nickname-sqs-name: sqs-test
 

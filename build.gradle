@@ -66,6 +66,11 @@ dependencies {
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sns'
 
+	// zipkin
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
 }
 
 dependencyManagement {
