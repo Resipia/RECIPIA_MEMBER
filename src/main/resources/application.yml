@@ -45,8 +45,6 @@ spring:
 
   sleuth:
     web:
-      client:
-        enabled: false # HTTP 클라이언트에 대한 추적 비활성화
       servlet:
         skip-pattern: /member/test.*
 
