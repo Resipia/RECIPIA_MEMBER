@@ -30,7 +30,7 @@ public class MemberController {
 
     @GetMapping("/test")
     public String test() {
-        return "aws test success!@!@!@!@!@!@!@!@!@!@!@!@";
+        return "member connect success";
     }
 
 
