@@ -24,7 +24,7 @@ public class SqsListenerService {
         String messageContent = messageNode.get("Message").asText();
 
         // messageId 추출 및 로깅 (만약 메시지에 messageId 정보가 있다면)
-        String messageId = messageNode.get("messageId").asText();
+        String messageId = messageNode.get("MessageId").asText();
         log.info("Received message from SQS with messageId: {}", messageId);
 
 

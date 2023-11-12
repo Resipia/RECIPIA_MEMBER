@@ -5,8 +5,8 @@ logging:
     org.hibernate.orm.jdbc.bind: trace
     org.springframework.cloud.sleuth: info
 
-    pattern:
-      level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 
 spring:
   datasource:
