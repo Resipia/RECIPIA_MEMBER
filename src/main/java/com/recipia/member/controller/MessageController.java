@@ -25,8 +25,6 @@ public class MessageController {
     @PostMapping("/publish")
     public ResponseEntity<String> publishMessage(@RequestBody Map<String, Object> messageMap) {
         try {
-            log.info("[MEMBER] Published message to SNS with messageId: TEST!@!!@!@!");
-
             // SnsService를 사용해서 메시지 발행
             PublishResponse response = snsService.publishNicknameToTopic(messageMap);
 
