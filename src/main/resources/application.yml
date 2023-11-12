@@ -43,10 +43,13 @@ spring:
       sqs:
         nickname-sqs-name: sqs-test
 
+  sleuth:
+    web:
+      client:
+        enabled: false # HTTP 클라이언트에 대한 추적 비활성화
 
 server:
   port: 8081
-
 
 management:
   tracing:
