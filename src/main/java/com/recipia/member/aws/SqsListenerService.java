@@ -25,7 +25,7 @@ public class SqsListenerService {
 
         // messageId 추출 및 로깅 (만약 메시지에 messageId 정보가 있다면)
         String messageId = messageNode.get("MessageId").asText();
-        log.info("Received message from SQS with messageId: {}", messageId);
+        log.info("[MEMBER] Received message from SQS with messageId: {}", messageId);
 
 
         // Assuming the "Message" is also a JSON string, we parse it to print as JSON object

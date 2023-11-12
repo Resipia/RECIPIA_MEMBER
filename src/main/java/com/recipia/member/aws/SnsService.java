@@ -36,7 +36,7 @@ public class SnsService {
         PublishResponse response = snsClient.publish(publishRequest);
 
         // messageId 로깅
-        log.info("Published message to SNS with messageId: {}", response.messageId());
+        log.info("[MEMBER] Published message to SNS with messageId: {}", response.messageId());
 
         return response;
     }
