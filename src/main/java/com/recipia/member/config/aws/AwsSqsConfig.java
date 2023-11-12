@@ -26,22 +26,33 @@ public class AwsSqsConfig {
     private String awsRegion;
 
     // SQS Client 세팅 (동기 클라이언트)
+//    @Bean
+//    public SqsClient sqsClient() {
+//        return SqsClient.builder()
+//                .credentialsProvider(StaticCredentialsProvider.create(
+//                        AwsBasicCredentials.create(awsAccessKey, awsSecretKey)))
+//                .region(Region.of(awsRegion))
+//                .build();
+//    }
+
     @Bean
-    public SqsClient sqsClient() {
-        return SqsClient.builder()
+    public SqsAsyncClient sqsClient() {
+        return SqsAsyncClient.builder()
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(awsAccessKey, awsSecretKey)))
                 .region(Region.of(awsRegion))
                 .build();
     }
 
+
+
     // Listener Factory 설정 (Listener쪽에서만 설정하면 됨)
-//    @Bean
-//    public SqsMessageListenerContainerFactory<Object> defaultSqsListenerContainerFactory() {
-//        return SqsMessageListenerContainerFactory
-//                .builder()
-//                .build();
-//    }
+    @Bean
+    public SqsMessageListenerContainerFactory<Object> defaultSqsListenerContainerFactory() {
+        return SqsMessageListenerContainerFactory
+                .builder()
+                .build();
+    }
 
 //    // 메세지 발송을 위한 SQS 템플릿 설정 (Sender쪽에서만 설정하면 됨)
 //    @Bean

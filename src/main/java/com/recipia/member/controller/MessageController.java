@@ -1,7 +1,5 @@
 package com.recipia.member.controller;
 
-import com.amazonaws.xray.AWSXRay;
-import com.amazonaws.xray.entities.Segment;
 import com.recipia.member.aws.SnsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

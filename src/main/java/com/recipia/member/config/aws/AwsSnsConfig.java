@@ -35,16 +35,4 @@ public class AwsSnsConfig {
                 .build();
     }
 
-//    @Bean
-//    public SnsClient getSnsClient() {
-//        return SnsClient.builder()
-//                .region(Region.of(awsRegion))
-//                .credentialsProvider(StaticCredentialsProvider.create(
-//                        AwsBasicCredentials.create(awsAccessKey, awsSecretKey)))
-//                .overrideConfiguration(ClientOverrideConfiguration.builder()
-//                        .addExecutionInterceptor(new TracingInterceptor())
-//                        .build())
-//                .build();
-//    }
-
 }
