@@ -46,6 +46,8 @@ public class SnsService {
 
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan)) {
             newSpan.tag("messageId", String.valueOf(response)); // messageId 태그 추가
+            newSpan.tag("producer", "MEMBER"); // messageId 태그 추가
+
             // 별도의 추가 작업 없음
         } finally {
             newSpan.finish(); // Span 완료

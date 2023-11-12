@@ -26,6 +26,7 @@ public class SqsListenerService {
 
         Span newSpan = tracer.nextSpan().name(messageId).start(); // Span 이름을 메시지 ID로 설정
         newSpan.tag("messageId", messageId); // messageId 태그 추가
+        newSpan.tag("consumer", "MEMBER"); // consumer 태그 추가
 
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan)) {
             // SQS 메시지 처리 로직
