@@ -25,6 +25,8 @@ public class SqsListenerService {
         String messageId = messageNode.get("MessageId").asText();  // 메시지 ID 추출
 
         Span newSpan = tracer.nextSpan().name(messageId).start(); // Span 이름을 메시지 ID로 설정
+        newSpan.tag("messageId", messageId); // messageId 태그 추가
+
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan)) {
             // SQS 메시지 처리 로직
             String topicArn = messageNode.get("TopicArn").asText();

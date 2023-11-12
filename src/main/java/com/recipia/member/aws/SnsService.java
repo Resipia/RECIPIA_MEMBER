@@ -43,7 +43,9 @@ public class SnsService {
 
         // 새로운 Span 생성 및 시작
         Span newSpan = tracer.nextSpan().name(response.messageId()).start(); // Span 이름을 SNS 메시지 ID로 설정
+
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan)) {
+            newSpan.tag("messageId", String.valueOf(response)); // messageId 태그 추가
             // 별도의 추가 작업 없음
         } finally {
             newSpan.finish(); // Span 완료
