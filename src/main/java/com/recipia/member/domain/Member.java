@@ -123,5 +123,7 @@ public class Member extends UpdateDateTime {
     }
 
 
-
+    public void changeNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
 }

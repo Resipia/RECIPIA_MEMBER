@@ -1,6 +1,6 @@
 logging:
   level:
-    com.recipia.member: debug
+    com.recipia.member: info
     org.springframework.web.servlet: debug
     org.hibernate.orm.jdbc.bind: trace
     org.springframework.cloud.sleuth: info
@@ -18,7 +18,7 @@ spring:
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     open-in-view: false
     show-sql: true
     properties:
