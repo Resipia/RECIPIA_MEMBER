@@ -1,5 +1,7 @@
 package com.recipia.member.aws;
 
+import brave.Span;
+import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,8 +9,6 @@ import io.awspring.cloud.sqs.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import brave.Span;
-import brave.Tracer;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,6 +43,5 @@ public class SqsListenerService {
         }
 
     }
-
 
 }

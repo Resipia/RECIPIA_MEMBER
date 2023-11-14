@@ -65,4 +65,11 @@ public class MemberEventRecord extends CreateDateTime {
     }
 
 
+    /**
+     * MemberEventRecord published: true, publishedAt: now 업데이트 메소드
+     */
+    public void changePublished() {
+        this.published = true;
+        publishedAt = LocalDateTime.now();
+    }
 }

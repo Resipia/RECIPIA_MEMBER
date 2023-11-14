@@ -42,6 +42,7 @@ spring:
           nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:sns-test
       sqs:
         nickname-sqs-name: sqs-test
+        record-sqs-name: member-sns-published-record-sqs
 
   sleuth:
     web:

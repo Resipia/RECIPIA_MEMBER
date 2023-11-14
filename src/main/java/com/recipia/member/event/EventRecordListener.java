@@ -17,8 +17,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Component
@@ -35,7 +33,6 @@ public class EventRecordListener {
     @Transactional
     @EventListener
     public void listen(NicknameChangeEvent event) throws JsonProcessingException {
-        // 여기서 db에 저장하는 로직 실행 (트랜잭션이 묶여있어야 함)
         Member member = memberRepository.findById(event.memberId()).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
 
         // JSON 객체 생성 및 문자열 변환
