@@ -22,7 +22,7 @@ public class MemberService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
-    public void nicknameChage() {
+    public void nicknameChange() {
         Member member = memberRepository.findById(2L).orElseThrow(() -> new MemberApplicationException(ErrorCode.DB_ERROR));
         member.changeNickname("NEW-NICKNAME222");
 
