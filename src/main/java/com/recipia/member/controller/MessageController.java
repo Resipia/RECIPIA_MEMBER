@@ -26,7 +26,8 @@ public class MessageController {
     public ResponseEntity<String> publishMessage(@RequestBody Map<String, Object> messageMap) {
         try {
             // SnsService를 사용해서 메시지 발행
-            PublishResponse response = snsService.publishNicknameToTopic(messageMap);
+            String message = (String) messageMap.get("message");
+            PublishResponse response = snsService.publishNicknameToTopic(message);
 
             // 발행 결과를 HTTP 응답으로 반환
             return ResponseEntity.ok().body(response.messageId());
