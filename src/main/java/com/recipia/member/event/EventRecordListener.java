@@ -11,6 +11,7 @@ import com.recipia.member.exception.MemberApplicationException;
 import com.recipia.member.repository.MemberEventRecordRepository;
 import com.recipia.member.repository.MemberRepository;
 import com.recipia.member.utils.CustomJsonBuilder;
+import com.recipia.member.utils.MemberStringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,6 @@ public class EventRecordListener {
     private final MemberRepository memberRepository;
     private final MemberEventRecordRepository memberEventRecordRepository;
     private final AwsSnsConfig awsSnsConfig;
-    private final ObjectMapper objectMapper;
     private final CustomJsonBuilder customJsonBuilder;
 
     /**
@@ -41,9 +41,11 @@ public class EventRecordListener {
         // JSON 객체 생성 및 문자열 변환
         String messageJson = customJsonBuilder.add("memberId", member.getId().toString()).build();
 
+        String topicName = MemberStringUtils.extractLastPart(awsSnsConfig.getSnsTopicNicknameChangeARN());
+
         MemberEventRecord memberEventRecord = MemberEventRecord.of(
                 member,
-                awsSnsConfig.getSnsTopicNicknameChangeARN(),
+                topicName,
                 "NicknameChangeEvent",
                 messageJson,
                 false,
@@ -52,5 +54,7 @@ public class EventRecordListener {
 
         memberEventRecordRepository.save(memberEventRecord);
     }
+
+
 
 }
