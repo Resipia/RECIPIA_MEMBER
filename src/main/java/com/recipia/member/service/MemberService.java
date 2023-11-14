@@ -26,7 +26,6 @@ public class MemberService {
         Member member = memberRepository.findById(2L).orElseThrow(() -> new MemberApplicationException(ErrorCode.DB_ERROR));
         member.changeNickname("NEW-NICKNAME222");
 
-        log.info("닉네임 변경 Service [멤버 pk : {} , 변경전 닉네임 : {} , 변경할 닉네임 : {}]", member.getId(), "oldNickname", "NEW-NICKNAME222");
         eventPublisher.publishEvent(new NicknameChangeEvent(member.getId()));
     }
 
