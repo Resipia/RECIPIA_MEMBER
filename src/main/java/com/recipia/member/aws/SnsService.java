@@ -25,13 +25,13 @@ public class SnsService {
     private final Tracer tracer;
 
 
-    public PublishResponse publishNicknameToTopic(Map<String, Object> messageMap) {
+    public PublishResponse publishNicknameToTopic(String message) {
         // 메시지를 JSON 형태로 변환
-        String messageJson = convertMapToJson(messageMap);
+//        String messageJson = convertMapToJson(messageMap);
 
         // SNS 발행 요청 생성
         PublishRequest publishRequest = PublishRequest.builder()
-                .message(messageJson)
+                .message(message)
                 .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
                 .build();
 
