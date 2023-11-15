@@ -5,13 +5,9 @@ import com.recipia.member.aws.SnsService;
 import com.recipia.member.utils.CustomJsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.transaction.event.TransactionPhase;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @RequiredArgsConstructor
