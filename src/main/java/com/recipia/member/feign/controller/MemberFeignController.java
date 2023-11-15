@@ -5,6 +5,7 @@ import com.recipia.member.feign.service.MemberFeignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ public class MemberFeignController {
     private final MemberFeignService memberFeignService;
 
     @PostMapping("/getNickname")
-    public NicknameDto getNickname(Long memberId) {
+    public NicknameDto getNickname(@RequestParam(name = "memberId") Long memberId) {
         return memberFeignService.getNicknameByMemberId(memberId);
     }
 
