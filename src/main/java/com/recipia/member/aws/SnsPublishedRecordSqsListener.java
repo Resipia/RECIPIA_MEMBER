@@ -27,35 +27,33 @@ public class SnsPublishedRecordSqsListener {
 
 
     /**
-     * MEMBER 서버에서 SNS가 잘 발행되었을때 DB MEMBER_EVENT_RECORD테이블에 false로 값 업데이트 해주는 SQS
+     * MEMBER 서버에서 SNS가 잘 발행되었을때 DB MEMBER_EVENT_RECORD테이블에 true로 값 업데이트 해주는 SQS
      */
     @SqsListener(value = "${spring.cloud.aws.sqs.record-sqs-name}")
     public void receiveSnsPublishedMessage(String messageJson) throws JsonProcessingException {
-
-        JsonNode messageNode = objectMapper.readTree(messageJson);
-        String messageId = messageNode.get("MessageId").asText();  // 메시지 ID 추출
-
-        // SQS 메시지 처리 로직
-        String topicArn = messageNode.get("TopicArn").asText();
+        JsonNode rootNode = objectMapper.readTree(messageJson);
+        String messageId = rootNode.get("MessageId").asText();
+        String topicArn = rootNode.get("TopicArn").asText();
         String topicName = MemberStringUtils.extractLastPart(topicArn);
 
-        String messageContent = messageNode.get("Message").asText();
+        // 'Message' 필드 내의 JSON 문자열 추출 및 파싱
+        String innerMessageJson = rootNode.get("Message").asText();
+        JsonNode innerMessageNode = objectMapper.readTree(innerMessageJson);
 
-        log.info("[MEMBER] Received message from SQS with messageId: {}", messageId);
+        // 'message' 필드 내의 JSON 문자열 추출 및 파싱
+        String memberMessageJson = innerMessageNode.get("message").asText();
+        JsonNode memberMessageNode = objectMapper.readTree(memberMessageJson);
 
-        // Assuming the "Message" is also a JSON string, we parse it to print as JSON object
-        JsonNode message = objectMapper.readTree(messageContent);
-        log.info("Message:  {}", message.toString());
+        // 'memberId' 추출
+        Long memberId = Long.valueOf(memberMessageNode.get("memberId").asText());
 
-        ObjectNode node = (ObjectNode) objectMapper.readTree(message.toString());
-
-        // "memberId" 키에 해당하는 값을 추출
-        Long memberId = Long.valueOf(node.get("memberId").asText());
-
-        MemberEventRecord memberEventRecord = memberEventRecordRepository.findFirstByMember_IdAndSnsTopicOrderByIdDesc(memberId, topicName).orElseThrow(() -> new MemberApplicationException(ErrorCode.DB_ERROR));
+        // DB 업데이트 로직
+        MemberEventRecord memberEventRecord = memberEventRecordRepository
+                .findFirstByMember_IdAndSnsTopicOrderByIdDesc(memberId, topicName)
+                .orElseThrow(() -> new MemberApplicationException(ErrorCode.DB_ERROR));
 
         memberEventRecord.changePublished();
-
+        log.info("[MEMBER] Processed message for memberId: {} with messageId: {}", memberId, messageId);
     }
 
 

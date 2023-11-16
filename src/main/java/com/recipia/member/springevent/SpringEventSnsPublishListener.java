@@ -1,5 +1,6 @@
 package com.recipia.member.springevent;
 
+import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.aws.SnsService;
 import com.recipia.member.utils.CustomJsonBuilder;
@@ -16,6 +17,7 @@ public class SpringEventSnsPublishListener {
 
     private final SnsService snsService;
     private final CustomJsonBuilder customJsonBuilder;
+    private final Tracer tracer;
 
     /**
      * 이벤트를 호출한 서비스 코드의 트랜잭션과 묶여있지 않고 트랜잭션이 commit된 후에 동작한다.
@@ -23,7 +25,15 @@ public class SpringEventSnsPublishListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void snsListen(NicknameChangeSpringEvent event) throws JsonProcessingException {
 
-        String messageJson = customJsonBuilder.add("memberId", event.memberId().toString()).build();
+        // 현재 컨텍스트에서 TraceID 추출
+        String traceId = tracer.currentSpan().context().traceIdString();
+
+        // message에 memberId, traceId 주입
+        String messageJson = customJsonBuilder
+                .add("memberId", event.memberId().toString())
+                .add("traceId", traceId) // 현재 TraceID 추가
+                .build();
+
         snsService.publishNicknameToTopic(messageJson);
     }
 
