@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
+import brave.Tracer;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -20,12 +22,20 @@ public class SnsService {
     private final SnsClient snsClient;
     private final AwsSnsConfig awsSnsConfig;
     private final ObjectMapper objectMapper;
+    private final Tracer tracer;
 
     public PublishResponse publishNicknameToTopic(String message) {
 
+        // TraceId 추출
+        String traceId = tracer.currentSpan().context().traceIdString(); // 현재 TraceID 추출
+
+        Map<String, Object> messageMap = new HashMap<>();
+        messageMap.put("traceId", traceId); // TraceID를 메시지에 추가
+        messageMap.put("message", message);
+
         // SNS 발행 요청 생성
         PublishRequest publishRequest = PublishRequest.builder()
-                .message(message)
+                .message(convertMapToJson(messageMap))
                 .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
                 .build();
 
