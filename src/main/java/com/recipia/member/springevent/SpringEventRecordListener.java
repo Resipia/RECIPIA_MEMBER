@@ -1,8 +1,6 @@
-package com.recipia.member.event;
+package com.recipia.member.springevent;
 
-import com.fasterxml.jackson.core.JsonFactoryBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.config.aws.AwsSnsConfig;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.event.MemberEventRecord;
@@ -20,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
-public class EventRecordListener {
+public class SpringEventRecordListener {
 
     private final MemberRepository memberRepository;
     private final MemberEventRecordRepository memberEventRecordRepository;
@@ -32,7 +30,7 @@ public class EventRecordListener {
      */
     @Transactional
     @EventListener
-    public void listen(NicknameChangeEvent event) throws JsonProcessingException {
+    public void listen(NicknameChangeSpringEvent event) throws JsonProcessingException {
         Member member = memberRepository.findById(event.memberId()).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
 
         // JSON 객체 생성 및 문자열 변환

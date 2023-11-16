@@ -2,7 +2,7 @@ package com.recipia.member.service;
 
 
 import com.recipia.member.domain.Member;
-import com.recipia.member.event.NicknameChangeEvent;
+import com.recipia.member.springevent.NicknameChangeSpringEvent;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
 import com.recipia.member.repository.MemberRepository;
@@ -26,7 +26,7 @@ public class MemberService {
         Member member = memberRepository.findById(2L).orElseThrow(() -> new MemberApplicationException(ErrorCode.DB_ERROR));
         member.changeNickname("NEW-NICKNAME222");
 
-        eventPublisher.publishEvent(new NicknameChangeEvent(member.getId()));
+        eventPublisher.publishEvent(new NicknameChangeSpringEvent(member.getId()));
     }
 
 }

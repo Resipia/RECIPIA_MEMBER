@@ -1,4 +1,4 @@
-package com.recipia.member.event;
+package com.recipia.member.springevent;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.aws.SnsService;
@@ -12,7 +12,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class SnsPublishListener {
+public class SpringEventSnsPublishListener {
 
     private final SnsService snsService;
     private final CustomJsonBuilder customJsonBuilder;
@@ -21,7 +21,7 @@ public class SnsPublishListener {
      * 이벤트를 호출한 서비스 코드의 트랜잭션과 묶여있지 않고 트랜잭션이 commit된 후에 동작한다.
      */
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void snsListen(NicknameChangeEvent event) throws JsonProcessingException {
+    public void snsListen(NicknameChangeSpringEvent event) throws JsonProcessingException {
 
         String messageJson = customJsonBuilder.add("memberId", event.memberId().toString()).build();
         snsService.publishNicknameToTopic(messageJson);
