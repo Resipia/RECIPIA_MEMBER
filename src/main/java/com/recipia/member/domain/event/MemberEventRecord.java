@@ -21,7 +21,7 @@ public class MemberEventRecord extends CreateDateTime {
     // 회원 이벤트 기록 Pk
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_event_record_pk", nullable = false)
+    @Column(name = "member_event_record_id", nullable = false)
     private Long id;
 
     // 회원 pk
