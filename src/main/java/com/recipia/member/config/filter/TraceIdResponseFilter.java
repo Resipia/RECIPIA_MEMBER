@@ -34,8 +34,6 @@ public class TraceIdResponseFilter implements Filter {
                     chain.doFilter(request, response);
                 } finally {
                     newSpan.finish();
-                    // 응답 헤더에 TraceID 추가
-                    httpResponse.setHeader("X-Trace-Id", newSpan.context().traceIdString());
                 }
             } else {
                 chain.doFilter(request, response);

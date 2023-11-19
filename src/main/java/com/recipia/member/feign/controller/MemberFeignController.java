@@ -20,7 +20,7 @@ public class MemberFeignController {
 
     @PostMapping("/getNickname")
     public NicknameDto getNickname(@RequestParam(name = "memberId") Long memberId) {
-        Span span = tracer.nextSpan().name("Feign Get Nickname").start();
+        Span span = tracer.nextSpan().name("[MEMBER] /feign/member/gitNickname received").start();
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(span)) {
             return memberFeignService.getNicknameByMemberId(memberId);
         } finally {
