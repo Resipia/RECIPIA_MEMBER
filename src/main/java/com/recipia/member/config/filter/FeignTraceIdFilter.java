@@ -5,7 +5,6 @@ import brave.propagation.TraceContext;
 import jakarta.servlet.*;
 import brave.Tracer;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,30 +12,28 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Component
-public class TraceIdResponseFilter implements Filter {
+public class FeignTraceIdFilter implements Filter {
 
     private final Tracer tracer;
-
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-        // Feign 요청 확인 및 TraceID 추출
-        if ("true".equals(httpRequest.getHeader("X-Feign-Client"))) {
-            String incomingTraceId = httpRequest.getHeader("X-Trace-Id");
-            if (incomingTraceId != null && !incomingTraceId.isEmpty()) {
-                // 추출한 TraceID로 새로운 Span 시작
-                TraceContext incomingContext = buildTraceContext(incomingTraceId);
-                Span newSpan = tracer.newChild(incomingContext).start();
-                try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan)) {
-                    chain.doFilter(request, response);
-                } finally {
-                    newSpan.finish();
-                }
-            } else {
+        // Feign 클라이언트가 아닌 경우, 다음 필터로 이동
+        if (!"true".equals(httpRequest.getHeader("X-Feign-Client"))) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        String incomingTraceId = httpRequest.getHeader("X-Trace-Id");
+        if (incomingTraceId != null && !incomingTraceId.isEmpty()) {
+            // 추출한 TraceID로 새로운 Span 시작
+            TraceContext incomingContext = buildTraceContext(incomingTraceId);
+            Span newSpan = tracer.newChild(incomingContext).start();
+            try (Tracer.SpanInScope ws = tracer.withSpanInScope(newSpan)) {
                 chain.doFilter(request, response);
+            } finally {
+                newSpan.finish();
             }
         } else {
             chain.doFilter(request, response);

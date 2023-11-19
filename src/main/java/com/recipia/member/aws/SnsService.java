@@ -26,8 +26,8 @@ public class SnsService {
 
     public PublishResponse publishNicknameToTopic(String message) {
 
-        // TraceId 추출
-        String traceId = tracer.currentSpan().context().traceIdString(); // 현재 TraceID 추출
+        // 현재 TraceID 추출
+        String traceId = tracer.currentSpan().context().traceIdString();
 
         Map<String, Object> messageMap = new HashMap<>();
         messageMap.put("traceId", traceId); // TraceID를 메시지에 추가
