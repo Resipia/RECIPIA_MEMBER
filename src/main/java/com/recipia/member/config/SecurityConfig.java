@@ -80,7 +80,7 @@ public class SecurityConfig {
             HttpSecurity http,
             CustomAuthenticationFilter customAuthenticationFilter,
             JwtAuthorizationFilter jwtAuthorizationFilter
-    ) throws Exception{
+    ) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -89,7 +89,9 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/resources/**"),
                                 new AntPathRequestMatcher("/login"),
                                 new AntPathRequestMatcher("/member/*"),
-                                new AntPathRequestMatcher("/feign/member/*")
+                                new AntPathRequestMatcher("/feign/member/*"),   // feign 으로 들어온 접근을 허용
+                                new AntPathRequestMatcher("/health")            // ALB에서 상태 검사용으로 들어온 '/health' 경로에 대한 접근을 허용
+
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -101,14 +103,14 @@ public class SecurityConfig {
     }
 
 
-        @Bean
-        public SecurityFilterChain basicSecurityFilterChain(HttpSecurity http) throws Exception {
-            return http
-                    .authorizeHttpRequests(authz -> authz
-                            .anyRequest().authenticated()
-                    ).httpBasic(Customizer.withDefaults())
-                    .build();
-        }
+    @Bean
+    public SecurityFilterChain basicSecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeHttpRequests(authz -> authz
+                        .anyRequest().authenticated()
+                ).httpBasic(Customizer.withDefaults())
+                .build();
+    }
 
     @Bean
     public SecurityFilterChain formSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -118,10 +120,6 @@ public class SecurityConfig {
                 ).formLogin(Customizer.withDefaults());
         return http.build();
     }
-
-
-
-
 
 
     /**
@@ -217,7 +215,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 
 }
