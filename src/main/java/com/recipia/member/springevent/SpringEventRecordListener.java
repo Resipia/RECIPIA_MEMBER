@@ -1,5 +1,6 @@
 package com.recipia.member.springevent;
 
+import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.config.aws.AwsSnsConfig;
 import com.recipia.member.domain.Member;
@@ -24,6 +25,7 @@ public class SpringEventRecordListener {
     private final MemberEventRecordRepository memberEventRecordRepository;
     private final AwsSnsConfig awsSnsConfig;
     private final CustomJsonBuilder customJsonBuilder;
+    private final Tracer tracer;
 
     /**
      * 이벤트를 호출한 서비스 코드의 트랜잭션과 묶이게 된다.
@@ -33,8 +35,14 @@ public class SpringEventRecordListener {
     public void listen(NicknameChangeSpringEvent event) throws JsonProcessingException {
         Member member = memberRepository.findById(event.memberId()).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
 
-        // JSON 객체 생성 및 문자열 변환
-        String messageJson = customJsonBuilder.add("memberId", member.getId().toString()).build();
+        // 현재 TraceID 추출
+        String traceId = tracer.currentSpan().context().traceIdString();
+
+        // message에 memberId, traceId 주입
+        String messageJson = customJsonBuilder
+                .add("memberId", event.memberId().toString())
+                .add("traceId", traceId)
+                .build();
 
         String topicName = MemberStringUtils.extractLastPart(awsSnsConfig.getSnsTopicNicknameChangeARN());
 
