@@ -23,7 +23,7 @@ public class SpringEventSnsPublishListener {
      * 이벤트를 호출한 서비스 코드의 트랜잭션과 묶여있지 않고 트랜잭션이 commit된 후에 동작한다.
      */
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void snsListen(NicknameChangeSpringEvent event) throws JsonProcessingException {
+    public void snsPublishListener(NicknameChangeSpringEvent event) throws JsonProcessingException {
 
         // 현재 TraceID 추출
         String traceId = tracer.currentSpan().context().traceIdString();
