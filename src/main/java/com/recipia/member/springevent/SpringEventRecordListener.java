@@ -32,7 +32,7 @@ public class SpringEventRecordListener {
      */
     @Transactional
     @EventListener
-    public void listen(NicknameChangeSpringEvent event) throws JsonProcessingException {
+    public void eventRecordListener(NicknameChangeSpringEvent event) throws JsonProcessingException {
         Member member = memberRepository.findById(event.memberId()).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
 
         // 현재 TraceID 추출
