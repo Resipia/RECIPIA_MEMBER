@@ -1,6 +1,10 @@
 package com.recipia.member.aws;
 
+import brave.Span;
+import brave.Tracer;
 import com.recipia.member.config.aws.AwsSnsConfig;
+import com.recipia.member.exception.ErrorCode;
+import com.recipia.member.exception.MemberApplicationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,21 +19,32 @@ public class SnsService {
 
     private final SnsClient snsClient;
     private final AwsSnsConfig awsSnsConfig;
+    private final Tracer tracer;
 
     public PublishResponse publishNicknameToTopic(String message) {
 
-        // SNS 발행 요청 생성
-        PublishRequest publishRequest = PublishRequest.builder()
-                .message(message)
-                .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
-                .build();
+        // SNS 발행 Span 생성
+        Span span = tracer.nextSpan().name("SNS Publish").start();
 
-        // SNS 클라이언트를 통해 메시지 발행
-        PublishResponse response = snsClient.publish(publishRequest);
+        try (Tracer.SpanInScope ws = tracer.withSpanInScope(span)) {
+            // SNS 발행 요청 생성
+            PublishRequest publishRequest = PublishRequest.builder()
+                    .message(message)
+                    .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
+                    .build();
 
-        // messageId 로깅
-        log.info("[MEMBER] Published message to SNS with messageId: {}", response.messageId());
-        return response;
+            // SNS 클라이언트를 통해 메시지 발행
+            PublishResponse response = snsClient.publish(publishRequest);
+
+            // messageId 로깅
+            log.info("[MEMBER] Published message to SNS with messageId: {}", response.messageId());
+            return response;
+        } catch (Exception e) {
+            span.tag("error", e.toString()); // 오류 태깅
+            throw new MemberApplicationException(ErrorCode.AWS_SNS_CLIENT);
+        } finally {
+            span.finish(); // Span 종료
+        }
     }
 
 }

@@ -37,16 +37,17 @@ public enum ErrorCode {
     BAD_REQUEST(400, "BAD_REQUEST", "잘못된 요청"),
     FILTER_USERNAME_PASSWORD_AUTHENTICATION_TOKEN(404, "FILTER_USERNAME_PASSWORD_AUTHENTICATION_TOKEN", "filter attemptAuthentication 인증 에러"),
     EVENT_NOT_FOUND(404, "EVENT_NOT_FOUND", "이벤트 저장소에 해당 이벤트를 찾을 수 없습니다."),
-
-    // 추가된 특정 에러 코드 (예시)
     INTERNAL_SERVER_ERROR(500, "INTERNAL_SERVER_ERROR", "서버 내부 오류"),
     NULL_POINTER_EXCEPTION(500, "NULL_POINTER_EXCEPTION", "Null 참조 오류"),
     ILLEGAL_ARGUMENT_EXCEPTION(400, "ILLEGAL_ARGUMENT_EXCEPTION", "부적절한 인자 오류"),
+
+    AWS_SNS_CLIENT(500, "AWS_SNS_CLIENT", "SNS 발행 에러"),
 
     // 외부 서비스 에러
     RECIPE_SERVICE_ERROR(500, "RECIPE_SERVICE_ERROR", "RECIPE 서비스 에러"),
     WRIGGLE_SERVICE_ERROR(500, "WRIGGLE_SERVICE_ERROR", "WRIGGLE 서비스 에러"),
     CHAT_SERVICE_ERROR(500, "CHAT_SERVICE_ERROR", "CHAT 서비스 에러");
+
 
     private final int status;
     private final String code;
