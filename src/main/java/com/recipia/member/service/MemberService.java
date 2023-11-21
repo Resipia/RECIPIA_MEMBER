@@ -23,7 +23,7 @@ public class MemberService {
 
     @Transactional
     public void nicknameChange() {
-        Member member = memberRepository.findById(2L).orElseThrow(() -> new MemberApplicationException(ErrorCode.DB_ERROR));
+        Member member = memberRepository.findById(2L).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
         member.changeNickname("NEW-NICKNAME222");
 
         eventPublisher.publishEvent(new NicknameChangeSpringEvent(member.getId()));
