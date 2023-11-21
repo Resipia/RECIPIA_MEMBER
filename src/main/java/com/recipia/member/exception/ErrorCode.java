@@ -36,6 +36,7 @@ public enum ErrorCode {
     IO_ERROR(404, "IO_ERROR", "INPUT/OUTPUT ERROR"),
     BAD_REQUEST(400, "BAD_REQUEST", "잘못된 요청"),
     FILTER_USERNAME_PASSWORD_AUTHENTICATION_TOKEN(404, "FILTER_USERNAME_PASSWORD_AUTHENTICATION_TOKEN", "filter attemptAuthentication 인증 에러"),
+    EVENT_NOT_FOUND(404, "EVENT_NOT_FOUND", "이벤트 저장소에 해당 이벤트를 찾을 수 없습니다."),
 
     // 추가된 특정 에러 코드 (예시)
     INTERNAL_SERVER_ERROR(500, "INTERNAL_SERVER_ERROR", "서버 내부 오류"),

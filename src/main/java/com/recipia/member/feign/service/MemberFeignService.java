@@ -16,7 +16,7 @@ public class MemberFeignService {
 
 
     public NicknameDto getNicknameByMemberId(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberApplicationException(ErrorCode.DB_ERROR));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
         return NicknameDto.of(member.getId(), member.getNickname());
     }
 }
