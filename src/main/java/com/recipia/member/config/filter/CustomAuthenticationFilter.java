@@ -43,7 +43,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             // Authentication 객체에 authRequest 설정
             setDetails(request, authRequest);
         } catch (Exception e) {
-            throw new MemberApplicationException(ErrorCode.USERNAME_PASSWORD_AUTHENTICATION_TOKEN_ERROR);
+            throw new MemberApplicationException(ErrorCode.FILTER_USERNAME_PASSWORD_AUTHENTICATION_TOKEN);
         }
 
         // Authentication 객체 반환
