@@ -4,6 +4,7 @@ import brave.sampler.Sampler;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -24,8 +25,15 @@ public class ZipkinTracingConfig {
         return new Sampler() {
             @Override
             public boolean isSampled(long traceId) {
-                HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-                return ALLOWED_PATHS.stream().anyMatch(path -> request.getRequestURI().startsWith(path));
+                RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+
+                if (requestAttributes instanceof ServletRequestAttributes) {
+                    HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+                    return ALLOWED_PATHS.stream().anyMatch(path -> request.getRequestURI().startsWith(path));
+                }
+
+                // HTTP 요청 정보가 없는 경우 기본적으로 추적하지 않음
+                return false;
             }
         };
     }
