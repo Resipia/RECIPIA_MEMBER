@@ -1,5 +1,8 @@
 package com.recipia.member.config.batch;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.recipia.member.aws.SnsService;
 import com.recipia.member.domain.event.MemberEventRecord;
 import jakarta.persistence.EntityManagerFactory;
@@ -32,14 +35,15 @@ public class BatchConfiguration extends DefaultBatchConfiguration {
 
     private final SnsService snsService;
     private final EntityManagerFactory entityManagerFactory;
+    private final ObjectMapper objectMapper;
 
     // 배치 작업에서 사용할 chunkSize 값 설정. 기본값은 1000
     @Value("${chunkSize:2}")
 //    @Value("${chunkSize:1000}")
     private int chunkSize;
 
-    @Value("${pageSize:2}")
-    private final int pageSize = 100;
+    @Value("${pageSize:4}")
+    private int pageSize;
 
     /**
      * Job을 정의. 하나 이상의 Step을 포함할 수 있으며, 여기서는 sendSmsStackStep을 시작점으로 설정함.
@@ -91,16 +95,12 @@ public class BatchConfiguration extends DefaultBatchConfiguration {
         return item -> {
 
             log.info("제대로 동작중!!");
-            item.changeIsBatchTrue();
-            snsService.publishNicknameToTopic(item.getAttribute());
+            // attribute JSON 파싱 및 새로운 JSON 문자열 생성
+            String newJsonMessage = createJsonMessage(item.getAttribute());
 
-            // 1초 동안 쉬는 로직 추가
-            try {
-                Thread.sleep(1000); // 1000밀리초 = 1초
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // 스레드 인터럽트 상태 복원
-                log.error("Thread interrupted", e);
-            }
+            // 여기서는 isBatch여부만 바꿔주고 published는 sqsListener가 새로운 sns메시지를 받으면 그때 처리한다.
+            item.changeIsBatchTrue();
+            snsService.publishNicknameToTopic(newJsonMessage);
             return item;
         };
     }
@@ -115,4 +115,28 @@ public class BatchConfiguration extends DefaultBatchConfiguration {
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }
+
+
+    /**
+     * [EXTRACT METHOD] - DB안의 데이터를 다시 parsing해서 뽑아낸 다음 그대로 다시 새로운 json으로 만드는 메서드
+     *
+     * 이렇게 다시 가공을 안하고 바로 이벤트 저장소 테이블에 저장된 attribute 값을 파라미터로 넣어서 SNS를 발행했더니
+     * SqsListener에서 메시지를 꺼내서 사용할 때 JSON PARSING 에러가 발생해서 이렇게 json 재가공을 해준것이다.
+     */
+    private String createJsonMessage(String json) throws JsonProcessingException {
+        // 기존 JSON 데이터 파싱
+        ObjectNode jsonNode = (ObjectNode) objectMapper.readTree(json);
+
+        // 필요한 데이터 추출 및 새 JSON 생성
+        Long memberId = jsonNode.get("memberId").asLong();
+        String traceId = jsonNode.get("traceId").asText();
+
+        // 새로운 JSON 생성
+        ObjectNode newJsonNode = objectMapper.createObjectNode();
+        newJsonNode.put("memberId", memberId);
+        newJsonNode.put("traceId", traceId);
+
+        return newJsonNode.toString();
+    }
+
 }
