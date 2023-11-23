@@ -51,11 +51,6 @@ spring:
         nickname-sqs-name: sqs-test
         record-sqs-name: member-sns-published-record-sqs
 
-  sleuth:
-    web:
-      servlet:
-        skip-pattern: /member/test.*
-
 server:
   port: 8081
 
