@@ -15,7 +15,14 @@ spring:
     username: ${DB_MASTER_USERNAME}
     password: ${DB_MASTER_PASSWORD}
 
+  batch:
+    jdbc:
+      initialize-schema: ALWAYS
+    job:
+      enabled: true
+
   jpa:
+    database: POSTGRESQL
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: none
