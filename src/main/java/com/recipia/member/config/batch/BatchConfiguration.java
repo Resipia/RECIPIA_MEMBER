@@ -1,8 +1,7 @@
-package com.recipia.member.config.event;
+package com.recipia.member.config.batch;
 
 import com.recipia.member.aws.SnsService;
 import com.recipia.member.domain.event.MemberEventRecord;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,7 +75,7 @@ public class BatchConfiguration extends DefaultBatchConfiguration {
     public JpaPagingItemReader<MemberEventRecord> jpaPagingItemReader(EntityManagerFactory entityManagerFactory) {
         log.info("jpaPagingItemReader 동작!");
         JpaPagingItemReader<MemberEventRecord> reader = new JpaPagingItemReader<>();
-        reader.setQueryString("SELECT m FROM MemberEventRecord m WHERE m.published = false");
+        reader.setQueryString("SELECT m FROM MemberEventRecord m WHERE m.published = false order by m.id ASC");
         reader.setEntityManagerFactory(entityManagerFactory);
         reader.setPageSize(pageSize); // 페이지 크기 설정
         return reader;
@@ -90,9 +89,18 @@ public class BatchConfiguration extends DefaultBatchConfiguration {
     public ItemProcessor<MemberEventRecord, MemberEventRecord> itemProcessor() {
         log.info("ItemProcessor 동작!");
         return item -> {
+
             log.info("제대로 동작중!!");
             item.changeIsBatchTrue();
             snsService.publishNicknameToTopic(item.getAttribute());
+
+            // 1초 동안 쉬는 로직 추가
+            try {
+                Thread.sleep(1000); // 1000밀리초 = 1초
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // 스레드 인터럽트 상태 복원
+                log.error("Thread interrupted", e);
+            }
             return item;
         };
     }

@@ -1,4 +1,4 @@
-package com.recipia.member.config.event;
+package com.recipia.member.config.batch;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
