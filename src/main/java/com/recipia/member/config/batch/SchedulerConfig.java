@@ -23,7 +23,7 @@ public class SchedulerConfig {
 
     // 매 5분마다 실행
 //    @Scheduled(cron = "0 */5 * * * *")
-    @Scheduled(cron = "10 * * * * *")   // 개발용 10초마다
+    @Scheduled(cron = "*/5 * * * * *")   // 개발용 5초마다
     public void runBatchJob() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())

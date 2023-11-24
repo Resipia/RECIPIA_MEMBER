@@ -79,7 +79,22 @@ public class BatchConfiguration extends DefaultBatchConfiguration {
     public JpaPagingItemReader<MemberEventRecord> jpaPagingItemReader(EntityManagerFactory entityManagerFactory) {
         log.info("jpaPagingItemReader 동작!");
         JpaPagingItemReader<MemberEventRecord> reader = new JpaPagingItemReader<>();
-        reader.setQueryString("SELECT m FROM MemberEventRecord m WHERE m.published = false order by m.id ASC");
+//        reader.setQueryString("SELECT m FROM MemberEventRecord m WHERE m.published = false order by m.id ASC");
+
+        String jpql = """
+                  SELECT mer
+                  FROM MemberEventRecord mer
+                  WHERE mer.published = false
+                  AND mer.id IN (
+                      SELECT MAX(innerMer.id)
+                      FROM MemberEventRecord innerMer
+                      WHERE innerMer.published = false
+                      GROUP BY innerMer.member.id, innerMer.snsTopic
+                  )
+                  ORDER BY mer.id ASC
+                """;
+
+        reader.setQueryString(jpql);
         reader.setEntityManagerFactory(entityManagerFactory);
         reader.setPageSize(pageSize); // 페이지 크기 설정
         return reader;
