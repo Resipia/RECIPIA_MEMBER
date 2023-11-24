@@ -50,6 +50,9 @@ public class MemberEventRecord extends CreateDateTime {
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
 
+    @Column(name = "is_batch")
+    private Boolean isBatch;
+
     private MemberEventRecord(Member member, String snsTopic, String eventType, String attribute, boolean published, LocalDateTime publishedAt) {
         this.member = member;
         this.snsTopic = snsTopic;
@@ -72,4 +75,12 @@ public class MemberEventRecord extends CreateDateTime {
         this.published = true;
         publishedAt = LocalDateTime.now();
     }
+
+    /**
+     * 배치처리할때 isBatch=true 로 업데이트 하는 메서드
+     */
+    public void changeIsBatchTrue() {
+        this.isBatch = true;
+    }
+
 }
