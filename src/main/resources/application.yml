@@ -15,7 +15,14 @@ spring:
     username: ${DB_MASTER_USERNAME}
     password: ${DB_MASTER_PASSWORD}
 
+  batch:
+    jdbc:
+      initialize-schema: ALWAYS
+    job:
+      enabled: true
+
   jpa:
+    database: POSTGRESQL
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: none
@@ -43,11 +50,6 @@ spring:
       sqs:
         nickname-sqs-name: sqs-test
         record-sqs-name: member-sns-published-record-sqs
-
-  sleuth:
-    web:
-      servlet:
-        skip-pattern: /member/test.*
 
 server:
   port: 8081

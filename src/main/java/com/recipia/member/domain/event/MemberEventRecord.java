@@ -50,6 +50,7 @@ public class MemberEventRecord extends CreateDateTime {
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
 
+
     private MemberEventRecord(Member member, String snsTopic, String eventType, String attribute, boolean published, LocalDateTime publishedAt) {
         this.member = member;
         this.snsTopic = snsTopic;
@@ -72,4 +73,14 @@ public class MemberEventRecord extends CreateDateTime {
         this.published = true;
         publishedAt = LocalDateTime.now();
     }
+
+
+    /**
+     * 배치처리할때 traceId 누락된 데이터는 새로 생성해서 DB에 attribute로 추가해주는 메소드
+     * @param newAttribute 새로 생성된 traceId와 기존에 있던 memberId
+     */
+    public void changeAttribute(String newAttribute) {
+        this.attribute = newAttribute;
+    }
+
 }

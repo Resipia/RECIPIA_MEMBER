@@ -4,8 +4,8 @@ package com.recipia.member.aws;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.domain.event.MemberEventRecord;
-import com.recipia.member.dto.SnsMessageDto;
 import com.recipia.member.dto.SnsInformationDto;
+import com.recipia.member.dto.SnsMessageDto;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
 import com.recipia.member.repository.MemberEventRecordRepository;
@@ -36,14 +36,7 @@ public class SqsEventRecordListener {
         SnsInformationDto snsInformationDto = objectMapper.readValue(messageJson, SnsInformationDto.class);
         SnsMessageDto snsMessageDto = objectMapper.readValue(snsInformationDto.Message(), SnsMessageDto.class);
 
-        // 'traceId' key 확인
-        if (snsMessageDto.traceId() == null) {
-            log.error("No traceId found in the message. memberId: {}, skipping processing.", snsMessageDto.memberId());
-            return;
-        }
-
-        String topicArn = snsInformationDto.TopicArn();
-        String topicName = MemberStringUtils.extractLastPart(topicArn);
+        String topicName = MemberStringUtils.extractLastPart(snsInformationDto.TopicArn());
         Long memberId = snsMessageDto.memberId();
 
         MemberEventRecord memberEventRecord = memberEventRecordRepository
