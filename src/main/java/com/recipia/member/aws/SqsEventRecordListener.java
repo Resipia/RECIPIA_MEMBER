@@ -36,17 +36,9 @@ public class SqsEventRecordListener {
         SnsInformationDto snsInformationDto = objectMapper.readValue(messageJson, SnsInformationDto.class);
         SnsMessageDto snsMessageDto = objectMapper.readValue(snsInformationDto.Message(), SnsMessageDto.class);
 
-        // 'traceId'가 null인지 확인
-        if (snsMessageDto.traceId() == null) {
-            log.error("No traceId found in the message. memberId: {}, skipping processing.", snsMessageDto.memberId());
-            return;
-        }
-
         String topicName = MemberStringUtils.extractLastPart(snsInformationDto.TopicArn());
         Long memberId = snsMessageDto.memberId();
 
-        // todo: 여기서 지금 배치로 발행여부를 업데이트할때 published가 false인 것은 전부 true로 해줘야 할것같음 아니면 다른 조건문을 생각해봐야할것같음.
-        //  왜냐하면 만약 4개가 false인채로 배치가 동작하면 얘는 그중 1개만 계속 true로 반복 수정해서 배치가 false인거는 계속 가져오다보니 멈추지 않고 무한반복함
         MemberEventRecord memberEventRecord = memberEventRecordRepository
                 .findFirstByMember_IdAndSnsTopicOrderByIdDesc(memberId, topicName)
                 .orElseThrow(() -> new MemberApplicationException(ErrorCode.EVENT_NOT_FOUND));
