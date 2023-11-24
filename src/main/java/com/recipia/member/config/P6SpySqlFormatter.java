@@ -19,8 +19,22 @@ public class P6SpySqlFormatter implements MessageFormattingStrategy {
 
     @Override
     public String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql, String url) {
-        sql = formatSql(category, sql);
+        // 배치 테이블 관련 쿼리 제외
+        if (isBatchTableQuery(sql)) {
+            return ""; // 배치 테이블 관련 쿼리는 로그에서 제외
+        }
         return String.format("[%s] | %d ms | %s", category, elapsed, formatSql(category, sql));
+    }
+
+    private boolean isBatchTableQuery(String sql) {
+        if (sql != null) {
+            String lowerCaseSql = sql.toLowerCase(Locale.ROOT);
+            return lowerCaseSql.contains("batch_job_instance") ||
+                    lowerCaseSql.contains("batch_job_execution") ||
+                    lowerCaseSql.contains("batch_step_execution") ||
+                    lowerCaseSql.contains("batch_step_execution_context");
+        }
+        return false;
     }
 
     private String formatSql(String category, String sql) {
@@ -35,5 +49,4 @@ public class P6SpySqlFormatter implements MessageFormattingStrategy {
         }
         return sql;
     }
-
 }

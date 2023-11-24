@@ -77,7 +77,7 @@ dependencies {
 
 
 	// P6spy
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1'
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
 
 }
