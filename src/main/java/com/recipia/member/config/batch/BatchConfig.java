@@ -112,21 +112,23 @@ public class BatchConfig extends DefaultBatchConfiguration {
     @Bean
     public ItemProcessor<MemberEventRecord, MemberEventRecord> itemProcessor() {
         return item -> {
-            try {
+//            try {
                 log.info("processItem 동작중");
 
                 // 1. 이벤트 객체의 attribute를 memberid, traceid 를 지닌 메시지 dto로 변환
-                SnsMessageDto snsMessageDto = objectMapper.readValue(item.getAttribute(), SnsMessageDto.class);
+//                SnsMessageDto snsMessageDto = objectMapper.readValue(item.getAttribute(), SnsMessageDto.class);
 
                 // 새로운 JSON 메시지 생성
-                String newJsonMessage = createJsonMessage(snsMessageDto);
+//                String newJsonMessage = createJsonMessage(snsMessageDto);
 
                 // 4. SNS 발행 메소드
-                snsService.publishNicknameToTopic(newJsonMessage);
+                // TODO: item.getTraceId() null일때 예외처리 추가
+//                snsService.publishNicknameToTopic(newJsonMessage, item.getTraceId());
+                snsService.publishNicknameToTopic(item.getAttribute(), item.getTraceId());
 
-            } catch (JsonProcessingException e) {
-                log.error("JSON 처리 중 오류 발생: {}", e.getMessage(), e);
-            }
+//            } catch (JsonProcessingException e) {
+//                log.error("JSON 처리 중 오류 발생: {}", e.getMessage(), e);
+//            }
             return item;
         };
 
@@ -146,12 +148,11 @@ public class BatchConfig extends DefaultBatchConfiguration {
     /**
      * [EXTRACT METHOD] - DB안의 데이터를 다시 parsing해서 뽑아낸 다음 그대로 다시 새로운 json으로 만드는 메서드
      */
-    private String createJsonMessage(SnsMessageDto snsMessageDto) throws JsonProcessingException {
-        ObjectNode newJsonNode = objectMapper.createObjectNode();
-        newJsonNode.put(TRACE_ID, snsMessageDto.traceId());
-        newJsonNode.put(MEMBER_ID, snsMessageDto.memberId().toString());
-        return newJsonNode.toString();
-    }
+//    private String createJsonMessage(SnsMessageDto snsMessageDto) throws JsonProcessingException {
+//        ObjectNode newJsonNode = objectMapper.createObjectNode();
+//        newJsonNode.put(MEMBER_ID, snsMessageDto.memberId().toString());
+//        return newJsonNode.toString();
+//    }
 
 
 
