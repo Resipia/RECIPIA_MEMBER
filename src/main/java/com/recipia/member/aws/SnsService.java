@@ -9,8 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.services.sns.model.MessageAttributeValue;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,15 +25,23 @@ public class SnsService {
     private final AwsSnsConfig awsSnsConfig;
     private final Tracer tracer;
 
-    public PublishResponse publishNicknameToTopic(String message) {
+    public PublishResponse publishNicknameToTopic(String message, String traceId) {
 
         // SNS 발행 Span 생성
         Span span = tracer.nextSpan().name("SNS Publish").start();
 
         try (Tracer.SpanInScope ws = tracer.withSpanInScope(span)) {
+
+            Map<String, MessageAttributeValue> messageAttributes = new HashMap<>();
+            messageAttributes.put("traceId", MessageAttributeValue.builder()
+                    .dataType("String")
+                    .stringValue(traceId)
+                    .build());
+
             // SNS 발행 요청 생성
             PublishRequest publishRequest = PublishRequest.builder()
                     .message(message)
+                    .messageAttributes(messageAttributes)
                     .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
                     .build();
 

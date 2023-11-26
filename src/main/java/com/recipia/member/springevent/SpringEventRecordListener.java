@@ -41,7 +41,6 @@ public class SpringEventRecordListener {
         // message에 memberId, traceId 주입
         String messageJson = customJsonBuilder
                 .add("memberId", event.memberId().toString())
-                .add("traceId", traceId)
                 .build();
 
         String topicName = MemberStringUtils.extractLastPart(awsSnsConfig.getSnsTopicNicknameChangeARN());
@@ -51,6 +50,7 @@ public class SpringEventRecordListener {
                 topicName,
                 "NicknameChangeEvent",
                 messageJson,
+                traceId,
                 false,
                 null
         );
