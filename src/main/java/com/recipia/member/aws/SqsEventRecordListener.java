@@ -40,7 +40,7 @@ public class SqsEventRecordListener {
         Long memberId = messageMemberIdDto.memberId();
 
         MemberEventRecord memberEventRecord = memberEventRecordRepository
-                .findFirstByMember_IdAndSnsTopicOrderByIdDesc(memberId, topicName)
+                .findFirstByMember_IdAndSnsTopicAndPublishedOrderByIdDesc(memberId, topicName, false)
                 .orElseThrow(() -> new MemberApplicationException(ErrorCode.EVENT_NOT_FOUND));
 
         memberEventRecord.changePublished();
