@@ -1,11 +1,8 @@
 package com.recipia.member.config.batch;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.recipia.member.aws.SnsService;
 import com.recipia.member.domain.event.MemberEventRecord;
-import com.recipia.member.dto.SnsMessageDto;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -106,30 +103,16 @@ public class BatchConfig extends DefaultBatchConfiguration {
     }
 
     /**
-     * ItemProcessor를 설정하여 MemberEventRecord를 필터링하고 isBatch를 true로 설정하고 snsService.publishNicknameToTopic()를 호출.
+     * ItemProcessor를 설정하여 MemberEventRecord를 필터링하고 snsService.publishNicknameToTopic()를 호출.
      * 이때 publishNicknameToTopic안의 트랜잭션이 시작되고 ItemWriter의 동작까지 같은 트랜잭션으로 묶어진다.
      */
     @Bean
     public ItemProcessor<MemberEventRecord, MemberEventRecord> itemProcessor() {
         return item -> {
-            try {
-                log.info("processItem 동작중");
-
-                // 1. 이벤트 객체의 attribute를 memberid, traceid 를 지닌 메시지 dto로 변환
-                SnsMessageDto snsMessageDto = objectMapper.readValue(item.getAttribute(), SnsMessageDto.class);
-
-                // 새로운 JSON 메시지 생성
-                String newJsonMessage = createJsonMessage(snsMessageDto);
-
-                // 4. SNS 발행 메소드
-                snsService.publishNicknameToTopic(newJsonMessage);
-
-            } catch (JsonProcessingException e) {
-                log.error("JSON 처리 중 오류 발생: {}", e.getMessage(), e);
-            }
+            log.info("processItem 동작중");
+            snsService.publishNicknameToTopic(item.getAttribute(), item.getTraceId());
             return item;
         };
-
     }
 
     /**
@@ -146,13 +129,11 @@ public class BatchConfig extends DefaultBatchConfiguration {
     /**
      * [EXTRACT METHOD] - DB안의 데이터를 다시 parsing해서 뽑아낸 다음 그대로 다시 새로운 json으로 만드는 메서드
      */
-    private String createJsonMessage(SnsMessageDto snsMessageDto) throws JsonProcessingException {
-        ObjectNode newJsonNode = objectMapper.createObjectNode();
-        newJsonNode.put(TRACE_ID, snsMessageDto.traceId());
-        newJsonNode.put(MEMBER_ID, snsMessageDto.memberId().toString());
-        return newJsonNode.toString();
-    }
-
+//    private String createJsonMessage(SnsMessageDto snsMessageDto) throws JsonProcessingException {
+//        ObjectNode newJsonNode = objectMapper.createObjectNode();
+//        newJsonNode.put(MEMBER_ID, snsMessageDto.memberId().toString());
+//        return newJsonNode.toString();
+//    }
 
 
 }

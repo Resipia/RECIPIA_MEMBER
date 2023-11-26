@@ -28,13 +28,12 @@ public class SpringEventSnsPublishListener {
         // 현재 TraceID 추출
         String traceId = tracer.currentSpan().context().traceIdString();
 
-        // message에 memberId, traceId 주입
+        // message에 memberId 주입
         String messageJson = customJsonBuilder
                 .add("memberId", event.memberId().toString())
-                .add("traceId", traceId)
                 .build();
 
-        snsService.publishNicknameToTopic(messageJson);
+        snsService.publishNicknameToTopic(messageJson, traceId);
     }
 
 }

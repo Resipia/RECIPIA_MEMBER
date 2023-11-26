@@ -4,8 +4,8 @@ package com.recipia.member.aws;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.domain.event.MemberEventRecord;
-import com.recipia.member.dto.SnsInformationDto;
-import com.recipia.member.dto.SnsMessageDto;
+import com.recipia.member.dto.message.MessageMemberIdDto;
+import com.recipia.member.dto.message.SnsNotificationDto;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
 import com.recipia.member.repository.MemberEventRecordRepository;
@@ -33,14 +33,14 @@ public class SqsEventRecordListener {
     @SqsListener(value = "${spring.cloud.aws.sqs.record-sqs-name}")
     public void receiveSnsPublishedMessage(String messageJson) throws JsonProcessingException {
 
-        SnsInformationDto snsInformationDto = objectMapper.readValue(messageJson, SnsInformationDto.class);
-        SnsMessageDto snsMessageDto = objectMapper.readValue(snsInformationDto.Message(), SnsMessageDto.class);
+        SnsNotificationDto snsNotificationDto = objectMapper.readValue(messageJson, SnsNotificationDto.class);
+        MessageMemberIdDto messageMemberIdDto = objectMapper.readValue(snsNotificationDto.Message(), MessageMemberIdDto.class);
 
-        String topicName = MemberStringUtils.extractLastPart(snsInformationDto.TopicArn());
-        Long memberId = snsMessageDto.memberId();
+        String topicName = MemberStringUtils.extractLastPart(snsNotificationDto.TopicArn());
+        Long memberId = messageMemberIdDto.memberId();
 
         MemberEventRecord memberEventRecord = memberEventRecordRepository
-                .findFirstByMember_IdAndSnsTopicOrderByIdDesc(memberId, topicName)
+                .findFirstByMember_IdAndSnsTopicAndPublishedOrderByIdDesc(memberId, topicName, false)
                 .orElseThrow(() -> new MemberApplicationException(ErrorCode.EVENT_NOT_FOUND));
 
         memberEventRecord.changePublished();
