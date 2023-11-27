@@ -46,10 +46,10 @@ spring:
         static: ${REGION}
       sns:
         topics:
-          nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:sns-test
+          nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:NicknameChange
       sqs:
-        nickname-sqs-name: sqs-test
-        record-sqs-name: member-sns-published-record-sqs
+        nickname-sqs-name: nickname-change-sqs
+        record-sqs-name: member-event-record-sqs
 
 server:
   port: 8081
