@@ -1,14 +1,11 @@
 logging:
-  level:
-    com.recipia.member: info
-    org.springframework.web.servlet: debug
-    org.hibernate.orm.jdbc.bind: trace
-    org.springframework.cloud.sleuth: info
-
   pattern:
     level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 
 spring:
+  profiles:
+    active: prod
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${MEMBER_DB_URL}
@@ -36,19 +33,6 @@ spring:
 
   application:
     name: member
-
-  cloud:
-    aws:
-      credentials:
-        access-key: ${AWS_ACCESS_KEY}
-        secret-key: ${AWS_SECRET_KEY}
-      region:
-        static: ${REGION}
-      sns:
-        topics:
-          nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:NicknameChange
-      sqs:
-        record-sqs-name: member-event-record-sqs
 
 server:
   port: 8081
