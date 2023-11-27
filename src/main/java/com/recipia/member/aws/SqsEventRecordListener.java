@@ -43,6 +43,6 @@ public class SqsEventRecordListener {
                 .findFirstByMember_IdAndSnsTopicAndPublishedOrderByIdDesc(memberId, topicName, false)
                 .orElseThrow(() -> new MemberApplicationException(ErrorCode.EVENT_NOT_FOUND));
 
-        memberEventRecord.changePublished();
+        memberEventRecord.changePublishedToTrue();
     }
 }
