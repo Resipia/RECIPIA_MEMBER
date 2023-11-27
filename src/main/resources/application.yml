@@ -48,7 +48,6 @@ spring:
         topics:
           nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:NicknameChange
       sqs:
-        nickname-sqs-name: nickname-change-sqs
         record-sqs-name: member-event-record-sqs
 
 server:

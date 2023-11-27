@@ -43,11 +43,6 @@ public class BatchConfig extends DefaultBatchConfiguration {
     @Value("${pageSize:4}")
     private int pageSize;
 
-    // 상수 정의
-    private static final String TRACE_ID = "traceId";
-    private static final String MEMBER_ID = "memberId";
-
-
     /**
      * Job을 정의. 하나 이상의 Step을 포함할 수 있으며, 여기서는 sendSmsStackStep을 시작점으로 설정함.
      */
@@ -110,7 +105,10 @@ public class BatchConfig extends DefaultBatchConfiguration {
     public ItemProcessor<MemberEventRecord, MemberEventRecord> itemProcessor() {
         return item -> {
             log.info("processItem 동작중");
-            snsService.publishNicknameToTopic(item.getAttribute(), item.getTraceId());
+
+            switch (item.getSnsTopic()) {
+                case "NicknameChange" -> snsService.publishNicknameToTopic(item.getAttribute(), item.getTraceId());
+            }
             return item;
         };
     }
