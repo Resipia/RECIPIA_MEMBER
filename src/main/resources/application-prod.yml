@@ -1,0 +1,21 @@
+logging:
+  level:
+    com.recipia.member: debug
+    org.springframework.web.servlet: debug
+    org.hibernate.orm.jdbc.bind: debug
+    org.springframework.cloud.sleuth: debug
+
+
+spring:
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      region:
+        static: ${REGION}
+      sns:
+        topics:
+          nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:NicknameChange
+      sqs:
+        record-sqs-name: member-event-record-sqs

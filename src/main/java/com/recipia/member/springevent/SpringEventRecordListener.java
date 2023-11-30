@@ -41,8 +41,8 @@ public class SpringEventRecordListener {
         // 현재 TraceID 추출
         String traceId = tracer.currentSpan().context().traceIdString();
 
-        // message에 memberId 주입
-        String messageJson = customJsonBuilder
+        // attribute에 memberId 주입
+        String attribute = customJsonBuilder
                 .add("memberId", member.getId().toString())
                 .build();
 
@@ -58,7 +58,7 @@ public class SpringEventRecordListener {
                 member,
                 topicName,
                 "NicknameChangeEvent",
-                messageJson,
+                attribute,
                 traceId,
                 false,
                 null
