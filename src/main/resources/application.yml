@@ -24,12 +24,17 @@ spring:
     hibernate:
       ddl-auto: none
     open-in-view: false
-#    show-sql: true
+    #    show-sql: true
     properties:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 10
         highlight_sql: true
+
+  sleuth:
+    http:
+      include-patterns=/member/nicknameChange,/feign/member/getNickname
+      ignore-patterns=/health
 
   application:
     name: member

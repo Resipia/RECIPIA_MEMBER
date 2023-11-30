@@ -5,7 +5,6 @@ logging:
     org.hibernate.orm.jdbc.bind: debug
     org.springframework.cloud.sleuth: debug
 
-
 spring:
   cloud:
     aws:
