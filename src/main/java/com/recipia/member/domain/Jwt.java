@@ -1,9 +1,9 @@
 package com.recipia.member.domain;
 
+import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 

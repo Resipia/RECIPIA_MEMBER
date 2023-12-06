@@ -1,7 +1,7 @@
 package com.recipia.member.domain.event;
 
 
-import com.recipia.member.domain.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
 import com.recipia.member.domain.auditingfield.CreateDateTime;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

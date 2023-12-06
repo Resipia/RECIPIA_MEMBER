@@ -1,10 +1,10 @@
 package com.recipia.member.feign.service;
 
-import com.recipia.member.domain.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
 import com.recipia.member.feign.dto.NicknameDto;
-import com.recipia.member.repository.MemberRepository;
+import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.recipia.member.dto;
 
-import com.recipia.member.domain.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
 import com.recipia.member.domain.constant.MemberStatus;
 
 import java.time.LocalDateTime;

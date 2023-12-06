@@ -1,8 +1,8 @@
 package com.recipia.member.config.jwt;
 
-import com.recipia.member.domain.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
 import com.recipia.member.domain.constant.MemberStatus;
-import com.recipia.member.repository.MemberRepository;
+import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;

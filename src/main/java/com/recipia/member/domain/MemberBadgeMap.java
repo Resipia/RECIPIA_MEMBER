@@ -1,5 +1,6 @@
 package com.recipia.member.domain;
 
+import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
