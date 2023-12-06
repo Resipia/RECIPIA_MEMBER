@@ -52,7 +52,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'  # 이 부분을 수정
+        include: 'prometheus'  # 이 부분을 수정
   tracing:
     sampling:
       probability: 1.0
