@@ -90,7 +90,8 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/login"),
                                 new AntPathRequestMatcher("/member/*"),
                                 new AntPathRequestMatcher("/feign/member/*"),   // feign 으로 들어온 접근을 허용
-                                new AntPathRequestMatcher("/health")            // ALB에서 상태 검사용으로 들어온 '/health' 경로에 대한 접근을 허용
+                                new AntPathRequestMatcher("/health"),           // ALB에서 상태 검사용으로 들어온 '/health' 경로에 대한 접근을 허용
+                                new AntPathRequestMatcher("/actuator/*")            // ALB에서 상태 검사용으로 들어온 '/health' 경로에 대한 접근을 허용
 
                         ).permitAll()
                         .anyRequest().authenticated()
