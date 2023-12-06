@@ -2,6 +2,8 @@ logging:
   pattern:
     level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 
+
+
 spring:
   profiles:
     active: prod
@@ -43,6 +45,14 @@ server:
   port: 8081
 
 management:
+  metrics:
+    web:
+      server:
+        auto-time-requests: true
+  endpoints:
+    web:
+      exposure:
+        include: 'prometheus'  # 이 부분을 수정
   tracing:
     sampling:
       probability: 1.0
