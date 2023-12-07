@@ -2,7 +2,7 @@ package com.recipia.member.hexagonal.adapter.in.web;
 
 import com.recipia.member.hexagonal.adapter.in.web.dto.LoginRequest;
 import com.recipia.member.hexagonal.application.port.in.MemberUseCase;
-import com.recipia.member.hexagonal.domain.Authentication;
+import com.recipia.member.hexagonal.domain.SignIn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +18,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         // 로그인 로직을 usecase를 통해 처리
-        Authentication result = memberUseCase.login(request.getUsername(), request.getPassword());
+        SignIn result = memberUseCase.login(request.getUsername(), request.getPassword());
         return ResponseEntity.ok(result);
     }
 

@@ -1,8 +1,8 @@
 package com.recipia.member.hexagonal.application.port.in;
 
-import com.recipia.member.hexagonal.domain.Authentication;
+import com.recipia.member.hexagonal.domain.SignIn;
 
 public interface MemberUseCase {
 
-    Authentication login(String username, String password);
+    SignIn login(String username, String password);
 }
