@@ -1,6 +1,6 @@
 package com.recipia.member.controller;
 
-import com.recipia.member.service.MemberService;
+import com.recipia.member.service.MemberServiceMVC;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberController {
 
-    private final MemberService memberService;
+    private final MemberServiceMVC memberServiceMVC;
 
     @PostMapping("/nicknameChange")
     public String nicknameChange() {
 
-        memberService.nicknameChange();
+        memberServiceMVC.nicknameChange();
         return "success";
     }
 

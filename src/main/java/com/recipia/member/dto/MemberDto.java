@@ -1,6 +1,6 @@
 package com.recipia.member.dto;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import com.recipia.member.domain.constant.MemberStatus;
 
 import java.time.LocalDateTime;
@@ -30,7 +30,7 @@ public record MemberDto(
     }
 
     /** entity를 dto로 변환하는 factory method 선언 */
-    public static MemberDto fromEntity(Member entity) {
+    public static MemberDto fromEntity(MemberEntity entity) {
         return of(
                 entity.getId(),
                 entity.getUsername(),

@@ -1,7 +1,7 @@
 package com.recipia.member.service.security;
 
 import com.recipia.member.config.dto.SecurityUserDetailsDto;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import com.recipia.member.dto.MemberDto;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // username으로 회원 있는지 조회
-        Member member = memberRepository.findMemberByUsername(username)
+        MemberEntity member = memberRepository.findMemberByUsername(username)
                 .orElseThrow(
                         () -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND)
                 );

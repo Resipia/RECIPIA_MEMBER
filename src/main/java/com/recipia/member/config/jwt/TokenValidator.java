@@ -1,6 +1,6 @@
 package com.recipia.member.config.jwt;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import com.recipia.member.domain.constant.MemberStatus;
 import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.MemberRepository;
 import io.jsonwebtoken.Claims;
@@ -27,7 +27,7 @@ public class TokenValidator {
 
             //todo: 지금 claims안에 username이 없어서 검증오류가 생긴것이다.
             String username = claims.get("username", String.class);
-            Member member = memberRepository.findMemberByUsernameAndStatus(username, MemberStatus.ACTIVE).orElse(null);
+            MemberEntity member = memberRepository.findMemberByUsernameAndStatus(username, MemberStatus.ACTIVE).orElse(null);
 
             return member != null;
         } catch (JwtException jwtException) {

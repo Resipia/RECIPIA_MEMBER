@@ -1,7 +1,7 @@
 package com.recipia.member.domain;
 
 import com.recipia.member.domain.auditingfield.UpdateDateTime;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class MemberFile extends UpdateDateTime {
     @ToString.Exclude
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;              // 회원 pk
+    private MemberEntity member;              // 회원 pk
 
     @Column(name = "flpth", nullable = false)
     private String filePath;        // 파일 경로
@@ -43,7 +43,7 @@ public class MemberFile extends UpdateDateTime {
     @Column(name = "del_yn", nullable = false)
     private String delYn;           // 삭제여부
 
-    private MemberFile(Member member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
+    private MemberFile(MemberEntity member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
         this.member = member;
         this.filePath = filePath;
         this.originFileName = originFileName;
@@ -54,7 +54,7 @@ public class MemberFile extends UpdateDateTime {
     }
 
     // 생성자 factory method of 선언
-    public static MemberFile of(Member member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
+    public static MemberFile of(MemberEntity member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
         return new MemberFile(member, filePath, originFileName, storedFileName, fileExtension, fileSize, delYn);
     }
 

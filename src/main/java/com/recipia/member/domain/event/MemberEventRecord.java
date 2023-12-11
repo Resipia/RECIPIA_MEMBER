@@ -1,7 +1,7 @@
 package com.recipia.member.domain.event;
 
 
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import com.recipia.member.domain.auditingfield.CreateDateTime;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -28,7 +28,7 @@ public class MemberEventRecord extends CreateDateTime {
     @ToString.Exclude
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private MemberEntity member;
 
     // sns topic 명
     @Column(name = "sns_topic", nullable = false)
@@ -55,7 +55,7 @@ public class MemberEventRecord extends CreateDateTime {
     private LocalDateTime publishedAt;
 
 
-    private MemberEventRecord(Member member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
+    private MemberEventRecord(MemberEntity member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
         this.member = member;
         this.snsTopic = snsTopic;
         this.eventType = eventType;
@@ -66,7 +66,7 @@ public class MemberEventRecord extends CreateDateTime {
     }
 
     // 생성자 factory method of 선언
-    public static MemberEventRecord of(Member member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
+    public static MemberEventRecord of(MemberEntity member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
         return new MemberEventRecord(member, snsTopic, eventType, attribute, traceId, published, publishedAt);
     }
 

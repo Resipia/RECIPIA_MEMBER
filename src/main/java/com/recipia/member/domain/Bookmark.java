@@ -1,7 +1,7 @@
 package com.recipia.member.domain;
 
 import com.recipia.member.domain.auditingfield.CreateDateTime;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,18 +23,18 @@ public class Bookmark extends CreateDateTime {
     @ToString.Exclude
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;          // 회원 pk
+    private MemberEntity member;          // 회원 pk
 
     @Column(name = "recipe_id", nullable = false)
     private Long recipeId;      // 레시피 pk
 
-    private Bookmark(Member member, Long recipeId) {
+    private Bookmark(MemberEntity member, Long recipeId) {
         this.member = member;
         this.recipeId = recipeId;
     }
 
     // factory method 선언
-    public static Bookmark of(Member member, Long recipeId) {
+    public static Bookmark of(MemberEntity member, Long recipeId) {
         return new Bookmark(member, recipeId);
     }
 

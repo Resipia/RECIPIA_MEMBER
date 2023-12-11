@@ -3,7 +3,7 @@ package com.recipia.member.springevent;
 import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.config.aws.AwsSnsConfig;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import com.recipia.member.domain.event.MemberEventRecord;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
@@ -36,7 +36,7 @@ public class SpringEventRecordListener {
     @EventListener
     public void eventRecordListener(NicknameChangeSpringEvent event) throws JsonProcessingException {
 
-        Member member = memberRepository.findById(event.memberId()).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
+        MemberEntity member = memberRepository.findById(event.memberId()).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
 
         // 현재 TraceID 추출
         String traceId = tracer.currentSpan().context().traceIdString();

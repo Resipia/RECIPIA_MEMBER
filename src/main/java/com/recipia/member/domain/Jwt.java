@@ -1,6 +1,6 @@
 package com.recipia.member.domain;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,7 +22,7 @@ public class Jwt {
     @ToString.Exclude
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;          // 회원 pk
+    private MemberEntity member;          // 회원 pk
 
     @Column(name = "refresh_token", nullable = false, length = 500)
     private String refreshToken;
@@ -32,14 +32,14 @@ public class Jwt {
 
 
     @Builder
-    private Jwt(Long id, Member member, String refreshToken, LocalDateTime expiredDateTime) {
+    private Jwt(Long id, MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
         this.id = id;
         this.member = member;
         this.refreshToken = refreshToken;
         this.expiredDateTime = expiredDateTime;
     }
 
-    public static Jwt of(Member member, String refreshToken, LocalDateTime expiredDateTime) {
+    public static Jwt of(MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
         return new Jwt(null, member, refreshToken, expiredDateTime);
     }
 

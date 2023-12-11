@@ -1,6 +1,6 @@
 package com.recipia.member.feign.service;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
 import com.recipia.member.feign.dto.NicknameDto;
@@ -16,7 +16,7 @@ public class MemberFeignService {
 
 
     public NicknameDto getNicknameByMemberId(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
+        MemberEntity member = memberRepository.findById(memberId).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
         return NicknameDto.of(member.getId(), member.getNickname());
     }
 }

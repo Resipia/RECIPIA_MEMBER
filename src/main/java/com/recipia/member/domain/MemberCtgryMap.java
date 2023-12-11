@@ -1,7 +1,7 @@
 package com.recipia.member.domain;
 
 import com.recipia.member.domain.auditingfield.UpdateDateTime;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,18 +23,18 @@ public class MemberCtgryMap extends UpdateDateTime {
     @ToString.Exclude
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;      // 회원 pk
+    private MemberEntity member;      // 회원 pk
 
     @Column(name = "ctgry_id", nullable = false)
     private Long ctgryId;   // 음식 카테고리 pk
 
-    private MemberCtgryMap(Member member, Long ctgryId) {
+    private MemberCtgryMap(MemberEntity member, Long ctgryId) {
         this.member = member;
         this.ctgryId = ctgryId;
     }
 
     // 생성자 factory method 선언
-    public static MemberCtgryMap of(Member member, Long ctgryId) {
+    public static MemberCtgryMap of(MemberEntity member, Long ctgryId) {
         return new MemberCtgryMap(member, ctgryId);
     }
 

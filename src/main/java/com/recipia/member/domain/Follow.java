@@ -2,7 +2,7 @@ package com.recipia.member.domain;
 
 
 import com.recipia.member.domain.auditingfield.CreateDateTime;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,20 +24,20 @@ public class Follow extends CreateDateTime {
     @ToString.Exclude
     @JoinColumn(name = "follower_member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member followerMember;  // 팔로워 회원 pk
+    private MemberEntity followerMember;  // 팔로워 회원 pk
 
     @ToString.Exclude
     @JoinColumn(name = "following_member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member followingMember; // 팔로잉 회원 pk
+    private MemberEntity followingMember; // 팔로잉 회원 pk
 
-    private Follow(Member followerMember, Member followingMember) {
+    private Follow(MemberEntity followerMember, MemberEntity followingMember) {
         this.followerMember = followerMember;
         this.followingMember = followingMember;
     }
 
     // 생성자 factory method 선언
-    public static Follow of(Member followerMember, Member followingMember) {
+    public static Follow of(MemberEntity followerMember, MemberEntity followingMember) {
         return new Follow(followerMember, followingMember);
     }
 
