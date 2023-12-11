@@ -1,4 +1,4 @@
-package com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield;
+package com.recipia.member.hexagonal.adapter.out.persistence.auditingfield;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

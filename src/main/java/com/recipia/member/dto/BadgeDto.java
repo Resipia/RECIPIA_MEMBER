@@ -1,6 +1,6 @@
 package com.recipia.member.dto;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.entity.BadgeEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.BadgeEntity;
 
 import java.time.LocalDateTime;
 

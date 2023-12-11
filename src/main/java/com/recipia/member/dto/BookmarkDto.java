@@ -1,6 +1,6 @@
 package com.recipia.member.dto;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.entity.BookmarkEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.BookmarkEntity;
 
 import java.time.LocalDateTime;
 

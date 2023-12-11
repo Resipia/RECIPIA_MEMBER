@@ -1,7 +1,7 @@
 package com.recipia.member.service;
 
 
-import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.MemberEntity;
 import com.recipia.member.springevent.NicknameChangeSpringEvent;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;

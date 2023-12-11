@@ -1,4 +1,4 @@
-package com.recipia.member.hexagonal.adapter.out.persistence.entity.constant;
+package com.recipia.member.hexagonal.adapter.out.persistence.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

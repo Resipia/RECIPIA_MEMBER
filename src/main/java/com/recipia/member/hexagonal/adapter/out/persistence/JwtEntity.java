@@ -1,4 +1,4 @@
-package com.recipia.member.hexagonal.adapter.out.persistence.entity;
+package com.recipia.member.hexagonal.adapter.out.persistence;
 
 import jakarta.persistence.*;
 import lombok.*;

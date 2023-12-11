@@ -1,7 +1,7 @@
-package com.recipia.member.hexagonal.adapter.out.persistence.entity;
+package com.recipia.member.hexagonal.adapter.out.persistence;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield.UpdateDateTimeForEntity;
-import com.recipia.member.hexagonal.adapter.out.persistence.entity.constant.MemberStatus;
+import com.recipia.member.hexagonal.adapter.out.persistence.auditingfield.UpdateDateTimeForEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.dto.MemberDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

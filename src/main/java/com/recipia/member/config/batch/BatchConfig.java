@@ -2,7 +2,7 @@ package com.recipia.member.config.batch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.aws.SnsService;
-import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberEventRecordEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.MemberEventRecordEntity;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

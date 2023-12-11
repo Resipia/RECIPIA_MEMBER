@@ -1,6 +1,6 @@
 package com.recipia.member.dto;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.entity.JwtEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.JwtEntity;
 
 import java.time.LocalDateTime;
 

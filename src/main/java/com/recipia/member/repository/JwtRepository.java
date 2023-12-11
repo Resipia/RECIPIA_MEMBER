@@ -1,6 +1,6 @@
 package com.recipia.member.repository;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.entity.JwtEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.JwtEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
