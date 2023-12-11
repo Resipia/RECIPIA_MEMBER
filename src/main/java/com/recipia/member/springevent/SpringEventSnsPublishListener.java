@@ -3,7 +3,7 @@ package com.recipia.member.springevent;
 import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.aws.SnsService;
-import com.recipia.member.utils.CustomJsonBuilder;
+import com.recipia.member.hexagonal.common.utils.CustomJsonBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

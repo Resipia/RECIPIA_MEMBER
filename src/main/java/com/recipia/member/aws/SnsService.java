@@ -2,9 +2,9 @@ package com.recipia.member.aws;
 
 import brave.Span;
 import brave.Tracer;
-import com.recipia.member.config.aws.AwsSnsConfig;
-import com.recipia.member.exception.ErrorCode;
-import com.recipia.member.exception.MemberApplicationException;
+import com.recipia.member.hexagonal.config.aws.AwsSnsConfig;
+import com.recipia.member.hexagonal.common.exception.ErrorCode;
+import com.recipia.member.hexagonal.common.exception.MemberApplicationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

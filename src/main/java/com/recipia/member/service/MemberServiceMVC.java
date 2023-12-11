@@ -3,8 +3,8 @@ package com.recipia.member.service;
 
 import com.recipia.member.hexagonal.adapter.out.persistence.MemberEntity;
 import com.recipia.member.springevent.NicknameChangeSpringEvent;
-import com.recipia.member.exception.ErrorCode;
-import com.recipia.member.exception.MemberApplicationException;
+import com.recipia.member.hexagonal.common.exception.ErrorCode;
+import com.recipia.member.hexagonal.common.exception.MemberApplicationException;
 import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
