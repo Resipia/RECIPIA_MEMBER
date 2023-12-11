@@ -55,7 +55,9 @@ cmake-build-*/
 
 # IntelliJ
 /.idea/
-/out/   # 프로젝트 루트에 있는 out 폴더만 무시
+
+# 프로젝트 루트에 있는 out 폴더만 무시
+/out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
