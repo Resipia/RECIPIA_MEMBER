@@ -1,7 +1,6 @@
-package com.recipia.member.domain;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
-import com.recipia.member.domain.auditingfield.UpdateDateTime;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield.UpdateDateTimeForEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class MemberFile extends UpdateDateTime {
+public class MemberFileEntity extends UpdateDateTimeForEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +42,7 @@ public class MemberFile extends UpdateDateTime {
     @Column(name = "del_yn", nullable = false)
     private String delYn;           // 삭제여부
 
-    private MemberFile(MemberEntity member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
+    private MemberFileEntity(MemberEntity member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
         this.member = member;
         this.filePath = filePath;
         this.originFileName = originFileName;
@@ -54,8 +53,8 @@ public class MemberFile extends UpdateDateTime {
     }
 
     // 생성자 factory method of 선언
-    public static MemberFile of(MemberEntity member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
-        return new MemberFile(member, filePath, originFileName, storedFileName, fileExtension, fileSize, delYn);
+    public static MemberFileEntity of(MemberEntity member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
+        return new MemberFileEntity(member, filePath, originFileName, storedFileName, fileExtension, fileSize, delYn);
     }
 
 }

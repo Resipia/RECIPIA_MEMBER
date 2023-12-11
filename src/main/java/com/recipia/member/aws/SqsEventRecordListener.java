@@ -3,7 +3,7 @@ package com.recipia.member.aws;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.recipia.member.domain.event.MemberEventRecord;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberEventRecordEntity;
 import com.recipia.member.dto.message.MessageMemberIdDto;
 import com.recipia.member.dto.message.SnsNotificationDto;
 import com.recipia.member.exception.ErrorCode;
@@ -39,10 +39,10 @@ public class SqsEventRecordListener {
         String topicName = MemberStringUtils.extractLastPart(snsNotificationDto.TopicArn());
         Long memberId = messageMemberIdDto.memberId();
 
-        MemberEventRecord memberEventRecord = memberEventRecordRepository
+        MemberEventRecordEntity memberEventRecordEntity = memberEventRecordRepository
                 .findFirstByMember_IdAndSnsTopicAndPublishedOrderByIdDesc(memberId, topicName, false)
                 .orElseThrow(() -> new MemberApplicationException(ErrorCode.EVENT_NOT_FOUND));
 
-        memberEventRecord.changePublishedToTrue();
+        memberEventRecordEntity.changePublishedToTrue();
     }
 }

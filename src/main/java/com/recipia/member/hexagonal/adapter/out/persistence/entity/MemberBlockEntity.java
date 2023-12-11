@@ -1,7 +1,6 @@
-package com.recipia.member.domain;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
-import com.recipia.member.domain.auditingfield.CreateDateTime;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield.CreateDateTimeForEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class MemberBlock extends CreateDateTime {
+public class MemberBlockEntity extends CreateDateTimeForEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,14 +29,14 @@ public class MemberBlock extends CreateDateTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private MemberEntity blockMember; // 차단 회원 pk
 
-    private MemberBlock(MemberEntity member, MemberEntity blockMember) {
+    private MemberBlockEntity(MemberEntity member, MemberEntity blockMember) {
         this.member = member;
         this.blockMember = blockMember;
     }
 
     // factory method of 선언
-    public static MemberBlock of(MemberEntity member, MemberEntity blockMember) {
-        return new MemberBlock(member, blockMember);
+    public static MemberBlockEntity of(MemberEntity member, MemberEntity blockMember) {
+        return new MemberBlockEntity(member, blockMember);
     }
 
 }

@@ -2,7 +2,6 @@ package com.recipia.member.hexagonal.adapter.in.web;
 
 import com.recipia.member.hexagonal.adapter.in.web.dto.LoginRequest;
 import com.recipia.member.hexagonal.application.port.in.MemberUseCase;
-import com.recipia.member.hexagonal.domain.SignIn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

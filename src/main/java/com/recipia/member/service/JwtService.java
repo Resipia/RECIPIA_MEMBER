@@ -1,7 +1,7 @@
 package com.recipia.member.service;
 
-import com.recipia.member.domain.Jwt;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.JwtEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberEntity;
 import com.recipia.member.dto.MemberDto;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
@@ -29,7 +29,7 @@ public class JwtService {
     public void insertRefreshTokenToDB(MemberDto memberDto, Pair<String, LocalDateTime> jwtPair) {
         MemberEntity member = memberRepository.findMemberByUsername(memberDto.username()).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
 
-        Jwt jwt = Jwt.of(member, jwtPair.getFirst(), jwtPair.getSecond());
-        jwtRepository.save(jwt);
+        JwtEntity jwtEntity = JwtEntity.of(member, jwtPair.getFirst(), jwtPair.getSecond());
+        jwtRepository.save(jwtEntity);
     }
 }

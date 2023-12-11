@@ -1,8 +1,7 @@
-package com.recipia.member.domain;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
 
-import com.recipia.member.domain.auditingfield.CreateDateTime;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield.CreateDateTimeForEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class MemberHistoryLog extends CreateDateTime {
+public class MemberHistoryLogEntity extends CreateDateTimeForEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,15 +31,15 @@ public class MemberHistoryLog extends CreateDateTime {
     @Column(name = "wriggle_id", nullable = false)
     private Long wriggleId;     // 위글 pk
 
-    private MemberHistoryLog(MemberEntity member, Long recipeId, Long wriggleId) {
+    private MemberHistoryLogEntity(MemberEntity member, Long recipeId, Long wriggleId) {
         this.member = member;
         this.recipeId = recipeId;
         this.wriggleId = wriggleId;
     }
 
     // factory method 선언
-    public static MemberHistoryLog of(MemberEntity member, Long recipeId, Long wriggleId) {
-        return new MemberHistoryLog(member, recipeId, wriggleId);
+    public static MemberHistoryLogEntity of(MemberEntity member, Long recipeId, Long wriggleId) {
+        return new MemberHistoryLogEntity(member, recipeId, wriggleId);
     }
 
 }

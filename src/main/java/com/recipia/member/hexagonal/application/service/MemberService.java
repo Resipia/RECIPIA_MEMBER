@@ -2,7 +2,6 @@ package com.recipia.member.hexagonal.application.service;
 
 import com.recipia.member.hexagonal.application.port.in.MemberUseCase;
 import com.recipia.member.hexagonal.application.port.out.port.MemberPersistencePort;
-import com.recipia.member.hexagonal.domain.SignIn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

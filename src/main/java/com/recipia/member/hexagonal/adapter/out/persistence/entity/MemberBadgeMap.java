@@ -1,6 +1,5 @@
-package com.recipia.member.domain;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,20 +26,20 @@ public class MemberBadgeMap {
     @ToString.Exclude
     @JoinColumn(name = "badge_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Badge badge;              // 뱃지 pk
+    private BadgeEntity badgeEntity;              // 뱃지 pk
 
     @Column(name = "rep_badge_yn", nullable = false)
     private String representBadgeYn;  // 대표 뱃지 유무
 
-    private MemberBadgeMap(MemberEntity member, Badge badge, String representBadgeYn) {
+    private MemberBadgeMap(MemberEntity member, BadgeEntity badgeEntity, String representBadgeYn) {
         this.member = member;
-        this.badge = badge;
+        this.badgeEntity = badgeEntity;
         this.representBadgeYn = representBadgeYn;
     }
 
     // factory method 선언
-    public static MemberBadgeMap of(MemberEntity member, Badge badge, String representBadgeYn) {
-        return new MemberBadgeMap(member, badge, representBadgeYn);
+    public static MemberBadgeMap of(MemberEntity member, BadgeEntity badgeEntity, String representBadgeYn) {
+        return new MemberBadgeMap(member, badgeEntity, representBadgeYn);
     }
 
 

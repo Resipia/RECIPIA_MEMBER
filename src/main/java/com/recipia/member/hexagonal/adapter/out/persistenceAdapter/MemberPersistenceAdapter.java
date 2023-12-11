@@ -1,7 +1,6 @@
 package com.recipia.member.hexagonal.adapter.out.persistenceAdapter;
 
 import com.recipia.member.hexagonal.application.port.out.port.MemberPersistencePort;
-import com.recipia.member.hexagonal.domain.SignIn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

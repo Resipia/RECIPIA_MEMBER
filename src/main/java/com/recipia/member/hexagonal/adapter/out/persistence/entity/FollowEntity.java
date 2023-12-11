@@ -1,8 +1,7 @@
-package com.recipia.member.domain;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
 
-import com.recipia.member.domain.auditingfield.CreateDateTime;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield.CreateDateTimeForEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Follow extends CreateDateTime {
+public class FollowEntity extends CreateDateTimeForEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,14 +30,14 @@ public class Follow extends CreateDateTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private MemberEntity followingMember; // 팔로잉 회원 pk
 
-    private Follow(MemberEntity followerMember, MemberEntity followingMember) {
+    private FollowEntity(MemberEntity followerMember, MemberEntity followingMember) {
         this.followerMember = followerMember;
         this.followingMember = followingMember;
     }
 
     // 생성자 factory method 선언
-    public static Follow of(MemberEntity followerMember, MemberEntity followingMember) {
-        return new Follow(followerMember, followingMember);
+    public static FollowEntity of(MemberEntity followerMember, MemberEntity followingMember) {
+        return new FollowEntity(followerMember, followingMember);
     }
 
 }

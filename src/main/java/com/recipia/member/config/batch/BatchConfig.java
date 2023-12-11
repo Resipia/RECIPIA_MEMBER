@@ -2,7 +2,7 @@ package com.recipia.member.config.batch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.aws.SnsService;
-import com.recipia.member.domain.event.MemberEventRecord;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberEventRecordEntity;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +63,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
     public Step step(final JobRepository jobRepository,
                      final PlatformTransactionManager transactionManager) {
         return new StepBuilder("step", jobRepository)
-                .<MemberEventRecord, MemberEventRecord>chunk(this.chunkSize, transactionManager)
+                .<MemberEventRecordEntity, MemberEventRecordEntity>chunk(this.chunkSize, transactionManager)
                 .reader(this.jpaPagingItemReader(entityManagerFactory))
                 .processor(this.itemProcessor())
                 .writer(this.itemWriter())
@@ -74,9 +74,9 @@ public class BatchConfig extends DefaultBatchConfiguration {
      * JpaPagingItemReader를 설정. publishedAt이 false인 Member 데이터를 조회하는 쿼리를 실행함.
      */
     @Bean
-    public JpaPagingItemReader<MemberEventRecord> jpaPagingItemReader(EntityManagerFactory entityManagerFactory) {
+    public JpaPagingItemReader<MemberEventRecordEntity> jpaPagingItemReader(EntityManagerFactory entityManagerFactory) {
         log.info("jpaPagingItemReader 동작!");
-        JpaPagingItemReader<MemberEventRecord> reader = new JpaPagingItemReader<>();
+        JpaPagingItemReader<MemberEventRecordEntity> reader = new JpaPagingItemReader<>();
 
         String jpql = """
                   SELECT mer
@@ -102,7 +102,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
      * 이때 publishNicknameToTopic안의 트랜잭션이 시작되고 ItemWriter의 동작까지 같은 트랜잭션으로 묶어진다.
      */
     @Bean
-    public ItemProcessor<MemberEventRecord, MemberEventRecord> itemProcessor() {
+    public ItemProcessor<MemberEventRecordEntity, MemberEventRecordEntity> itemProcessor() {
         return item -> {
             log.info("processItem 동작중");
 
@@ -117,9 +117,9 @@ public class BatchConfig extends DefaultBatchConfiguration {
      * ItemWriter를 설정. 업데이트된 엔터티를 처리. 여기서 작업이 마무리되면 트랜잭션이 종료되고 커밋된다.
      */
     @Bean
-    public ItemWriter<MemberEventRecord> itemWriter() {
+    public ItemWriter<MemberEventRecordEntity> itemWriter() {
         log.info("itemWriter 동작!");
-        JpaItemWriter<MemberEventRecord> writer = new JpaItemWriter<>();
+        JpaItemWriter<MemberEventRecordEntity> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }

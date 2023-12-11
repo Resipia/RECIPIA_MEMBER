@@ -1,7 +1,7 @@
-package com.recipia.member.domain;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
 
-import com.recipia.member.domain.auditingfield.UpdateDateTime;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield.UpdateDateTimeForEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Badge extends UpdateDateTime {
+public class BadgeEntity extends UpdateDateTimeForEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,14 +36,14 @@ public class Badge extends UpdateDateTime {
     @OneToMany(mappedBy = "badge")
     List<MemberBadgeMap> badgeMapList = new ArrayList<>(); // 뱃지 매핑 리스트
 
-    private Badge(String badgeName, String badgeDescription, Integer badgeAchieve) {
+    private BadgeEntity(String badgeName, String badgeDescription, Integer badgeAchieve) {
         this.badgeName = badgeName;
         this.badgeDescription = badgeDescription;
         this.badgeAchieve = badgeAchieve;
     }
 
     // factory method 선언
-    public static Badge of(String badgeName, String badgeDescription, Integer badgeAchieve) {
-        return new Badge(badgeName, badgeDescription, badgeAchieve);
+    public static BadgeEntity of(String badgeName, String badgeDescription, Integer badgeAchieve) {
+        return new BadgeEntity(badgeName, badgeDescription, badgeAchieve);
     }
 }

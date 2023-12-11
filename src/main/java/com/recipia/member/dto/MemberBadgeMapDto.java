@@ -1,6 +1,6 @@
 package com.recipia.member.dto;
 
-import com.recipia.member.domain.MemberBadgeMap;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberBadgeMap;
 
 public record MemberBadgeMapDto(
         Long id,

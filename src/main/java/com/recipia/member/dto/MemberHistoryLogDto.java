@@ -1,6 +1,6 @@
 package com.recipia.member.dto;
 
-import com.recipia.member.domain.MemberHistoryLog;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberHistoryLogEntity;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +17,7 @@ public record MemberHistoryLogDto(
     }
 
     /** entity를 dto로 변환시켜주는 factory method */
-    public static MemberHistoryLogDto fromEntity(MemberHistoryLog entity) {
+    public static MemberHistoryLogDto fromEntity(MemberHistoryLogEntity entity) {
         return of(
                 entity.getId(),
                 entity.getRecipeId(),

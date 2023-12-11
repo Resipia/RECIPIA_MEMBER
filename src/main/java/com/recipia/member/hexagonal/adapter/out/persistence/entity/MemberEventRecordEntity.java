@@ -1,8 +1,7 @@
-package com.recipia.member.domain.event;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
 
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
-import com.recipia.member.domain.auditingfield.CreateDateTime;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield.CreateDateTimeForEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class MemberEventRecord extends CreateDateTime {
+public class MemberEventRecordEntity extends CreateDateTimeForEntity {
 
     // 회원 이벤트 기록 Pk
     @Id
@@ -55,7 +54,7 @@ public class MemberEventRecord extends CreateDateTime {
     private LocalDateTime publishedAt;
 
 
-    private MemberEventRecord(MemberEntity member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
+    private MemberEventRecordEntity(MemberEntity member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
         this.member = member;
         this.snsTopic = snsTopic;
         this.eventType = eventType;
@@ -66,8 +65,8 @@ public class MemberEventRecord extends CreateDateTime {
     }
 
     // 생성자 factory method of 선언
-    public static MemberEventRecord of(MemberEntity member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
-        return new MemberEventRecord(member, snsTopic, eventType, attribute, traceId, published, publishedAt);
+    public static MemberEventRecordEntity of(MemberEntity member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
+        return new MemberEventRecordEntity(member, snsTopic, eventType, attribute, traceId, published, publishedAt);
     }
 
 

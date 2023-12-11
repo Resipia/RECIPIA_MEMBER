@@ -1,7 +1,6 @@
-package com.recipia.member.domain;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
-import com.recipia.member.domain.auditingfield.UpdateDateTime;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield.UpdateDateTimeForEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class MemberCtgryMap extends UpdateDateTime {
+public class MemberCtgryMapEntity extends UpdateDateTimeForEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,14 +27,14 @@ public class MemberCtgryMap extends UpdateDateTime {
     @Column(name = "ctgry_id", nullable = false)
     private Long ctgryId;   // 음식 카테고리 pk
 
-    private MemberCtgryMap(MemberEntity member, Long ctgryId) {
+    private MemberCtgryMapEntity(MemberEntity member, Long ctgryId) {
         this.member = member;
         this.ctgryId = ctgryId;
     }
 
     // 생성자 factory method 선언
-    public static MemberCtgryMap of(MemberEntity member, Long ctgryId) {
-        return new MemberCtgryMap(member, ctgryId);
+    public static MemberCtgryMapEntity of(MemberEntity member, Long ctgryId) {
+        return new MemberCtgryMapEntity(member, ctgryId);
     }
 
 }

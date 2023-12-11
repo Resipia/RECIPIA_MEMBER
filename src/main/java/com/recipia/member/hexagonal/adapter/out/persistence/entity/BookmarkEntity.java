@@ -1,7 +1,6 @@
-package com.recipia.member.domain;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
-import com.recipia.member.domain.auditingfield.CreateDateTime;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield.CreateDateTimeForEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,7 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Bookmark extends CreateDateTime {
+public class BookmarkEntity extends CreateDateTimeForEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,14 +27,14 @@ public class Bookmark extends CreateDateTime {
     @Column(name = "recipe_id", nullable = false)
     private Long recipeId;      // 레시피 pk
 
-    private Bookmark(MemberEntity member, Long recipeId) {
+    private BookmarkEntity(MemberEntity member, Long recipeId) {
         this.member = member;
         this.recipeId = recipeId;
     }
 
     // factory method 선언
-    public static Bookmark of(MemberEntity member, Long recipeId) {
-        return new Bookmark(member, recipeId);
+    public static BookmarkEntity of(MemberEntity member, Long recipeId) {
+        return new BookmarkEntity(member, recipeId);
     }
 
 }

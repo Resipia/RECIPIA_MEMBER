@@ -1,8 +1,7 @@
-package com.recipia.member.hexagonal.adapter.out.persistence.member;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
-import com.recipia.member.domain.*;
-import com.recipia.member.domain.auditingfield.UpdateDateTime;
-import com.recipia.member.domain.constant.MemberStatus;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.auditingfield.UpdateDateTimeForEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.constant.MemberStatus;
 import com.recipia.member.dto.MemberDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,7 +18,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "member")
-public class MemberEntity extends UpdateDateTime {
+public class MemberEntity extends UpdateDateTimeForEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,35 +64,35 @@ public class MemberEntity extends UpdateDateTime {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "followerMember")
-    private List<Follow>  followerList= new ArrayList<>();          // 팔로워 회원 리스트
+    private List<FollowEntity>  followerList= new ArrayList<>();          // 팔로워 회원 리스트
 
     @ToString.Exclude
     @OneToMany(mappedBy = "followingMember")
-    private List<Follow> followingList = new ArrayList<>();         // 팔로잉 회원 리스트
+    private List<FollowEntity> followingList = new ArrayList<>();         // 팔로잉 회원 리스트
 
     @ToString.Exclude
     @OneToMany(mappedBy = "member")
-    private List<MemberBlock> userList = new ArrayList<>();           // 차단 신청한 회원 리스트
+    private List<MemberBlockEntity> userList = new ArrayList<>();           // 차단 신청한 회원 리스트
 
     @ToString.Exclude
     @OneToMany(mappedBy = "blockMember")
-    private List<MemberBlock> blockList = new ArrayList<>();          // 차단시킬 회원 리스트
+    private List<MemberBlockEntity> blockList = new ArrayList<>();          // 차단시킬 회원 리스트
 
     @ToString.Exclude
     @OneToMany(mappedBy = "member")
-    private List<MemberFile> fileList = new ArrayList<>();            // 파일 리스트
+    private List<MemberFileEntity> fileList = new ArrayList<>();            // 파일 리스트
 
     @ToString.Exclude
     @OneToMany(mappedBy = "member")
-    private List<Bookmark> bookmarkList = new ArrayList<>();        // 북마크 리스트
+    private List<BookmarkEntity> bookmarkEntityList = new ArrayList<>();        // 북마크 리스트
 
     @ToString.Exclude
     @OneToMany(mappedBy = "member")
-    private List<MemberCtgryMap> ctgryMapList = new ArrayList<>();    // 회원 카테고리 매핑 리스트
+    private List<MemberCtgryMapEntity> ctgryMapList = new ArrayList<>();    // 회원 카테고리 매핑 리스트
 
     @ToString.Exclude
     @OneToMany(mappedBy = "member")
-    private List<MemberHistoryLog> historyLogList = new ArrayList<>();// 회원 히스토리 리스트
+    private List<MemberHistoryLogEntity> historyLogList = new ArrayList<>();// 회원 히스토리 리스트
 
     @ToString.Exclude
     @OneToMany(mappedBy = "member")

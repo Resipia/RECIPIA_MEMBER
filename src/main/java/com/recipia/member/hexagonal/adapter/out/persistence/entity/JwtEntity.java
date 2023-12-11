@@ -1,6 +1,5 @@
-package com.recipia.member.domain;
+package com.recipia.member.hexagonal.adapter.out.persistence.entity;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +11,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-public class Jwt {
+public class JwtEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,21 +31,21 @@ public class Jwt {
 
 
     @Builder
-    private Jwt(Long id, MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
+    private JwtEntity(Long id, MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
         this.id = id;
         this.member = member;
         this.refreshToken = refreshToken;
         this.expiredDateTime = expiredDateTime;
     }
 
-    public static Jwt of(MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
-        return new Jwt(null, member, refreshToken, expiredDateTime);
+    public static JwtEntity of(MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
+        return new JwtEntity(null, member, refreshToken, expiredDateTime);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Jwt jwt)) return false;
+        if (!(o instanceof JwtEntity jwt)) return false;
         return this.id != null && Objects.equals(getId(), jwt.getId());
     }
 

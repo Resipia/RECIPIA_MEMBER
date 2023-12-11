@@ -3,8 +3,8 @@ package com.recipia.member.springevent;
 import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.config.aws.AwsSnsConfig;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
-import com.recipia.member.domain.event.MemberEventRecord;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberEventRecordEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberEntity;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
 import com.recipia.member.repository.MemberEventRecordRepository;
@@ -48,13 +48,13 @@ public class SpringEventRecordListener {
 
         String topicName = MemberStringUtils.extractLastPart(awsSnsConfig.getSnsTopicNicknameChangeARN());
 
-        List<MemberEventRecord> memberEventFalseList = memberEventRecordRepository.findByMember_IdAndSnsTopicAndPublished(member.getId(), topicName, false);
+        List<MemberEventRecordEntity> memberEventFalseList = memberEventRecordRepository.findByMember_IdAndSnsTopicAndPublished(member.getId(), topicName, false);
 
         // forEach 메소드는 리스트가 비어있을 경우, 아무 작업도 수행하지 않기 때문에,
         // 빈 리스트에 대한 명시적 체크는 불필요하다.
-        memberEventFalseList.forEach(MemberEventRecord::changePublishedToTrue);
+        memberEventFalseList.forEach(MemberEventRecordEntity::changePublishedToTrue);
 
-        MemberEventRecord memberEventRecord = MemberEventRecord.of(
+        MemberEventRecordEntity memberEventRecordEntity = MemberEventRecordEntity.of(
                 member,
                 topicName,
                 "NicknameChangeEvent",
@@ -64,7 +64,7 @@ public class SpringEventRecordListener {
                 null
         );
 
-        memberEventRecordRepository.save(memberEventRecord);
+        memberEventRecordRepository.save(memberEventRecordEntity);
     }
 
 

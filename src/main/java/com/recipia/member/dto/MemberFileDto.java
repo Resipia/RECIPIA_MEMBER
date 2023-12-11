@@ -1,6 +1,6 @@
 package com.recipia.member.dto;
 
-import com.recipia.member.domain.MemberFile;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberFileEntity;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +21,7 @@ public record MemberFileDto(
     }
 
     /** entity를 dto로 변환시켜주는 factory method */
-    public static MemberFileDto fromEntity(MemberFile entity) {
+    public static MemberFileDto fromEntity(MemberFileEntity entity) {
         return of(
                 entity.getId(),
                 entity.getFilePath(),

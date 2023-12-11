@@ -1,6 +1,6 @@
 package com.recipia.member.dto;
 
-import com.recipia.member.domain.Jwt;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.JwtEntity;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +15,7 @@ public record JwtDto(
         return new JwtDto(id, memberDto, refreshToken, expiredDateTime);
     }
 
-    public static JwtDto fromEntity(Jwt entity) {
+    public static JwtDto fromEntity(JwtEntity entity) {
         return of(entity.getId(), MemberDto.fromEntity(entity.getMember()), entity.getRefreshToken(), entity.getExpiredDateTime());
     }
 }

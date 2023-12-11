@@ -1,6 +1,6 @@
 package com.recipia.member.dto;
 
-import com.recipia.member.domain.Badge;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.BadgeEntity;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +19,7 @@ public record BadgeDto(
     }
 
     /** entity를 dto로 만드는 factory method 선언 */
-    public static BadgeDto fromEntity(Badge entity) {
+    public static BadgeDto fromEntity(BadgeEntity entity) {
         return of(
                 entity.getId(),
                 entity.getBadgeName(),

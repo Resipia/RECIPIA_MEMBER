@@ -1,6 +1,6 @@
 package com.recipia.member.feign.service;
 
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberEntity;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
 import com.recipia.member.feign.dto.NicknameDto;

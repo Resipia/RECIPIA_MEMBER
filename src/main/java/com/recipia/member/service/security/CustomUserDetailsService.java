@@ -1,7 +1,7 @@
 package com.recipia.member.service.security;
 
 import com.recipia.member.config.dto.SecurityUserDetailsDto;
-import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
+import com.recipia.member.hexagonal.adapter.out.persistence.entity.MemberEntity;
 import com.recipia.member.dto.MemberDto;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
