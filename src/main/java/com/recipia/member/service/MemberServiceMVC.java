@@ -1,7 +1,7 @@
 package com.recipia.member.service;
 
 
-import com.recipia.member.hexagonal.adapter.out.persistence.member.Member;
+import com.recipia.member.hexagonal.adapter.out.persistence.member.MemberEntity;
 import com.recipia.member.springevent.NicknameChangeSpringEvent;
 import com.recipia.member.exception.ErrorCode;
 import com.recipia.member.exception.MemberApplicationException;
@@ -16,14 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberServiceMVC {
 
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void nicknameChange() {
-        Member member = memberRepository.findById(2L).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
+        MemberEntity member = memberRepository.findById(2L).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
         member.changeNickname("NEW-NICKNAME222");
 
         eventPublisher.publishEvent(new NicknameChangeSpringEvent(member.getId()));
