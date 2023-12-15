@@ -99,7 +99,8 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     private List<MemberBadgeMap> badgeMapList = new ArrayList<>();    // 회원 뱃지 매핑 리스트
 
 
-    private MemberEntity(String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
+    private MemberEntity(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.fullName = fullName;
@@ -114,15 +115,15 @@ public class MemberEntity extends UpdateDateTimeForEntity {
         this.collectionYn = collectionYn;
     }
 
-    // 생성자 factory method of 선언
+    // 새 엔티티 생성용 팩토리 메소드
     public static MemberEntity of(String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
-        return new MemberEntity(username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn);
+        return new MemberEntity(null, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn);
     }
 
-    public static MemberEntity dtoToEntity(MemberDto dto) {
-        return of(dto.username(), dto.password(), dto.fullName(), dto.nickname(),dto.status(), dto.introduction(), dto.telNo(), dto.address1(), dto.address2(), dto.email(), dto.protectionYn(), dto.collectionYn());
+    // 기존 엔티티 로드용 팩토리 메소드
+    public static MemberEntity of(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
+        return new MemberEntity(id, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn);
     }
-
 
     // update용 메소드
     public void changeNickname(String newNickname) {
