@@ -6,7 +6,7 @@ import com.recipia.member.hexagonal.config.handler.CustomAuthFailureHandler;
 import com.recipia.member.hexagonal.config.handler.CustomAuthSuccessHandler;
 import com.recipia.member.hexagonal.config.handler.CustomAuthenticationProvider;
 import com.recipia.member.hexagonal.config.jwt.TokenValidator;
-import com.recipia.member.service.JwtService;
+import com.recipia.member.hexagonal.application.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

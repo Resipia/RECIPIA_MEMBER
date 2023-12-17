@@ -1,7 +1,7 @@
 package com.recipia.member.hexagonal.config.batch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.recipia.member.aws.SnsService;
+import com.recipia.member.hexagonal.adapter.out.aws.SnsService;
 import com.recipia.member.hexagonal.adapter.out.persistence.MemberEventRecordEntity;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;

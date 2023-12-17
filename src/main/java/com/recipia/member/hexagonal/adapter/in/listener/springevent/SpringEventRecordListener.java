@@ -1,16 +1,17 @@
-package com.recipia.member.springevent;
+package com.recipia.member.hexagonal.adapter.in.listener.springevent;
 
 import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.recipia.member.hexagonal.config.aws.AwsSnsConfig;
+import com.recipia.member.hexagonal.config.aws.SnsConfig;
 import com.recipia.member.hexagonal.adapter.out.persistence.MemberEventRecordEntity;
 import com.recipia.member.hexagonal.adapter.out.persistence.MemberEntity;
 import com.recipia.member.hexagonal.common.exception.ErrorCode;
 import com.recipia.member.hexagonal.common.exception.MemberApplicationException;
-import com.recipia.member.repository.MemberEventRecordRepository;
+import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.MemberEventRecordRepository;
 import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.MemberRepository;
 import com.recipia.member.hexagonal.common.utils.CustomJsonBuilder;
 import com.recipia.member.hexagonal.common.utils.MemberStringUtils;
+import com.recipia.member.hexagonal.common.event.NicknameChangeSpringEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class SpringEventRecordListener {
 
     private final MemberRepository memberRepository;
     private final MemberEventRecordRepository memberEventRecordRepository;
-    private final AwsSnsConfig awsSnsConfig;
+    private final SnsConfig snsConfig;
     private final CustomJsonBuilder customJsonBuilder;
     private final Tracer tracer;
 
@@ -46,7 +47,7 @@ public class SpringEventRecordListener {
                 .add("memberId", member.getId().toString())
                 .build();
 
-        String topicName = MemberStringUtils.extractLastPart(awsSnsConfig.getSnsTopicNicknameChangeARN());
+        String topicName = MemberStringUtils.extractLastPart(snsConfig.getSnsTopicNicknameChangeARN());
 
         List<MemberEventRecordEntity> memberEventFalseList = memberEventRecordRepository.findByMember_IdAndSnsTopicAndPublished(member.getId(), topicName, false);
 

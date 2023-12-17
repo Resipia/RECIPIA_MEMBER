@@ -1,8 +1,8 @@
-package com.recipia.member.aws;
+package com.recipia.member.hexagonal.adapter.out.aws;
 
 import brave.Span;
 import brave.Tracer;
-import com.recipia.member.hexagonal.config.aws.AwsSnsConfig;
+import com.recipia.member.hexagonal.config.aws.SnsConfig;
 import com.recipia.member.hexagonal.common.exception.ErrorCode;
 import com.recipia.member.hexagonal.common.exception.MemberApplicationException;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class SnsService {
 
     private final SnsClient snsClient;
-    private final AwsSnsConfig awsSnsConfig;
+    private final SnsConfig snsConfig;
     private final Tracer tracer;
 
     public PublishResponse publishNicknameToTopic(String message, String traceId) {
@@ -42,7 +42,7 @@ public class SnsService {
             PublishRequest publishRequest = PublishRequest.builder()
                     .message(message)
                     .messageAttributes(messageAttributes)
-                    .topicArn(awsSnsConfig.getSnsTopicNicknameChangeARN())
+                    .topicArn(snsConfig.getSnsTopicNicknameChangeARN())
                     .build();
 
             // SNS 클라이언트를 통해 메시지 발행

@@ -1,4 +1,4 @@
-package com.recipia.member.aws;
+package com.recipia.member.hexagonal.adapter.in.listener.aws;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

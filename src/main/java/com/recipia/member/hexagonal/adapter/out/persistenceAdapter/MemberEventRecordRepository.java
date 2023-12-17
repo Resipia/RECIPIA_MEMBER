@@ -1,4 +1,4 @@
-package com.recipia.member.repository;
+package com.recipia.member.hexagonal.adapter.out.persistenceAdapter;
 
 import com.recipia.member.hexagonal.adapter.out.persistence.MemberEventRecordEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

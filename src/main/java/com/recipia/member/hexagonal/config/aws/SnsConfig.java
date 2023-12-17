@@ -12,7 +12,7 @@ import software.amazon.awssdk.services.sns.SnsClient;
 
 @Getter
 @Configuration
-public class AwsSnsConfig {
+public class SnsConfig {
 
     @Value("${spring.cloud.aws.credentials.access-key}")
     private String awsAccessKey;

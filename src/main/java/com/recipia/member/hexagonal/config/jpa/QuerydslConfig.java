@@ -1,4 +1,4 @@
-package com.recipia.member.hexagonal.config;
+package com.recipia.member.hexagonal.config.jpa;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

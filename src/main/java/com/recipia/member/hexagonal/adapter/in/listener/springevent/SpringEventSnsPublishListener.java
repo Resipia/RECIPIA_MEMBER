@@ -1,9 +1,10 @@
-package com.recipia.member.springevent;
+package com.recipia.member.hexagonal.adapter.in.listener.springevent;
 
 import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.recipia.member.aws.SnsService;
+import com.recipia.member.hexagonal.adapter.out.aws.SnsService;
 import com.recipia.member.hexagonal.common.utils.CustomJsonBuilder;
+import com.recipia.member.hexagonal.common.event.NicknameChangeSpringEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

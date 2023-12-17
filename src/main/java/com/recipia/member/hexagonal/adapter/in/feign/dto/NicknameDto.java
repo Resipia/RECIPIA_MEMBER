@@ -1,4 +1,4 @@
-package com.recipia.member.feign.dto;
+package com.recipia.member.hexagonal.adapter.in.feign.dto;
 
 /**
  * FeignClient 응답 DTO

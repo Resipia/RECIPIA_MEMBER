@@ -1,14 +1,14 @@
-package com.recipia.member.aws;
+package com.recipia.member.hexagonal.adapter.in.listener.aws;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.hexagonal.adapter.out.persistence.MemberEventRecordEntity;
-import com.recipia.member.dto.message.MessageMemberIdDto;
-import com.recipia.member.dto.message.SnsNotificationDto;
+import com.recipia.member.hexagonal.adapter.in.listener.aws.dto.MessageMemberIdDto;
+import com.recipia.member.hexagonal.adapter.in.listener.aws.dto.SnsNotificationDto;
 import com.recipia.member.hexagonal.common.exception.ErrorCode;
 import com.recipia.member.hexagonal.common.exception.MemberApplicationException;
-import com.recipia.member.repository.MemberEventRecordRepository;
+import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.MemberEventRecordRepository;
 import com.recipia.member.hexagonal.common.utils.MemberStringUtils;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;

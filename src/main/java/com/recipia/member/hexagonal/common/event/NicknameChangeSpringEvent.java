@@ -1,4 +1,4 @@
-package com.recipia.member.springevent;
+package com.recipia.member.hexagonal.common.event;
 
 /**
  * 닉네임 변경 이벤트 객체
