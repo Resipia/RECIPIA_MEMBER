@@ -30,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         SecurityUserDetailsDto securityUserDetailsDto = (SecurityUserDetailsDto) userDetailsService.loadUserByUsername(username);
 
         // 암호화된 비밀번호 비교
-        if (!bCryptPasswordEncoder.matches(userCryptPassword, securityUserDetailsDto.getMemberDto().password())) {
+        if (!bCryptPasswordEncoder.matches(userCryptPassword, securityUserDetailsDto.getTokenMemberInfoDto().password())) {
             throw new BadCredentialsException(securityUserDetailsDto.getUsername() + "의 비밀번호가 잘못되었습니다.");
         }
 

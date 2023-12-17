@@ -2,9 +2,9 @@ package com.recipia.member.hexagonal.config.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.recipia.member.dto.MemberDto;
 import com.recipia.member.hexagonal.common.exception.ErrorCode;
 import com.recipia.member.hexagonal.common.exception.MemberApplicationException;
+import com.recipia.member.hexagonal.config.dto.TokenMemberInfoDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -52,12 +52,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 
     /**
-     * HttpServletRequest에서 MemberDto에 관련된 데이터 추출하기
+     * HttpServletRequest에서 TokenMemberInfoDto에 관련된 데이터 추출하기
      */
     private UsernamePasswordAuthenticationToken getAuthRequest (HttpServletRequest request) {
         try {
-            MemberDto memberDto = objectMapper.readValue(request.getInputStream(), MemberDto.class);
-            return new UsernamePasswordAuthenticationToken(memberDto.username(), memberDto.password());
+            TokenMemberInfoDto tokenMemberInfoDto = objectMapper.readValue(request.getInputStream(), TokenMemberInfoDto.class);
+            return new UsernamePasswordAuthenticationToken(tokenMemberInfoDto.username(), tokenMemberInfoDto.password());
         } catch (Exception e) {
             throw new MemberApplicationException(ErrorCode.IO_ERROR);
         }

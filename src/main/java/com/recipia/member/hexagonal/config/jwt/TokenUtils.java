@@ -1,6 +1,6 @@
 package com.recipia.member.hexagonal.config.jwt;
 
-import com.recipia.member.dto.MemberDto;
+import com.recipia.member.hexagonal.config.dto.TokenMemberInfoDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -44,8 +44,8 @@ public class TokenUtils {
     /**
      * 사용자 pk를 기준으로 Access Token을 발급하여 반환해 준다.
      */
-    public static String generateAccessToken(MemberDto memberDto) {
-        Pair<String, LocalDateTime> jwtPair = generateToken(memberDto, ACCESS_TOKEN_EXPIRATION_SECONDS, ACCESS_TOKEN_TYPE);
+    public static String generateAccessToken(TokenMemberInfoDto tokenMemberInfoDto) {
+        Pair<String, LocalDateTime> jwtPair = generateToken(tokenMemberInfoDto, ACCESS_TOKEN_EXPIRATION_SECONDS, ACCESS_TOKEN_TYPE);
         return jwtPair.getFirst();
     }
 
@@ -53,8 +53,8 @@ public class TokenUtils {
      * 사용자 pk를 기준으로 Refresh Token을 발급하여 반환해 준다.
      * 이때 Refresh Token은 DB에 저장해야 한다.
      */
-    public static Pair<String, LocalDateTime> generateRefreshToken(MemberDto memberDto) {
-        return generateToken(memberDto, REFRESH_TOKEN_EXPIRATION_SECONDS, REFRESH_TOKEN_TYPE);
+    public static Pair<String, LocalDateTime> generateRefreshToken(TokenMemberInfoDto tokenMemberInfoDto) {
+        return generateToken(tokenMemberInfoDto, REFRESH_TOKEN_EXPIRATION_SECONDS, REFRESH_TOKEN_TYPE);
     }
 
 
@@ -62,19 +62,19 @@ public class TokenUtils {
      * Pair라는 객체는 두 개의 연관된 값을 함께 그룹화하는데 사용
      * org.springframework.data.util.Pair 사용
      */
-    private static Pair<String, LocalDateTime> generateToken(MemberDto memberDto, long expirationSeconds, String tokenType) {
+    private static Pair<String, LocalDateTime> generateToken(TokenMemberInfoDto tokenMemberInfoDto, long expirationSeconds, String tokenType) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expiryDate = now.plusSeconds(expirationSeconds);
 
         JwtBuilder builder = Jwts.builder()
                 .setHeader(createHeader())
-                .setClaims(createClaims(memberDto, tokenType))
-                .setSubject(String.valueOf(memberDto.username()))
+                .setClaims(createClaims(tokenMemberInfoDto, tokenType))
+                .setSubject(String.valueOf(tokenMemberInfoDto.username()))
                 .setIssuer("Recipia")
                 .setExpiration(Date.from(expiryDate.atZone(ZoneId.systemDefault()).toInstant()))
                 .signWith(key, SignatureAlgorithm.HS256);
 
-        log.info("generateJwtToken - Token generated for username: " + memberDto.username());
+        log.info("generateJwtToken - Token generated for username: " + tokenMemberInfoDto.username());
         return Pair.of(builder.compact(), expiryDate);
     }
 
@@ -95,18 +95,15 @@ public class TokenUtils {
 
     /**
      * 사용자 정보를 기반으로 클래임을 생성해주는 메서드
-     * @param memberDto 사용자 정보
+     * @param tokenMemberInfoDto 사용자 정보
      * @return Map<String, Object>
      */
-    private static Map<String, Object> createClaims(MemberDto memberDto, String tokenType) {
+    private static Map<String, Object> createClaims(TokenMemberInfoDto tokenMemberInfoDto, String tokenType) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(MEMBER_ID, memberDto.id());
-        claims.put(USERNAME, memberDto.username()); // 이걸 넣어주면 해결이긴 하다.
-        claims.put(NICKNAME, memberDto.nickname());
+        claims.put(MEMBER_ID, tokenMemberInfoDto.id());
+        claims.put(NICKNAME, tokenMemberInfoDto.nickname());
         claims.put("type", tokenType); // Token 종류를 저장
-        // fixme: 추후에는 아래 주석 해제
-//        claims.put(ROLE, memberDto.roleType().name());
-        claims.put(ROLE, "MEMBER");
+        claims.put(ROLE, tokenMemberInfoDto.roleType().name());
         return claims;
     }
 

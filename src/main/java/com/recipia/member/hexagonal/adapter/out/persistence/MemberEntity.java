@@ -2,7 +2,7 @@ package com.recipia.member.hexagonal.adapter.out.persistence;
 
 import com.recipia.member.hexagonal.adapter.out.persistence.auditingfield.UpdateDateTimeForEntity;
 import com.recipia.member.hexagonal.adapter.out.persistence.constant.MemberStatus;
-import com.recipia.member.dto.MemberDto;
+import com.recipia.member.hexagonal.adapter.out.persistence.constant.RoleType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -62,6 +62,10 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     @Column(name = "collection_yn", nullable = false)
     private String collectionYn;    // 개인정보 수집 보호여부
 
+    @Column(name = "role_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;        // 회원상태
+
     @ToString.Exclude
     @OneToMany(mappedBy = "followerMember")
     private List<FollowEntity>  followerList= new ArrayList<>();          // 팔로워 회원 리스트
@@ -99,7 +103,7 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     private List<MemberBadgeMap> badgeMapList = new ArrayList<>();    // 회원 뱃지 매핑 리스트
 
 
-    private MemberEntity(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
+    private MemberEntity(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -113,16 +117,17 @@ public class MemberEntity extends UpdateDateTimeForEntity {
         this.email = email;
         this.protectionYn = protectionYn;
         this.collectionYn = collectionYn;
+        this.roleType = roleType;
     }
 
     // 새 엔티티 생성용 팩토리 메소드
-    public static MemberEntity of(String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
-        return new MemberEntity(null, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn);
+    public static MemberEntity of(String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
+        return new MemberEntity(null, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn, roleType);
     }
 
     // 기존 엔티티 로드용 팩토리 메소드
-    public static MemberEntity of(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
-        return new MemberEntity(id, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn);
+    public static MemberEntity of(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
+        return new MemberEntity(id, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn, roleType);
     }
 
     // update용 메소드

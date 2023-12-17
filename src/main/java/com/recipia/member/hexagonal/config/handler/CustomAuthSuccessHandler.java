@@ -3,9 +3,9 @@ package com.recipia.member.hexagonal.config.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.recipia.member.hexagonal.config.dto.SecurityUserDetailsDto;
+import com.recipia.member.hexagonal.config.dto.TokenMemberInfoDto;
 import com.recipia.member.hexagonal.config.jwt.TokenUtils;
-import com.recipia.member.dto.MemberDto;
-import com.recipia.member.service.JwtService;
+import com.recipia.member.hexagonal.application.service.JwtService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,16 +40,16 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
 
         // 사용자 정보 가져오기
-        MemberDto memberDto = ((SecurityUserDetailsDto) authentication.getPrincipal()).getMemberDto();
+        TokenMemberInfoDto tokenMemberInfoDto = ((SecurityUserDetailsDto) authentication.getPrincipal()).getTokenMemberInfoDto();
 
         HashMap<String, Object> responseMap = new HashMap<>();
         responseMap.put("resultCode", 200);
         responseMap.put("failMessage", null);
 
         // JWT 토큰 생성
-        String token = TokenUtils.generateAccessToken(memberDto);
-        Pair<String, LocalDateTime> refreshTokenPair = TokenUtils.generateRefreshToken(memberDto);
-        jwtService.insertRefreshTokenToDB(memberDto, refreshTokenPair);
+        String token = TokenUtils.generateAccessToken(tokenMemberInfoDto);
+        Pair<String, LocalDateTime> refreshTokenPair = TokenUtils.generateRefreshToken(tokenMemberInfoDto);
+        jwtService.insertRefreshTokenToDB(tokenMemberInfoDto.username(), refreshTokenPair);
         responseMap.put("token", token);
 
         // 응답 설정하고 클라이언트에 전송

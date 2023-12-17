@@ -1,6 +1,5 @@
 package com.recipia.member.hexagonal.config.dto;
 
-import com.recipia.member.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.Delegate;
@@ -18,23 +17,22 @@ import java.util.Collections;
 public class SecurityUserDetailsDto implements UserDetails {
 
     @Delegate
-    private MemberDto memberDto;
+    private TokenMemberInfoDto tokenMemberInfoDto;
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // todo: 추후에 Member domain에 roleType field 추가
-        return Collections.singletonList(new SimpleGrantedAuthority("MEMBER"));
+        return Collections.singletonList(new SimpleGrantedAuthority(tokenMemberInfoDto.roleType().toString()));
     }
 
     @Override
     public String getPassword() {
-        return memberDto.password();
+        return tokenMemberInfoDto.password();
     }
 
     @Override
     public String getUsername() {
-        return memberDto.username();
+        return tokenMemberInfoDto.username();
     }
 
     @Override

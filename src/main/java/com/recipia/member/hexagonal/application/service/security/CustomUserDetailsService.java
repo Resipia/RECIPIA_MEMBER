@@ -1,11 +1,11 @@
-package com.recipia.member.service.security;
+package com.recipia.member.hexagonal.application.service.security;
 
 import com.recipia.member.hexagonal.config.dto.SecurityUserDetailsDto;
 import com.recipia.member.hexagonal.adapter.out.persistence.MemberEntity;
-import com.recipia.member.dto.MemberDto;
 import com.recipia.member.hexagonal.common.exception.ErrorCode;
 import com.recipia.member.hexagonal.common.exception.MemberApplicationException;
 import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.MemberRepository;
+import com.recipia.member.hexagonal.config.dto.TokenMemberInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,14 +31,13 @@ public class CustomUserDetailsService implements UserDetailsService {
                         () -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND)
                 );
 
-        // Member entity to MemberDto
-        MemberDto memberDto = MemberDto.fromEntity(member);
+        // Member entity to TokenMemberInfoDto
+        TokenMemberInfoDto tokenMemberInfoDto = TokenMemberInfoDto.fromEntity(member);
 
         // 사용자 정보 기반으로 SecurityUserDetailsDto 객체 생성
-        return new SecurityUserDetailsDto(memberDto,
-                // todo: 추후에는 memberDto.roleType().toString()로 수정
+        return new SecurityUserDetailsDto(tokenMemberInfoDto,
                 Collections.singleton(new SimpleGrantedAuthority(
-                        "MEMBER"
+                        tokenMemberInfoDto.roleType().toString()
                 )));
     }
 }

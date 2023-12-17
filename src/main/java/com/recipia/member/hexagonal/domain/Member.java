@@ -1,6 +1,7 @@
 package com.recipia.member.hexagonal.domain;
 
 import com.recipia.member.hexagonal.adapter.out.persistence.constant.MemberStatus;
+import com.recipia.member.hexagonal.adapter.out.persistence.constant.RoleType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,8 +22,9 @@ public class Member {
     private String email;           // 이메일
     private String protectionYn;    // 개인정보 보호 동의여부
     private String collectionYn;    // 개인정보 수집 보호여부
+    private RoleType roleType;      // 계정 권한
 
-    private Member(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
+    private Member(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -36,10 +38,11 @@ public class Member {
         this.email = email;
         this.protectionYn = protectionYn;
         this.collectionYn = collectionYn;
+        this.roleType = roleType;
     }
 
-    public static Member of(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn) {
-        return new Member(id, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn);
+    public static Member of(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
+        return new Member(id, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn, roleType);
     }
 
 
