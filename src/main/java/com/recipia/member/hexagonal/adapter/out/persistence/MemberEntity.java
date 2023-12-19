@@ -26,8 +26,8 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     @Column(name = "member_id", nullable = false)
     private Long id;                // 회원 pk
 
-    @Column(name = "username", nullable = false)
-    private String username;          // 회원 로그인 id
+    @Column(name = "email", nullable = false)
+    private String email;           // 이메일
 
     @Column(name = "password", nullable = false)
     private String password;        // 회원 비밀번호
@@ -54,9 +54,6 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     @Column(name = "addr2")
     private String address2;        // 주소2
 
-    @Column(name = "email", nullable = false)
-    private String email;           // 이메일
-
     @Column(name = "protection_yn", nullable = false)
     private String protectionYn;    // 개인정보 보호 동의여부
 
@@ -67,35 +64,11 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;        // 회원상태
 
-    @ToString.Exclude
-    @OneToMany(mappedBy = "followerMember")
-    private List<FollowEntity>  followerList= new ArrayList<>();          // 팔로워 회원 리스트
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "followingMember")
-    private List<FollowEntity> followingList = new ArrayList<>();         // 팔로잉 회원 리스트
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "member")
-    private List<MemberBlockEntity> userList = new ArrayList<>();           // 차단 신청한 회원 리스트
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "blockMember")
-    private List<MemberBlockEntity> blockList = new ArrayList<>();          // 차단시킬 회원 리스트
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "member")
-    private List<MemberFileEntity> fileList = new ArrayList<>();            // 파일 리스트
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "member")
-    private List<MemberHistoryLogEntity> historyLogList = new ArrayList<>();// 회원 히스토리 리스트
-
 
     // private 생성자
-    private MemberEntity(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
+    private MemberEntity(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String protectionYn, String collectionYn, RoleType roleType) {
         this.id = id;
-        this.username = username;
+        this.email = email;
         this.password = password;
         this.fullName = fullName;
         this.nickname = nickname;
@@ -104,20 +77,19 @@ public class MemberEntity extends UpdateDateTimeForEntity {
         this.telNo = telNo;
         this.address1 = address1;
         this.address2 = address2;
-        this.email = email;
         this.protectionYn = protectionYn;
         this.collectionYn = collectionYn;
         this.roleType = roleType;
     }
 
     // 새 엔티티 생성용 팩토리 메소드
-    public static MemberEntity of(String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
-        return new MemberEntity(null, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn, roleType);
+    public static MemberEntity of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String protectionYn, String collectionYn, RoleType roleType) {
+        return new MemberEntity(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, protectionYn, collectionYn, roleType);
     }
 
     // 기존 엔티티 로드용 팩토리 메소드
-    public static MemberEntity of(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
-        return new MemberEntity(id, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn, roleType);
+    public static MemberEntity of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String protectionYn, String collectionYn, RoleType roleType) {
+        return new MemberEntity(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, protectionYn, collectionYn, roleType);
     }
 
     @Override

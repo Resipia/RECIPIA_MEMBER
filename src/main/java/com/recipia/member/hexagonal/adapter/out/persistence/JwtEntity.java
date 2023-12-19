@@ -18,10 +18,8 @@ public class JwtEntity {
     @Column(name = "jwt_id", nullable = false)
     private Long id;                // jwt pk
 
-    @ToString.Exclude
-    @JoinColumn(name = "member_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private MemberEntity member;          // 회원 pk
+    @Column(name = "member_id", nullable = false)
+    private Long memberId;          // 회원 pk
 
     @Column(name = "refresh_token", nullable = false, length = 500)
     private String refreshToken;
@@ -31,21 +29,21 @@ public class JwtEntity {
 
 
     @Builder
-    private JwtEntity(Long id, MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
+    private JwtEntity(Long id, Long memberId, String refreshToken, LocalDateTime expiredDateTime) {
         this.id = id;
-        this.member = member;
+        this.memberId = memberId;
         this.refreshToken = refreshToken;
         this.expiredDateTime = expiredDateTime;
     }
 
     // 새 엔티티 생성용 팩토리 메소드
-    public static JwtEntity of(MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
-        return new JwtEntity(null, member, refreshToken, expiredDateTime);
+    public static JwtEntity of(Long memberId, String refreshToken, LocalDateTime expiredDateTime) {
+        return new JwtEntity(null, memberId, refreshToken, expiredDateTime);
     }
 
     // 기존 엔티티 로드용 팩토리 메소드
-    public static JwtEntity of(Long id, MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
-        return new JwtEntity(id, member, refreshToken, expiredDateTime);
+    public static JwtEntity of(Long id, Long memberId, String refreshToken, LocalDateTime expiredDateTime) {
+        return new JwtEntity(id, memberId, refreshToken, expiredDateTime);
     }
 
     @Override

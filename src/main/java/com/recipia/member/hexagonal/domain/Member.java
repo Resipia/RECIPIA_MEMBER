@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class Member {
 
     private Long id;                // 회원 pk
-    private String username;          // 회원 로그인 id
+    private String email;           // 이메일
     private String password;        // 회원 비밀번호
     private String fullName;        // 회원이름
     private String nickname;        // 닉네임
@@ -19,14 +19,13 @@ public class Member {
     private String telNo;           // 전화번호
     private String address1;        // 주소1
     private String address2;        // 주소2
-    private String email;           // 이메일
     private String protectionYn;    // 개인정보 보호 동의여부
     private String collectionYn;    // 개인정보 수집 보호여부
     private RoleType roleType;      // 계정 권한
 
-    private Member(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
+    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String protectionYn, String collectionYn, RoleType roleType) {
         this.id = id;
-        this.username = username;
+        this.email = email;
         this.password = password;
         this.fullName = fullName;
         this.nickname = nickname;
@@ -35,14 +34,13 @@ public class Member {
         this.telNo = telNo;
         this.address1 = address1;
         this.address2 = address2;
-        this.email = email;
         this.protectionYn = protectionYn;
         this.collectionYn = collectionYn;
         this.roleType = roleType;
     }
 
-    public static Member of(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
-        return new Member(id, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn, roleType);
+    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String protectionYn, String collectionYn, RoleType roleType) {
+        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, protectionYn, collectionYn, roleType);
     }
 
 

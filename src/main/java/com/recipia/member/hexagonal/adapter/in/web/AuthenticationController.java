@@ -16,9 +16,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        // 로그인 로직을 usecase를 통해 처리
-        SignIn result = memberUseCase.login(request.getUsername(), request.getPassword());
-        return ResponseEntity.ok(result);
+        return null;
     }
 
 }
