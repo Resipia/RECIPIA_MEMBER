@@ -38,8 +38,14 @@ public class JwtEntity {
         this.expiredDateTime = expiredDateTime;
     }
 
+    // 새 엔티티 생성용 팩토리 메소드
     public static JwtEntity of(MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
         return new JwtEntity(null, member, refreshToken, expiredDateTime);
+    }
+
+    // 기존 엔티티 로드용 팩토리 메소드
+    public static JwtEntity of(Long id, MemberEntity member, String refreshToken, LocalDateTime expiredDateTime) {
+        return new JwtEntity(id, member, refreshToken, expiredDateTime);
     }
 
     @Override

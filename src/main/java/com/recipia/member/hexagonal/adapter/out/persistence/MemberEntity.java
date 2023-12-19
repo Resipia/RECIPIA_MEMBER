@@ -11,6 +11,7 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /** 회원 */
 @ToString(callSuper = true)
@@ -88,21 +89,10 @@ public class MemberEntity extends UpdateDateTimeForEntity {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "member")
-    private List<BookmarkEntity> bookmarkEntityList = new ArrayList<>();        // 북마크 리스트
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "member")
-    private List<MemberCtgryMapEntity> ctgryMapList = new ArrayList<>();    // 회원 카테고리 매핑 리스트
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "member")
     private List<MemberHistoryLogEntity> historyLogList = new ArrayList<>();// 회원 히스토리 리스트
 
-    @ToString.Exclude
-    @OneToMany(mappedBy = "member")
-    private List<MemberBadgeMap> badgeMapList = new ArrayList<>();    // 회원 뱃지 매핑 리스트
 
-
+    // private 생성자
     private MemberEntity(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
         this.id = id;
         this.username = username;
@@ -128,6 +118,18 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     // 기존 엔티티 로드용 팩토리 메소드
     public static MemberEntity of(Long id, String username, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String email, String protectionYn, String collectionYn, RoleType roleType) {
         return new MemberEntity(id, username, password, fullName, nickname, status, introduction, telNo, address1, address2, email, protectionYn, collectionYn, roleType);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MemberEntity that)) return false;
+        return this.id != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 
     // update용 메소드
