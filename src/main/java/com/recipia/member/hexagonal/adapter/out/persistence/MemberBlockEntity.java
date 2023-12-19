@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Objects;
+
 /** 회원 차단 */
 @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,14 +31,31 @@ public class MemberBlockEntity extends CreateDateTimeForEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private MemberEntity blockMember; // 차단 회원 pk
 
-    private MemberBlockEntity(MemberEntity member, MemberEntity blockMember) {
+    private MemberBlockEntity(Long id, MemberEntity member, MemberEntity blockMember) {
+        this.id = id;
         this.member = member;
         this.blockMember = blockMember;
     }
 
-    // factory method of 선언
+    // 새 엔티티 생성용 팩토리 메소드
     public static MemberBlockEntity of(MemberEntity member, MemberEntity blockMember) {
-        return new MemberBlockEntity(member, blockMember);
+        return new MemberBlockEntity(null, member, blockMember);
     }
 
+    // 기존 엔티티 로드용 팩토리 메소드
+    public static MemberBlockEntity of(Long id, MemberEntity member, MemberEntity blockMember) {
+        return new MemberBlockEntity(id, member, blockMember);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MemberBlockEntity that)) return false;
+        return this.id != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }

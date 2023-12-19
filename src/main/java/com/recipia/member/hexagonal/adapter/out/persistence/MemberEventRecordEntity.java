@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /** 회원 이벤트 기록 */
 @ToString(callSuper = true)
@@ -54,7 +55,8 @@ public class MemberEventRecordEntity extends CreateDateTimeForEntity {
     private LocalDateTime publishedAt;
 
 
-    private MemberEventRecordEntity(MemberEntity member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
+    private MemberEventRecordEntity(Long id, MemberEntity member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
+        this.id = id;
         this.member = member;
         this.snsTopic = snsTopic;
         this.eventType = eventType;
@@ -64,11 +66,27 @@ public class MemberEventRecordEntity extends CreateDateTimeForEntity {
         this.publishedAt = publishedAt;
     }
 
-    // 생성자 factory method of 선언
+    // 새 엔티티 생성용 팩토리 메소드
     public static MemberEventRecordEntity of(MemberEntity member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
-        return new MemberEventRecordEntity(member, snsTopic, eventType, attribute, traceId, published, publishedAt);
+        return new MemberEventRecordEntity(null, member, snsTopic, eventType, attribute, traceId, published, publishedAt);
     }
 
+    // 기존 엔티티 로드용 팩토리 메소드
+    public static MemberEventRecordEntity of(Long id, MemberEntity member, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {
+        return new MemberEventRecordEntity(id, member, snsTopic, eventType, attribute, traceId, published, publishedAt);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MemberEventRecordEntity that)) return false;
+        return this.id != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 
     /**
      * MemberEventRecord published: true, publishedAt: now 업데이트 메소드
