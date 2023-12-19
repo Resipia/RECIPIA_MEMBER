@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Objects;
+
 /** 회원 파일 */
 @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -42,7 +44,8 @@ public class MemberFileEntity extends UpdateDateTimeForEntity {
     @Column(name = "del_yn", nullable = false)
     private String delYn;           // 삭제여부
 
-    private MemberFileEntity(MemberEntity member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
+    private MemberFileEntity(Long id, MemberEntity member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
+        this.id = id;
         this.member = member;
         this.filePath = filePath;
         this.originFileName = originFileName;
@@ -52,9 +55,25 @@ public class MemberFileEntity extends UpdateDateTimeForEntity {
         this.delYn = delYn;
     }
 
-    // 생성자 factory method of 선언
+    // 새 엔티티 생성용 팩토리 메소드
     public static MemberFileEntity of(MemberEntity member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
-        return new MemberFileEntity(member, filePath, originFileName, storedFileName, fileExtension, fileSize, delYn);
+        return new MemberFileEntity(null, member, filePath, originFileName, storedFileName, fileExtension, fileSize, delYn);
     }
 
+    // 기존 엔티티 로드용 팩토리 메소드
+    public static MemberFileEntity of(Long id, MemberEntity member, String filePath, String originFileName, String storedFileName, String fileExtension, Integer fileSize, String delYn) {
+        return new MemberFileEntity(id, member, filePath, originFileName, storedFileName, fileExtension, fileSize, delYn);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MemberFileEntity that)) return false;
+        return this.id != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }
