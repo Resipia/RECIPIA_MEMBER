@@ -32,7 +32,7 @@ public class SecurityUserDetailsDto implements UserDetails {
 
     @Override
     public String getUsername() {
-        return tokenMemberInfoDto.username();
+        return tokenMemberInfoDto.email();
     }
 
     @Override

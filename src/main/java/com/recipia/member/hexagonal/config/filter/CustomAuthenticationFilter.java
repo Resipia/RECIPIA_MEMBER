@@ -57,7 +57,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     private UsernamePasswordAuthenticationToken getAuthRequest (HttpServletRequest request) {
         try {
             TokenMemberInfoDto tokenMemberInfoDto = objectMapper.readValue(request.getInputStream(), TokenMemberInfoDto.class);
-            return new UsernamePasswordAuthenticationToken(tokenMemberInfoDto.username(), tokenMemberInfoDto.password());
+            return new UsernamePasswordAuthenticationToken(tokenMemberInfoDto.email(), tokenMemberInfoDto.password());
         } catch (Exception e) {
             throw new MemberApplicationException(ErrorCode.IO_ERROR);
         }

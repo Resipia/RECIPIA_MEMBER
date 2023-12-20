@@ -3,6 +3,8 @@ package com.recipia.member.hexagonal.config.jwt;
 import com.recipia.member.hexagonal.adapter.out.persistence.MemberEntity;
 import com.recipia.member.hexagonal.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.MemberRepository;
+import com.recipia.member.hexagonal.application.port.out.port.MemberPort;
+import com.recipia.member.hexagonal.domain.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class TokenValidator {
 
     private final MemberRepository memberRepository;
+    private final MemberPort memberPort;
 
     public boolean isValidToken(String token, String tokenType) {
         try {
@@ -25,10 +28,8 @@ public class TokenValidator {
                 return false;
             }
 
-            //todo: 지금 claims안에 username이 없어서 검증오류가 생긴것이다.
-            String username = claims.get("username", String.class);
-            MemberEntity member = memberRepository.findMemberByUsernameAndStatus(username, MemberStatus.ACTIVE).orElse(null);
-
+            String email = claims.get("email", String.class);
+            Member member = memberPort.findMemberByEmailAndStatus(email, MemberStatus.ACTIVE).orElse(null);
             return member != null;
         } catch (JwtException jwtException) {
             return false;

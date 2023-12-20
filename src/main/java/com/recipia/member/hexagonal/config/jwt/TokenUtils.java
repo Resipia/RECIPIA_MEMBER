@@ -31,7 +31,7 @@ public class TokenUtils {
     private static final String JWT_TYPE = "JWT";
     private static final String ALGORITHM = "HS256";
     private static final String MEMBER_ID = "memberId";
-    private static final String USERNAME = "username";
+    private static final String EMAIL = "email";
     private static final String NICKNAME = "nickname";
     private static final String ROLE = "role";
 
@@ -69,12 +69,12 @@ public class TokenUtils {
         JwtBuilder builder = Jwts.builder()
                 .setHeader(createHeader())
                 .setClaims(createClaims(tokenMemberInfoDto, tokenType))
-                .setSubject(String.valueOf(tokenMemberInfoDto.username()))
+                .setSubject(String.valueOf(tokenMemberInfoDto.email()))
                 .setIssuer("Recipia")
                 .setExpiration(Date.from(expiryDate.atZone(ZoneId.systemDefault()).toInstant()))
                 .signWith(key, SignatureAlgorithm.HS256);
 
-        log.info("generateJwtToken - Token generated for username: " + tokenMemberInfoDto.username());
+        log.info("generateJwtToken - Token generated for user email: " + tokenMemberInfoDto.email());
         return Pair.of(builder.compact(), expiryDate);
     }
 
@@ -86,6 +86,11 @@ public class TokenUtils {
     public static String getNicknameFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
         return claims.get(NICKNAME, String.class);
+    }
+
+    public static String getEmailFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.get(EMAIL, String.class);
     }
 
     public static String getRoleFromToken(String token) {
@@ -101,6 +106,7 @@ public class TokenUtils {
     private static Map<String, Object> createClaims(TokenMemberInfoDto tokenMemberInfoDto, String tokenType) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(MEMBER_ID, tokenMemberInfoDto.id());
+        claims.put(EMAIL, tokenMemberInfoDto.email());
         claims.put(NICKNAME, tokenMemberInfoDto.nickname());
         claims.put("type", tokenType); // Token 종류를 저장
         claims.put(ROLE, tokenMemberInfoDto.roleType().name());
