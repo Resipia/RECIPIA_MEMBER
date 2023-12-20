@@ -63,6 +63,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.springframework.batch:spring-batch-test'
+	runtimeOnly 'com.h2database:h2'
 
 	// AWS SNS, SQS - spring3.x.x
 	implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.1")
