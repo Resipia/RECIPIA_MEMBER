@@ -15,6 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@Table(name = "follow")
 public class FollowEntity extends CreateDateTimeForEntity {
 
     @Id

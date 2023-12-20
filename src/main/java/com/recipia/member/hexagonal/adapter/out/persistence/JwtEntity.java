@@ -11,6 +11,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@Table(name = "jwt")
 public class JwtEntity {
 
     @Id

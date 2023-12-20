@@ -14,6 +14,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@Table(name = "member_block")
 public class MemberBlockEntity extends CreateDateTimeForEntity {
 
     @Id

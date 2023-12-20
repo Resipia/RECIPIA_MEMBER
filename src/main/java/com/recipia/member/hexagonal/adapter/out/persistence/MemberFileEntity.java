@@ -14,6 +14,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@Table(name = "member_file")
 public class MemberFileEntity extends UpdateDateTimeForEntity {
 
     @Id
