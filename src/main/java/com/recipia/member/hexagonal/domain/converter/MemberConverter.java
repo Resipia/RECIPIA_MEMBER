@@ -17,7 +17,7 @@ public class MemberConverter {
     public static Member entityToDomain(MemberEntity entity) {
         return Member.of(
                 entity.getId(),
-                entity.getUsername(),
+                entity.getEmail(),
                 entity.getPassword(),
                 entity.getFullName(),
                 entity.getNickname(),
@@ -26,9 +26,10 @@ public class MemberConverter {
                 entity.getTelNo(),
                 entity.getAddress1(),
                 entity.getAddress2(),
-                entity.getEmail(),
                 entity.getProtectionYn(),
-                entity.getCollectionYn());
+                entity.getCollectionYn(),
+                entity.getRoleType()
+              );
     }
 
     /**
@@ -38,7 +39,7 @@ public class MemberConverter {
      */
     public static MemberEntity domainToEntity(Member member) {
         return MemberEntity.of(
-                member.getUsername(),
+                member.getEmail(),
                 member.getPassword(),
                 member.getFullName(),
                 member.getNickname(),
@@ -47,9 +48,10 @@ public class MemberConverter {
                 member.getTelNo(),
                 member.getAddress1(),
                 member.getAddress2(),
-                member.getEmail(),
                 member.getProtectionYn(),
-                member.getCollectionYn());
+                member.getCollectionYn(),
+                member.getRoleType()
+        );
     }
 
     

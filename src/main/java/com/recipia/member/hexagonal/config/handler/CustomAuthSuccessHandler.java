@@ -2,6 +2,8 @@ package com.recipia.member.hexagonal.config.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.recipia.member.hexagonal.application.port.in.JwtUseCase;
+import com.recipia.member.hexagonal.application.port.out.port.JwtPort;
 import com.recipia.member.hexagonal.config.dto.SecurityUserDetailsDto;
 import com.recipia.member.hexagonal.config.dto.TokenMemberInfoDto;
 import com.recipia.member.hexagonal.config.jwt.TokenUtils;
@@ -31,7 +33,7 @@ import java.util.HashMap;
 public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
-    private final JwtService jwtService;
+    private final JwtUseCase jwtUseCase;
 
     /**
      * 인증 성공 후 처리하는 메서드.
@@ -49,7 +51,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         // JWT 토큰 생성
         String token = TokenUtils.generateAccessToken(tokenMemberInfoDto);
         Pair<String, LocalDateTime> refreshTokenPair = TokenUtils.generateRefreshToken(tokenMemberInfoDto);
-        jwtService.insertRefreshTokenToDB(tokenMemberInfoDto.username(), refreshTokenPair);
+        jwtUseCase.insertRefreshTokenToDB(tokenMemberInfoDto.email(), refreshTokenPair);
         responseMap.put("token", token);
 
         // 응답 설정하고 클라이언트에 전송
