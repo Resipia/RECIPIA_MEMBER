@@ -16,6 +16,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
+@Table(name = "member_event_record")
 public class MemberEventRecordEntity extends CreateDateTimeForEntity {
 
     // 회원 이벤트 기록 Pk
@@ -86,14 +87,6 @@ public class MemberEventRecordEntity extends CreateDateTimeForEntity {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
-    }
-
-    /**
-     * MemberEventRecord published: true, publishedAt: now 업데이트 메소드
-     */
-    public void changePublishedToTrue() {
-        this.published = true;
-        publishedAt = LocalDateTime.now();
     }
 
 }
