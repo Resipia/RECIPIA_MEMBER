@@ -42,20 +42,24 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         // 사용자 정보 가져오기
         TokenMemberInfoDto tokenMemberInfoDto = ((SecurityUserDetailsDto) authentication.getPrincipal()).getTokenMemberInfoDto();
 
+        // JWT 토큰 생성
+        String accessToken = TokenUtils.generateAccessToken(tokenMemberInfoDto);
+        Pair<String, LocalDateTime> refreshTokenPair = TokenUtils.generateRefreshToken(tokenMemberInfoDto);
+
+        // Refresh Token DB에 저장
+        jwtUseCase.insertRefreshTokenToDB(tokenMemberInfoDto.email(), refreshTokenPair);
+
+        // 응답 맵 생성 및 토큰 추가
         HashMap<String, Object> responseMap = new HashMap<>();
         responseMap.put("resultCode", 200);
-        responseMap.put("failMessage", null);
+        responseMap.put("accessToken", accessToken);
+        responseMap.put("refreshToken", refreshTokenPair.getFirst());
 
-        // JWT 토큰 생성
-        String token = TokenUtils.generateAccessToken(tokenMemberInfoDto);
-        Pair<String, LocalDateTime> refreshTokenPair = TokenUtils.generateRefreshToken(tokenMemberInfoDto);
-        jwtUseCase.insertRefreshTokenToDB(tokenMemberInfoDto.email(), refreshTokenPair);
-        responseMap.put("token", token);
-
-        // 응답 설정하고 클라이언트에 전송
+        // 응답 설정
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
 
+        // 응답 데이터 클라이언트에 전송
         try (PrintWriter printWriter = response.getWriter()) {
             printWriter.print(objectMapper.writeValueAsString(responseMap));
             printWriter.flush();

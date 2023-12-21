@@ -1,5 +1,8 @@
 package com.recipia.member.config.handler;
 
+import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
+import com.recipia.member.common.exception.ErrorCode;
+import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.config.dto.SecurityUserDetailsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         // DB에서 사용자 정보 조회
         SecurityUserDetailsDto securityUserDetailsDto = (SecurityUserDetailsDto) userDetailsService.loadUserByUsername(username);
+
+        // 사용자가 상태 검증
+        if (securityUserDetailsDto.getTokenMemberInfoDto().memberStatus().equals(MemberStatus.DORMANT)) {
+            // 휴면 계정
+            throw new MemberApplicationException(ErrorCode.USER_IS_DORMANT);
+        } else if (securityUserDetailsDto.getTokenMemberInfoDto().memberStatus().equals(MemberStatus.DEACTIVATED)) {
+            // 탈퇴 계정
+            throw new MemberApplicationException(ErrorCode.USER_IS_DEACTIVATED);
+        }
 
         // 암호화된 비밀번호 비교
         if (!bCryptPasswordEncoder.matches(userCryptPassword, securityUserDetailsDto.getTokenMemberInfoDto().password())) {

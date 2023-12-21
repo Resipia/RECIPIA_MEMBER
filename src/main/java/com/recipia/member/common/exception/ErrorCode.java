@@ -12,6 +12,8 @@ public enum ErrorCode {
 
     // 로그인 관련 에러
     USER_NOT_FOUND(404, "USER_NOT_FOUND", "유저를 찾을 수 없습니다."),
+    USER_IS_DORMANT(404, "USER_IS_DORMANT", "휴면계정입니다."),
+    USER_IS_DEACTIVATED(404, "USER_IS_DEACTIVATED", "탈퇴한 계정입니다."),
 
     // JWT 관련 에러
     INVALID_JWT(401, "INVALID_JWT", "토큰이 유효하지 않습니다."),
