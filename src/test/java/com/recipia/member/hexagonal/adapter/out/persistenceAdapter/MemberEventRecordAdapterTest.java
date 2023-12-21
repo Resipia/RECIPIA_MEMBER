@@ -1,6 +1,6 @@
 package com.recipia.member.hexagonal.adapter.out.persistenceAdapter;
 
-import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.querydsl.MemberEventRecordQueryRepository;
+import com.recipia.member.adapter.out.persistenceAdapter.querydsl.MemberEventRecordQueryRepository;
 import jakarta.transaction.Transactional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
