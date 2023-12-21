@@ -3,25 +3,10 @@ package com.recipia.member.adapter.in.listener.aws;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-<<<<<<< Updated upstream:src/main/java/com/recipia/member/hexagonal/adapter/in/listener/aws/SqsEventRecordListener.java
-import com.recipia.member.hexagonal.adapter.out.persistence.MemberEventRecordEntity;
-import com.recipia.member.hexagonal.adapter.in.listener.aws.dto.MessageMemberIdDto;
-import com.recipia.member.hexagonal.adapter.in.listener.aws.dto.SnsNotificationDto;
-import com.recipia.member.hexagonal.application.port.in.MemberEventRecordUseCase;
-import com.recipia.member.hexagonal.application.port.out.port.MemberEventRecordPort;
-import com.recipia.member.hexagonal.common.exception.ErrorCode;
-import com.recipia.member.hexagonal.common.exception.MemberApplicationException;
-import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.MemberEventRecordRepository;
-import com.recipia.member.hexagonal.common.utils.MemberStringUtils;
-=======
-import com.recipia.member.adapter.out.persistenceAdapter.MemberEventRecordRepository;
-import com.recipia.member.adapter.out.persistence.MemberEventRecordEntity;
 import com.recipia.member.adapter.in.listener.aws.dto.MessageMemberIdDto;
 import com.recipia.member.adapter.in.listener.aws.dto.SnsNotificationDto;
-import com.recipia.member.common.exception.ErrorCode;
-import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.common.utils.MemberStringUtils;
->>>>>>> Stashed changes:src/main/java/com/recipia/member/adapter/in/listener/aws/SqsEventRecordListener.java
+import com.recipia.member.application.port.in.MemberEventRecordUseCase;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

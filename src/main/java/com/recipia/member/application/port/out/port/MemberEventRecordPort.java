@@ -1,4 +1,4 @@
-package com.recipia.member.hexagonal.application.port.out.port;
+package com.recipia.member.application.port.out.port;
 
 public interface MemberEventRecordPort {
 

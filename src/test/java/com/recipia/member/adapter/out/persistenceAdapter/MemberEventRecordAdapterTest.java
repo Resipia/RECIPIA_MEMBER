@@ -1,4 +1,4 @@
-package com.recipia.member.hexagonal.adapter.out.persistenceAdapter;
+package com.recipia.member.adapter.out.persistenceAdapter;
 
 import com.recipia.member.adapter.out.persistenceAdapter.querydsl.MemberEventRecordQueryRepository;
 import jakarta.transaction.Transactional;

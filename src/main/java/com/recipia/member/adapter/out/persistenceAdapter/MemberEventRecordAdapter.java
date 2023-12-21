@@ -1,7 +1,7 @@
-package com.recipia.member.hexagonal.adapter.out.persistenceAdapter;
+package com.recipia.member.adapter.out.persistenceAdapter;
 
-import com.recipia.member.hexagonal.adapter.out.persistenceAdapter.querydsl.MemberEventRecordQueryRepository;
-import com.recipia.member.hexagonal.application.port.out.port.MemberEventRecordPort;
+import com.recipia.member.adapter.out.persistenceAdapter.querydsl.MemberEventRecordQueryRepository;
+import com.recipia.member.application.port.out.port.MemberEventRecordPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

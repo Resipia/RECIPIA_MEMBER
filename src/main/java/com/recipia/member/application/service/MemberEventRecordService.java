@@ -1,7 +1,7 @@
-package com.recipia.member.hexagonal.application.service;
+package com.recipia.member.application.service;
 
-import com.recipia.member.hexagonal.application.port.in.MemberEventRecordUseCase;
-import com.recipia.member.hexagonal.application.port.out.port.MemberEventRecordPort;
+import com.recipia.member.application.port.in.MemberEventRecordUseCase;
+import com.recipia.member.application.port.out.port.MemberEventRecordPort;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
