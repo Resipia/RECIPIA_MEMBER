@@ -83,7 +83,7 @@ class SignUpServiceTest extends TotalTestSupport {
     }
 
     private Member createMember() {
-        return Member.of(1L, "test1@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 1", "Nickname1",  MemberStatus.ACTIVE, "Introduction 1", "010-1234-5678",
+        return Member.of(null, "test1@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 1", "Nickname1",  MemberStatus.ACTIVE, "Introduction 1", "010-1234-5678",
                 "Address 1-1", "Address 1-2", "Y", "Y", RoleType.MEMBER);
     }
 

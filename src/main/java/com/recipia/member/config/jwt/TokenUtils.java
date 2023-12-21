@@ -38,6 +38,7 @@ public class TokenUtils {
     private static final String ACCESS_TOKEN_TYPE = "access";
     private static final String REFRESH_TOKEN_TYPE = "refresh";
 
+    // fixme: accesstoken, refreshtoken 기간 변경
     private static final long ACCESS_TOKEN_EXPIRATION_SECONDS = 60 * 60; // 60분
     private static final long REFRESH_TOKEN_EXPIRATION_SECONDS = 60 * 60 * 24 * 30; // 30일
 
