@@ -2,22 +2,15 @@ package com.recipia.member.adapter.in.listener.springevent;
 
 import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.recipia.member.adapter.out.persistence.MemberEntity;
-import com.recipia.member.adapter.out.persistence.MemberEventRecordEntity;
 import com.recipia.member.adapter.out.persistenceAdapter.MemberEventRecordRepository;
-import com.recipia.member.config.aws.SnsConfig;
-import com.recipia.member.common.exception.ErrorCode;
-import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.adapter.out.persistenceAdapter.MemberRepository;
-import com.recipia.member.common.utils.CustomJsonBuilder;
-import com.recipia.member.common.utils.MemberStringUtils;
 import com.recipia.member.common.event.NicknameChangeSpringEvent;
+import com.recipia.member.common.utils.CustomJsonBuilder;
+import com.recipia.member.config.aws.SnsConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 @RequiredArgsConstructor
