@@ -43,7 +43,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         // 암호화된 비밀번호 비교
         if (!bCryptPasswordEncoder.matches(userCryptPassword, securityUserDetailsDto.getTokenMemberInfoDto().password())) {
-            throw new BadCredentialsException(securityUserDetailsDto.getUsername() + "의 비밀번호가 잘못되었습니다.");
+            throw new MemberApplicationException(ErrorCode.USER_NOT_FOUND);
         }
 
         // 인증 성공 시 반환 객체 생성 및 반환
