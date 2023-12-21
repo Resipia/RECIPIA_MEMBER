@@ -19,7 +19,7 @@ import java.util.Collections;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class SecurityUserDetailsService implements UserDetailsService {
 
     private final MemberPort memberPort;
 
