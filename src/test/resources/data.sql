@@ -1,13 +1,30 @@
 -- member 테이블에 테스트 데이터 삽입
-INSERT INTO member (email, password, full_name, nickname, status, introduction, tel_no, addr1, addr2, protection_yn,
-                    collection_yn, role_type, create_dttm, update_dttm)
-VALUES ('test1@example.com', '$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte', 'Full Name 1', 'Nickname1', 'ACTIVE', 'Introduction 1', '010-1234-5678',
-        'Address 1-1', 'Address 1-2', 'Y', 'Y', 'MEMBER', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('test2@example.com', '$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte', 'Full Name 2', 'Nickname2', 'ACTIVE', 'Introduction 2', '010-2345-6789',
-        'Address 2-1', 'Address 2-2', 'Y', 'Y', 'MEMBER', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-       ('test3@example.com', '$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte', 'Full Name 3', 'Nickname3', 'ACTIVE', 'Introduction 3', '010-3456-7890',
-        'Address 3-1', 'Address 3-2', 'Y', 'Y', 'MEMBER', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
+INSERT INTO public.member (password,
+                           full_name,
+                           email,
+                           nickname,
+                           status,
+                           introduction,
+                           tel_no,
+                           addr1,
+                           addr2,
+                           collection_consent_yn,
+                           marketing_consent_yn,
+                           privacy_policy_consent_yn,
+                           cookie_consent_yn,
+                           create_dttm,
+                           update_dttm,
+                           role_type)
+VALUES ('password1', '홍길동', 'hong1@example.com', 'hong1', 'ACTIVE', '안녕하세요', '010-1234-5678', '서울시 강남구', '123번지', 'Y', 'Y',
+        'Y', 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
+       ('password2', '김철수', 'kim2@example.com', 'kim2', 'DORMANT', '반갑습니다', '010-2345-6789', '서울시 서초구', '456번지', 'Y', 'N',
+        'Y', 'N', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
+       ('password3', '이영희', 'lee3@example.com', 'lee3', 'ACTIVE', '잘 부탁드립니다', '010-3456-7890', '부산시 해운대구', '789번지', 'N',
+        'Y', 'N', 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ADMIN'),
+       ('password4', '박지민', 'park4@example.com', 'park4', 'DEACTIVATED', '반가워요', '010-4567-8901', '대구시 중구', '1011번지', 'Y', 'Y',
+        'Y', 'N', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
+       ('password5', '정수민', 'jung5@example.com', 'jung5', 'ACTIVE', '안녕하세요!', '010-5678-9012', '인천시 남동구', '1213번지', 'N',
+        'N', 'Y', 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER');
 
 -- member_event_record 테이블에 가짜 데이터 삽입
 
