@@ -16,11 +16,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-// fixme: 통합으로 수정
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @SpringBootTest
-class SignUpControllerTest{
+class SignUpControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +47,7 @@ class SignUpControllerTest{
 
 
     @Test
-    @DisplayName("[fail] 필수 입력값이 누락된 dto가 들어왔을 때 BadRequest를 반환한다")
+    @DisplayName("[bad] 필수 입력값이 누락된 dto가 들어왔을 때 BadRequest를 반환한다")
     void testMissingRequiredFields() throws Exception {
         //given
         SignUpRequestDto invalidRequest = SignUpRequestDto.of(
@@ -68,7 +67,7 @@ class SignUpControllerTest{
                     assertThat(responseString).contains("email");
                     assertThat(responseString).contains("fullName");
                 });
-        }
+    }
 
     // JSON 문자열 변환을 위한 유틸리티 메서드
     private String asJsonString(final Object obj) {
