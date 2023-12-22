@@ -2,18 +2,26 @@ package com.recipia.member.application.service;
 
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
-import com.recipia.member.config.TotalTestSupport;
+import com.recipia.member.adapter.out.persistenceAdapter.SignUpAdapter;
 import com.recipia.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
-@DisplayName("회원가입 Service 테스트")
-class SignUpServiceTest extends TotalTestSupport {
+@ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 회원가입 Service 테스트")
+class SignUpServiceTest {
 
-    @Autowired
+    @Mock
+    private SignUpAdapter signUpAdapterMock;
+
+    @InjectMocks
     private SignUpService sut;
 
     @DisplayName("[happy] DB에 없는 이메일이 들어왔을때 true를 리턴한다.")
@@ -23,6 +31,7 @@ class SignUpServiceTest extends TotalTestSupport {
         String email = "test1@gmail.com";
 
         //when
+        when(signUpAdapterMock.isEmailAvailable(email)).thenReturn(true);
         boolean isEmailAvailable = sut.isEmailAvailable(email);
 
         //then
@@ -37,6 +46,7 @@ class SignUpServiceTest extends TotalTestSupport {
         String email = "test1@example.com";
 
         //when
+        when(signUpAdapterMock.isEmailAvailable(email)).thenReturn(false);
         boolean isEmailAvailable = sut.isEmailAvailable(email);
         //then
         assertThat(isEmailAvailable).isFalse();
@@ -49,6 +59,7 @@ class SignUpServiceTest extends TotalTestSupport {
         String telNo = "101-1111-1111";
 
         //when
+        when(signUpAdapterMock.isTelNoAvailable(telNo)).thenReturn(true);
         boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
 
         //then
@@ -63,6 +74,7 @@ class SignUpServiceTest extends TotalTestSupport {
         String telNo = "010-1234-5678";
 
         //when
+        when(signUpAdapterMock.isTelNoAvailable(telNo)).thenReturn(false);
         boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
 
         //then
@@ -76,7 +88,9 @@ class SignUpServiceTest extends TotalTestSupport {
         //given
         Member member = createMember();
         //when
+        when(signUpAdapterMock.signUpMember(member)).thenReturn(4L);
         Long createdMemberId = sut.signUp(member);
+
         //then
         assertThat(createdMemberId).isEqualTo(4L);
 
