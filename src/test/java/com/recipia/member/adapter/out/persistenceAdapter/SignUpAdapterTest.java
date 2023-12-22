@@ -84,7 +84,7 @@ class SignUpAdapterTest extends TotalTestSupport {
 
     private Member createMemberNonExist() {
         return Member.of(null, "test4@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 4", "Nickname4",  MemberStatus.ACTIVE, "Introduction 4", "010-4234-5678",
-                "Address 4-4", "Address 4-2", "Y", "Y", RoleType.MEMBER);
+                "Address 4-4", "Address 4-2", "Y", "Y", "Y","Y", RoleType.MEMBER);
     }
 
 }

@@ -22,8 +22,10 @@ public class Member {
     private String telNo;           // 전화번호
     private String address1;        // 주소1
     private String address2;        // 주소2
-    private String protectionYn;    // 개인정보 보호 동의여부
-    private String collectionYn;    // 개인정보 수집 보호여부
+    private String collectionConsentYn;    // 개인정보 수집 및 이용 동의 여부
+    private String marketingConsentYn;    // 마케팅 활용 동의 여부
+    private String privacyPolicyConsentYn;    // 개인정보 보호 정책 동의 여부
+    private String cookieConsentYn;    // 쿠키 및 추적 기술 사용 동의 여부
     private RoleType roleType;      // 계정 권한
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
@@ -33,7 +35,7 @@ public class Member {
     private static final int MAX_PASSWORD_LENGTH = 20;
 
 
-    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String protectionYn, String collectionYn, RoleType roleType) {
+    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String collectionConsentYn, String marketingConsentYn, String privacyPolicyConsentYn, String cookieConsentYn, RoleType roleType) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -44,13 +46,15 @@ public class Member {
         this.telNo = telNo;
         this.address1 = address1;
         this.address2 = address2;
-        this.protectionYn = protectionYn;
-        this.collectionYn = collectionYn;
+        this.collectionConsentYn = collectionConsentYn;
+        this.marketingConsentYn = marketingConsentYn;
+        this.privacyPolicyConsentYn = privacyPolicyConsentYn;
+        this.cookieConsentYn = cookieConsentYn;
         this.roleType = roleType;
     }
 
-    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String protectionYn, String collectionYn, RoleType roleType) {
-        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, protectionYn, collectionYn, roleType);
+    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String collectionConsentYn, String marketingConsentYn, String privacyPolicyConsentYn, String cookieConsentYn, RoleType roleType) {
+        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, collectionConsentYn, marketingConsentYn, privacyPolicyConsentYn, cookieConsentYn, roleType);
     }
 
     /**

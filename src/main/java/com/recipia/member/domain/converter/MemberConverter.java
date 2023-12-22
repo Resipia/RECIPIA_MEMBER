@@ -26,8 +26,10 @@ public class MemberConverter {
                 entity.getTelNo(),
                 entity.getAddress1(),
                 entity.getAddress2(),
-                entity.getProtectionYn(),
-                entity.getCollectionYn(),
+                entity.getCollectionConsentYn(),
+                entity.getMarketingConsentYn(),
+                entity.getPrivacyPolicyConsentYn(),
+                entity.getCookieConsentYn(),
                 entity.getRoleType()
               );
     }
@@ -48,8 +50,10 @@ public class MemberConverter {
                 member.getTelNo(),
                 member.getAddress1(),
                 member.getAddress2(),
-                member.getProtectionYn(),
-                member.getCollectionYn(),
+                member.getCollectionConsentYn(),
+                member.getMarketingConsentYn(),
+                member.getPrivacyPolicyConsentYn(),
+                member.getCookieConsentYn(),
                 member.getRoleType()
         );
     }
