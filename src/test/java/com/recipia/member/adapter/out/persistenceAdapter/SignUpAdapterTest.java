@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// fixme: 통합으로 수정
 @DisplayName("회원가입 Adapter 테스트")
 class SignUpAdapterTest extends TotalTestSupport {
 
