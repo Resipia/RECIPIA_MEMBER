@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+/**
+ * security authentication provider에서 사용한다.
+ * DB에 저장된 실제 맴버 객체를 검증하는 서비스 클래스
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Service
