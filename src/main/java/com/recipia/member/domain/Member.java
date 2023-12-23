@@ -4,6 +4,7 @@ import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -99,6 +100,10 @@ public class Member {
         return false;
     }
 
+    public static void passwordEncoder(Member member) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        member.password = encoder.encode(member.getPassword());
+    }
 
 
 }
