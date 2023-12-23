@@ -22,7 +22,6 @@ public enum ErrorCode {
 
     // 회원가입 관련 에러
     EMAIL_ALREADY_EXISTS(400, "EMAIL_ALREADY_EXISTS", "이미 존재하는 이메일입니다."),
-    USERNAME_ALREADY_EXISTS(400, "USERNAME_ALREADY_EXISTS", "이미 존재하는 사용자 아이디입니다."),
     ACCOUNT_LOCKED(401, "ACCOUNT_LOCKED", "계정이 잠겼습니다."),
 
     // DB 관련 에러

@@ -1,7 +1,10 @@
 package com.recipia.member.config.jwt;
 
 import com.recipia.member.config.dto.TokenMemberInfoDto;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,8 +41,8 @@ public class TokenUtils {
     private static final String ACCESS_TOKEN_TYPE = "access";
     private static final String REFRESH_TOKEN_TYPE = "refresh";
 
-    private static final long ACCESS_TOKEN_EXPIRATION_SECONDS = 60 * 60; // 60분
-    private static final long REFRESH_TOKEN_EXPIRATION_SECONDS = 60 * 60 * 24 * 30; // 30일
+    private static final long ACCESS_TOKEN_EXPIRATION_SECONDS = 30 * 60; // 30분
+    private static final long REFRESH_TOKEN_EXPIRATION_SECONDS = 60 * 60 * 24 * 30 * 6; // 6개월
 
     /**
      * 사용자 pk를 기준으로 Access Token을 발급하여 반환해 준다.

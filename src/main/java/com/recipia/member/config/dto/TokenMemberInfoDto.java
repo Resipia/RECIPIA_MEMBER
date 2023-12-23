@@ -6,6 +6,10 @@ import com.recipia.member.adapter.out.persistence.constant.RoleType;
 import com.recipia.member.domain.Member;
 
 // todo: password 필요없으면 제거해야함
+
+/**
+ * spring security에서 principal 끼우는 객체
+ */
 public record TokenMemberInfoDto(
         Long id,
         String email,

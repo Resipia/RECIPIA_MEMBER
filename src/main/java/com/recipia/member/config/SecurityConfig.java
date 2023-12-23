@@ -1,12 +1,12 @@
 package com.recipia.member.config;
 
-import com.recipia.member.config.jwt.TokenValidator;
+import com.recipia.member.application.service.JwtService;
 import com.recipia.member.config.filter.CustomAuthenticationFilter;
 import com.recipia.member.config.filter.JwtAuthorizationFilter;
 import com.recipia.member.config.handler.CustomAuthFailureHandler;
 import com.recipia.member.config.handler.CustomAuthSuccessHandler;
 import com.recipia.member.config.handler.CustomAuthenticationProvider;
-import com.recipia.member.application.service.JwtService;
+import com.recipia.member.config.jwt.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -89,6 +89,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/resources/**"),
                                 new AntPathRequestMatcher("/login"),
                                 new AntPathRequestMatcher("/member/*"),
+                                new AntPathRequestMatcher("/member/jwt/refresh"),   // refresh token 재발급 요청때는 접근을 허용
                                 new AntPathRequestMatcher("/feign/member/*"),   // feign 으로 들어온 접근을 허용
                                 new AntPathRequestMatcher("/health"),           // ALB에서 상태 검사용으로 들어온 '/health' 경로에 대한 접근을 허용
                                 new AntPathRequestMatcher("/actuator/*"),       // 프로메데우트 확인용

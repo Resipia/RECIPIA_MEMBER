@@ -3,11 +3,15 @@ package com.recipia.member.common.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 중앙 집중 예외처리를 위한 GlobalControllerAdvice 선언
@@ -42,6 +46,18 @@ public class GlobalControllerAdvice {
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
         log.error("IllegalArgumentException occurred", e);
         return buildErrorResponse(ErrorCode.BAD_REQUEST, "Invalid argument provided");
+    }
+
+    /**
+     * MethodArgumentNotValidException 처리
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        List<String> missingFields = e.getBindingResult().getFieldErrors().stream()
+                .map(FieldError::getField)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(missingFields);
     }
 
     /**
