@@ -31,7 +31,7 @@ class SignUpControllerTest {
     void test() throws Exception {
         //given
         SignUpRequestDto validRequest = SignUpRequestDto.of(
-                "user@example.com", "password123", "John Doe", "johndoe",
+                "user@example.com", "password123P!", "John Doe", "johndoe",
                 "Hello, I'm John", "010-1234-5678", "123 Main St", "Apt 101",
                 "Y", "Y", "Y", "Y"
         );
