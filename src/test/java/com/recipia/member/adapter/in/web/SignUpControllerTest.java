@@ -69,6 +69,30 @@ class SignUpControllerTest {
                 });
     }
 
+
+    @Test
+    @DisplayName("[bad] 비밀번호 정규식에 맞지 않는 비밀번호가 들어왔을때 회원가입에 실패한다.")
+    void passwordRegNotFullfill() throws Exception {
+        //given
+        SignUpRequestDto invalidRequest = SignUpRequestDto.of(
+                null, "password123", null, "johndoe",
+                "Hello, I'm John", "010-1234-5678", "123 Main St", "Apt 101",
+                "Y", "Y", "Y", "Y"
+        );
+
+        System.out.println("--");
+        System.out.println(asJsonString(invalidRequest));
+        System.out.println("--");
+
+        //when & then
+        mockMvc.perform(post("/member/signUp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(invalidRequest)))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+
     // JSON 문자열 변환을 위한 유틸리티 메서드
     private String asJsonString(final Object obj) {
         try {
