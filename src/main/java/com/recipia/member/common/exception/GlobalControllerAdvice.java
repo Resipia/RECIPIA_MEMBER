@@ -27,7 +27,7 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(MemberApplicationException.class)
     public ResponseEntity<?> handleMemberApplicationException(MemberApplicationException e) {
         log.error("MemberApplicationException occurred", e);
-        return buildErrorResponse(e.getErrorCode(), e.getMessage());
+        return buildErrorResponse(e.getErrorCode(), null);
     }
 
     /**
@@ -53,11 +53,13 @@ public class GlobalControllerAdvice {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        List<String> missingFields = e.getBindingResult().getFieldErrors().stream()
-                .map(FieldError::getField)
-                .collect(Collectors.toList());
+        log.error("MethodArgumentNotValidException occurred", e);
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(missingFields);
+        String missingFields = e.getBindingResult().getFieldErrors().stream()
+                .map(FieldError::getField)
+                .collect(Collectors.joining(", "));  // 필드를 쉼표와 공백으로 구분하여 하나의 문자열로 합친다.
+
+        return buildErrorResponse(ErrorCode.BAD_REQUEST, missingFields);
     }
 
     /**
