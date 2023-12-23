@@ -35,15 +35,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         // 사용자가 상태 검증
         if (securityUserDetailsDto.getTokenMemberInfoDto().memberStatus().equals(MemberStatus.DORMANT)) {
             // 휴면 계정
-            throw new MemberApplicationException(ErrorCode.USER_IS_DORMANT);
+            throw new BadCredentialsException("휴면 계정입니다");
         } else if (securityUserDetailsDto.getTokenMemberInfoDto().memberStatus().equals(MemberStatus.DEACTIVATED)) {
             // 탈퇴 계정
-            throw new MemberApplicationException(ErrorCode.USER_IS_DEACTIVATED);
+            throw new BadCredentialsException("탈퇴한 계정입니다");
         }
 
         // 암호화된 비밀번호 비교
         if (!bCryptPasswordEncoder.matches(userCryptPassword, securityUserDetailsDto.getTokenMemberInfoDto().password())) {
-            throw new MemberApplicationException(ErrorCode.USER_NOT_FOUND);
+            throw new BadCredentialsException("유저를 찾을 수 없습니다.");
         }
 
         // 인증 성공 시 반환 객체 생성 및 반환
