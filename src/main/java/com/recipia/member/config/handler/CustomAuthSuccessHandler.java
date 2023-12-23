@@ -2,6 +2,7 @@ package com.recipia.member.config.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
 import com.recipia.member.application.port.in.JwtUseCase;
 import com.recipia.member.config.dto.SecurityUserDetailsDto;
 import com.recipia.member.config.dto.TokenMemberInfoDto;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 사용자 인증 성공 후 처리하는 핸들러.
@@ -49,11 +51,12 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         // Refresh Token DB에 저장
         jwtUseCase.insertRefreshTokenToDB(tokenMemberInfoDto.email(), refreshTokenPair);
 
-        // 응답 맵 생성 및 토큰 추가
-        HashMap<String, Object> responseMap = new HashMap<>();
-        responseMap.put("resultCode", 200);
-        responseMap.put("accessToken", accessToken);
-        responseMap.put("refreshToken", refreshTokenPair.getFirst());
+        // ResponseDto 객체 생성
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("accessToken", accessToken);
+        tokenMap.put("refreshToken", refreshTokenPair.getFirst());
+
+        ResponseDto<Map<String, String>> responseDto = ResponseDto.success(tokenMap);
 
         // 응답 설정
         response.setCharacterEncoding("UTF-8");
@@ -61,7 +64,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
 
         // 응답 데이터 클라이언트에 전송
         try (PrintWriter printWriter = response.getWriter()) {
-            printWriter.print(objectMapper.writeValueAsString(responseMap));
+            printWriter.print(objectMapper.writeValueAsString(responseDto));
             printWriter.flush();
         }
 
