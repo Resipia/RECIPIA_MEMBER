@@ -87,7 +87,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 new AntPathRequestMatcher("/resources/**"),
-                                new AntPathRequestMatcher("/login"),
                                 new AntPathRequestMatcher("/member/*"),
                                 new AntPathRequestMatcher("/member/jwt/refresh"),   // refresh token 재발급 요청때는 접근을 허용
                                 new AntPathRequestMatcher("/feign/member/*"),   // feign 으로 들어온 접근을 허용
