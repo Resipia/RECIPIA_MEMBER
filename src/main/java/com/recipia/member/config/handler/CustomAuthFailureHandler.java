@@ -38,7 +38,8 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
         Map<String, Object> resultMap = new HashMap<>();
         String failMessage = getFailureMessage(exception);
 
-        log.debug(failMessage);
+//        log.debug(failMessage);
+        log.error(failMessage);
 
         resultMap.put("memberInfo", null);
         resultMap.put("resultCode", 9999);
@@ -60,7 +61,7 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
      * @return 실패 메시지
      */
     private String getFailureMessage(AuthenticationException exception) {
-        if (exception instanceof AuthenticationServiceException) {
+        if (exception instanceof BadCredentialsException) {
             return "로그인 정보가 일치하지 않습니다.";
         } else if (exception instanceof LockedException) {
             return "계정이 잠겨 있습니다.";
