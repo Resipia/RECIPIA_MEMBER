@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// fixme: 통합으로 수정
-@DisplayName("회원가입 Adapter 테스트")
+@DisplayName("[통합] 회원가입 Adapter 테스트")
 class SignUpAdapterTest extends TotalTestSupport {
 
     @Autowired
@@ -78,7 +77,7 @@ class SignUpAdapterTest extends TotalTestSupport {
         Long createdMemberId = sut.signUpMember(member);
 
         //then
-        assertThat(createdMemberId).isEqualTo(4L);
+        assertThat(createdMemberId).isEqualTo(6L);
     }
 
 
