@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
-import static com.recipia.member.hexagonal.adapter.out.persistence.QMemberEventRecordEntity.memberEventRecordEntity;
+import static com.recipia.member.adapter.out.persistence.QMemberEventRecordEntity.memberEventRecordEntity;
 
 
 @RequiredArgsConstructor

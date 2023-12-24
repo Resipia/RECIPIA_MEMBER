@@ -80,9 +80,6 @@ class SignUpControllerTest {
                 "Y", "Y", "Y", "Y"
         );
 
-        System.out.println("--");
-        System.out.println(asJsonString(invalidRequest));
-        System.out.println("--");
 
         //when & then
         mockMvc.perform(post("/member/signUp")
