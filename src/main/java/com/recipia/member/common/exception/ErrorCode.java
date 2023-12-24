@@ -10,6 +10,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    // todo: 숫자로 정의한 errorcode 추가하고 클라이언트한테 반환할때는 status, errorcode만 추가
+    // todo: log.error에 찍을때는 우리가 알아보기 편하게 문자 에러메세지는 추가
     // 로그인 관련 에러
     USER_NOT_FOUND(404, "USER_NOT_FOUND", "유저를 찾을 수 없습니다."),
     USER_IS_DORMANT(404, "USER_IS_DORMANT", "휴면계정입니다."),
