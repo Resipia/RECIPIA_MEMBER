@@ -1,6 +1,7 @@
 package com.recipia.member.adapter.in.web;
 
 import com.recipia.member.adapter.in.web.dto.request.JwtRepublishRequestDto;
+import com.recipia.member.adapter.in.web.dto.response.JwtRepublishResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
 import com.recipia.member.application.port.in.JwtUseCase;
 import com.recipia.member.domain.converter.JwtConverter;
@@ -20,10 +21,10 @@ public class JwtController {
     private final JwtUseCase jwtUseCase;
 
     @PostMapping("/republish")
-    public ResponseEntity<ResponseDto<Void>> republish (@Valid @RequestBody JwtRepublishRequestDto republishReqDto) {
-        jwtUseCase.republishAccessToken(JwtConverter.requestToDomain(republishReqDto));
+    public ResponseEntity<ResponseDto<JwtRepublishResponseDto>> republish (@Valid @RequestBody JwtRepublishRequestDto republishReqDto) {
+        String accessToken = jwtUseCase.republishAccessToken(JwtConverter.requestDtoToDomain(republishReqDto));
         return ResponseEntity.ok(
-                ResponseDto.success()
+                ResponseDto.success(JwtRepublishResponseDto.of(accessToken))
         );
     }
 
