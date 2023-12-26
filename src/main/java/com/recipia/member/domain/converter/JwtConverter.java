@@ -1,6 +1,7 @@
 package com.recipia.member.domain.converter;
 
 
+import com.recipia.member.adapter.in.web.dto.request.JwtRepublishRequestDto;
 import com.recipia.member.adapter.out.persistence.JwtEntity;
 import com.recipia.member.domain.Jwt;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,11 @@ public class JwtConverter {
 
     public static JwtEntity domainToEntity(Jwt jwt) {
         return JwtEntity.of(jwt.getId(), jwt.getMemberId(), jwt.getRefreshToken(), jwt.getExpiredDateTime());
+    }
+
+    public static Jwt requestToDomain(JwtRepublishRequestDto requestDto) {
+        return Jwt.of(null, requestDto.getMemberId(), requestDto.getRefreshToken(), null);
+
     }
 
 }
