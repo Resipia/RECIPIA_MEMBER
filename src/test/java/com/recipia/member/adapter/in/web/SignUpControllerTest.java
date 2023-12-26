@@ -2,13 +2,12 @@ package com.recipia.member.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.adapter.in.web.dto.SignUpRequestDto;
+import com.recipia.member.config.TotalTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,10 +15,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("test")
 @AutoConfigureMockMvc
-@SpringBootTest
-class SignUpControllerTest {
+class SignUpControllerTest extends TotalTestSupport {
 
     @Autowired
     private MockMvc mockMvc;
@@ -28,7 +25,7 @@ class SignUpControllerTest {
 
     @DisplayName("[happy] 필수 입력값이 전부 충족된 dto가 들어왔을때 회원가입 정상 작동한다")
     @Test
-    void test() throws Exception {
+    void fulfillRequiredFields() throws Exception {
         //given
         SignUpRequestDto validRequest = SignUpRequestDto.of(
                 "user@example.com", "password123P!", "John Doe", "johndoe",
