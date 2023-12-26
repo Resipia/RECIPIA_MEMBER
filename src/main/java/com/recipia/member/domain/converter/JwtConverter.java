@@ -21,7 +21,7 @@ public class JwtConverter {
         return JwtEntity.of(jwt.getId(), jwt.getMemberId(), jwt.getRefreshToken(), jwt.getExpiredDateTime());
     }
 
-    public static Jwt requestToDomain(JwtRepublishRequestDto requestDto) {
+    public static Jwt requestDtoToDomain(JwtRepublishRequestDto requestDto) {
         return Jwt.of(null, requestDto.getMemberId(), requestDto.getRefreshToken(), null);
 
     }
