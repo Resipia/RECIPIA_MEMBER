@@ -49,6 +49,7 @@ public class GlobalControllerAdvice {
     }
 
     /**
+     * @Valid 어노테이션을 사용하고 @NotNull, @NotBlank 등 어노테이션이 달려있는 필수값이 누락된 채로 들어올때 아래 에러를 발생.
      * MethodArgumentNotValidException 처리
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
