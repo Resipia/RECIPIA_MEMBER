@@ -4,5 +4,8 @@ import com.recipia.member.domain.Jwt;
 import org.springframework.stereotype.Component;
 
 public interface JwtPort {
+    // refresh token 저장용
     void save(Jwt jwt);
+    // memberid, refresh token으로 Jwt 가져오기
+    Jwt getJwt(Jwt jwt);
 }

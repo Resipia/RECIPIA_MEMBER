@@ -21,7 +21,7 @@ public class SignUpController {
 
     @PostMapping("/signUp")
     public ResponseEntity<ResponseDto<Long>> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
-        Long memberId = signUpUseCase.signUp(MemberConverter.requestToDomain(requestDto));
+        Long memberId = signUpUseCase.signUp(MemberConverter.requestDtoToDomain(requestDto));
         return ResponseEntity.ok(
                 ResponseDto.success(memberId)
         );

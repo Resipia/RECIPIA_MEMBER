@@ -35,3 +35,8 @@ VALUES (1, 'topic1', 'eventType1', 'attribute1', 'traceId1', CURRENT_TIMESTAMP, 
        (1, 'topic1', 'eventType1', 'attribute3', 'traceId3', CURRENT_TIMESTAMP, false, NULL),
        (2, 'topic4', 'eventType4', 'attribute4', 'traceId4', CURRENT_TIMESTAMP, false, NULL),
        (3, 'topic5', 'eventType5', 'attribute5', 'traceId5', CURRENT_TIMESTAMP, false, NULL);
+
+
+--  jwt 테이블에 가짜 데이터 삽입
+INSERT INTO jwt(jwt_id, member_id, refresh_token, expired_dttm)
+VALUES (1, 1, 'some-refresh-token', DATEADD(MONTH, 6, CURRENT_DATE()));

@@ -63,7 +63,7 @@ public class MemberConverter {
         );
     }
 
-    public static Member requestToDomain(SignUpRequestDto req) {
+    public static Member requestDtoToDomain(SignUpRequestDto req) {
         return Member.of(
                 null, req.getEmail(), req.getPassword(), req.getFullName(), req.getNickname(), MemberStatus.ACTIVE, req.getIntroduction(), req.getTelNo(), req.getAddress1(), req.getAddress2(), req.getCollectionConsentYn(), req.getMarketingConsentYn(), req.getPrivacyPolicyConsentYn(), req.getCookieConsentYn(), RoleType.MEMBER
         );

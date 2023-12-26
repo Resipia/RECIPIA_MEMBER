@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
  * Member 커스텀 예외처리 클래스
  */
 @Getter
-//@AllArgsConstructor
 @NoArgsConstructor
 public class MemberApplicationException extends RuntimeException {
 

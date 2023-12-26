@@ -2,13 +2,11 @@ package com.recipia.member.config;
 
 import brave.Tracer;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
-@Configuration
-@Profile("test")
-public class TestZipkinConfig {
+@TestConfiguration
+public  class TestZipkinConfig {
 
     @Bean
     public Tracer tracer() {

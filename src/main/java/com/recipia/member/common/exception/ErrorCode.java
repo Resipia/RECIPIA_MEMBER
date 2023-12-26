@@ -19,8 +19,9 @@ public enum ErrorCode {
 
     // JWT 관련 에러
     INVALID_JWT(401, "INVALID_JWT", "토큰이 유효하지 않습니다."),
-    EXPIRED_JWT(401, "EXPIRED_JWT", "JWT 토큰이 만료되었습니다."),
+    EXPIRED_REFRESH_TOKEN(401, "EXPIRED_REFRESH_TOKEN", "Refresh Token이 만료되었습니다."),
     MISSING_JWT(401, "MISSING_JWT", "JWT 토큰이 누락되었습니다."),
+    JWT_NOT_FOUND(404, "JWT_NOT_FOUND", "JWT를 찾을 수 없습니다."),
 
     // 회원가입 관련 에러
     EMAIL_ALREADY_EXISTS(400, "EMAIL_ALREADY_EXISTS", "이미 존재하는 이메일입니다."),

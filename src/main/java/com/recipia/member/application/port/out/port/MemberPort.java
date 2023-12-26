@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface MemberPort {
 
-    Optional<Member> findMemberById(Long memberId);
+    Member findMemberById(Long memberId);
     Optional<Member> findMemberByEmail(String email);
     Optional<Member> findMemberByEmailAndStatus(String email, MemberStatus status);
 
