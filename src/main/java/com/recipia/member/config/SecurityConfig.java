@@ -87,7 +87,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 new AntPathRequestMatcher("/resources/**"),
-                                new AntPathRequestMatcher("/member/*"),
+                                new AntPathRequestMatcher("/member/**"),
 //                                new AntPathRequestMatcher("/member/jwt/republish"),   // access token 재발급 요청때는 접근을 허용
                                 new AntPathRequestMatcher("/feign/member/*"),   // feign 으로 들어온 접근을 허용
                                 new AntPathRequestMatcher("/health"),           // ALB에서 상태 검사용으로 들어온 '/health' 경로에 대한 접근을 허용
