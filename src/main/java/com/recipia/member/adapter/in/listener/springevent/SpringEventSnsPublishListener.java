@@ -2,7 +2,7 @@ package com.recipia.member.adapter.in.listener.springevent;
 
 import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.recipia.member.adapter.out.aws.SnsService;
+import com.recipia.member.adapter.out.aws.SeoulSnsService;
 import com.recipia.member.common.utils.CustomJsonBuilder;
 import com.recipia.member.common.event.NicknameChangeSpringEvent;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Component
 public class SpringEventSnsPublishListener {
 
-    private final SnsService snsService;
+    private final SeoulSnsService seoulSnsService;
     private final CustomJsonBuilder customJsonBuilder;
     private final Tracer tracer;
 
@@ -34,7 +34,7 @@ public class SpringEventSnsPublishListener {
                 .add("memberId", event.memberId().toString())
                 .build();
 
-        snsService.publishNicknameToTopic(messageJson, traceId);
+        seoulSnsService.publishNicknameToTopic(messageJson, traceId);
     }
 
 }

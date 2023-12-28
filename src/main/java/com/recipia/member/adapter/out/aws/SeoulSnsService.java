@@ -2,9 +2,9 @@ package com.recipia.member.adapter.out.aws;
 
 import brave.Span;
 import brave.Tracer;
-import com.recipia.member.config.aws.SnsConfig;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
+import com.recipia.member.config.aws.SnsConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,15 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 @Service
-public class SnsService {
+public class SeoulSnsService {
 
     private final SnsClient snsClient;
     private final SnsConfig snsConfig;
     private final Tracer tracer;
+
 
     public PublishResponse publishNicknameToTopic(String message, String traceId) {
 
