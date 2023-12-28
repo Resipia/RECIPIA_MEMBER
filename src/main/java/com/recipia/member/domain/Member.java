@@ -100,9 +100,12 @@ public class Member {
         return false;
     }
 
-    public static void passwordEncoder(Member member) {
+    /**
+     * 비밀번호를 암호화하는 인스턴스 메소드
+     */
+    public void passwordEncoder() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        member.password = encoder.encode(member.getPassword());
+        this.password = encoder.encode(this.password);
     }
 
 

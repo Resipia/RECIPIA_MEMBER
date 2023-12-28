@@ -49,6 +49,20 @@ class MemberTest {
         assertThat(isValidPassword).isTrue();
     }
 
+    @DisplayName("[happy] 비밀번호 암호화에 성공한다.")
+    @Test
+    void passwordEncoderSuccess() {
+        //given
+        Member member = createMember();
+        String beforePassword = member.getPassword();
+
+        //when
+        member.passwordEncoder();
+
+        //then
+        assertThat(beforePassword).isNotEqualTo(member.getPassword());
+    }
+
     @DisplayName("[bad] 비밀번호 정규식에 맞지 않는 비밀번호가 들어왔을때 실패한다.")
     @Test
     void validPasswordTestFail() {
