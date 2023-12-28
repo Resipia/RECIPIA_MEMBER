@@ -34,8 +34,7 @@ public class TokyoSnsService {
     }
 
     // 인증번호를 포함한 SMS 메시지 보내기
-    public void sendVerificationCode(String phoneNumber) {
-        String verificationCode = generateRandomCode();
+    public void sendVerificationCode(String phoneNumber, String verificationCode) {
         String message = String.format("[Recipia] 인증번호[%s]를 입력해주세요.", verificationCode);
 
         PublishRequest request = PublishRequest.builder()
