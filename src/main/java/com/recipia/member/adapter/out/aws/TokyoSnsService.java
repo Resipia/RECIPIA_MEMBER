@@ -11,6 +11,7 @@ import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
 
+import java.util.Optional;
 import java.util.Random;
 
 @RequiredArgsConstructor
@@ -20,19 +21,18 @@ public class TokyoSnsService {
 
     private final SnsConfig snsConfig;
     private static final String TOKYO_REGION = "ap-northeast-1";
+    private Optional<SnsClient> tokyoSnsClient = Optional.empty(); // Optional 사용
 
-
-    /**
-     * 서울 리전에서 사용하는 SnsClient의 빈과 겹치지 않게 도쿄 리전은 따로 객체를 생성 (빈 설정 X)
-     */
-    public SnsClient tokyoSnsClient() {
-        return SnsClient.builder()
-                .region(Region.of(TOKYO_REGION))
-                .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(snsConfig.getAwsAccessKey(), snsConfig.getAwsSecretKey())))
-                .build();
+    private SnsClient tokyoSnsClient() {
+        if (tokyoSnsClient.isEmpty()) { // Optional의 isEmpty() 메소드를 사용
+            tokyoSnsClient = Optional.of(SnsClient.builder()
+                    .region(Region.of(TOKYO_REGION))
+                    .credentialsProvider(StaticCredentialsProvider.create(
+                            AwsBasicCredentials.create(snsConfig.getAwsAccessKey(), snsConfig.getAwsSecretKey())))
+                    .build());
+        }
+        return tokyoSnsClient.get(); // Optional에서 값을 가져옴
     }
-
     // 인증번호를 포함한 SMS 메시지 보내기
     public void sendVerificationCode(String phoneNumber, String verificationCode) {
         String message = String.format("[Recipia] 인증번호[%s]를 입력해주세요.", verificationCode);
