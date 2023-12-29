@@ -44,4 +44,10 @@ spring:
     job:
       enabled: false
 
+  redis:
+    host: localhost
+    port: 6379
+    password: redis
+    database: 2   # 2 데이터베이스 사용 (테스트용)
+
 some.configuration.for.tracer: false
