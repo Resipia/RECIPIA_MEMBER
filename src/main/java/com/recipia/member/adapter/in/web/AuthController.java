@@ -7,10 +7,7 @@ import com.recipia.member.domain.Authentication;
 import com.recipia.member.domain.converter.AuthConverter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/member/auth")
 @RequiredArgsConstructor
@@ -20,15 +17,15 @@ public class AuthController {
     private final AuthUseCase authUseCase;
 
     @PostMapping("/phone")
-    public void sendPhoneNumber(@Valid PhoneNumberRequestDto requestDto) {
+    public void sendPhoneNumber(@Valid @RequestBody PhoneNumberRequestDto requestDto) {
         authUseCase.verityPhoneNumber(AuthConverter.requestToDomain(requestDto));
     }
 
-    @PostMapping("/phone")
-    public void verifyCode(@RequestParam(required = true) String phoneNumbner , @RequestParam(required = true) String phoneNumbner ) {
-        String phoneNumbner = "01012345678";
-        Authentication authentication = Authentication.of(phoneNumbner, null);
-        authUseCase.verityPhoneNumber(authentication);
-    }
+//    @PostMapping("/phone")
+//    public void verifyCode(@RequestParam(required = true) String phoneNumbner , @RequestParam(required = true) String phoneNumbner ) {
+//        String phoneNumbner = "01012345678";
+//        Authentication authentication = Authentication.of(phoneNumbner, null);
+//        authUseCase.verityPhoneNumber(authentication);
+//    }
 
 }
