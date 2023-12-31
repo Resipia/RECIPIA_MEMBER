@@ -66,7 +66,7 @@ class RedisServiceTest extends TotalTestSupport {
         String findValue = redisService.getValues(KEY);
 
         // then
-        assertThat(findValue).isEqualTo("false");
+        assertThat(findValue).isNull();
     }
 
     @Test
@@ -78,7 +78,7 @@ class RedisServiceTest extends TotalTestSupport {
                 () -> {
                     String expiredValue = redisService.getValues(KEY);
                     assertThat(expiredValue).isNotEqualTo(findValue);
-                    assertThat(expiredValue).isEqualTo("false");
+                    assertThat(expiredValue).isNull();
                 }
         );
     }
