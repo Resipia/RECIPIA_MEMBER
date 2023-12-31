@@ -21,7 +21,7 @@ public class TokyoSnsService {
 
     private final SnsConfig snsConfig;
     private static final String TOKYO_REGION = "ap-northeast-1";
-    private Optional<SnsClient> tokyoSnsClient = Optional.empty(); // Optional 사용
+    private static Optional<SnsClient> tokyoSnsClient = Optional.empty(); // Optional 사용
 
     private SnsClient tokyoSnsClient() {
         if (tokyoSnsClient.isEmpty()) { // Optional의 isEmpty() 메소드를 사용
