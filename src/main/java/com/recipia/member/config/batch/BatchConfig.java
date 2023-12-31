@@ -1,7 +1,7 @@
 package com.recipia.member.config.batch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.recipia.member.adapter.out.aws.SnsService;
+import com.recipia.member.adapter.out.aws.SeoulSnsService;
 import com.recipia.member.adapter.out.persistence.MemberEventRecordEntity;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Configuration
 public class BatchConfig extends DefaultBatchConfiguration {
 
-    private final SnsService snsService;
+    private final SeoulSnsService seoulSnsService;
     private final EntityManagerFactory entityManagerFactory;
     private final ObjectMapper objectMapper;
 
@@ -107,7 +107,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
             log.info("processItem 동작중");
 
             switch (item.getSnsTopic()) {
-                case "NicknameChange" -> snsService.publishNicknameToTopic(item.getAttribute(), item.getTraceId());
+                case "NicknameChange" -> seoulSnsService.publishNicknameToTopic(item.getAttribute(), item.getTraceId());
             }
             return item;
         };

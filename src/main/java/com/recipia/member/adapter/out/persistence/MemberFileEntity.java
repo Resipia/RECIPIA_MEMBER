@@ -22,6 +22,7 @@ public class MemberFileEntity extends UpdateDateTimeForEntity {
     @Column(name = "member_file_id", nullable = false)
     private Long id;                // 회원 파일 pk
 
+    // fixme: onetoone으로 수정
     @ToString.Exclude
     @JoinColumn(name = "member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)

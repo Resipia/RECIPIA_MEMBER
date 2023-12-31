@@ -27,7 +27,7 @@ public class SnsConfig {
     private String snsTopicNicknameChangeARN;
 
     @Bean
-    public SnsClient getSnsClient() {
+    public SnsClient getSnsClient () {
         return SnsClient.builder()
                 .region(Region.of(awsRegion)) // 리전 설정 추가
                 .credentialsProvider(StaticCredentialsProvider.create(

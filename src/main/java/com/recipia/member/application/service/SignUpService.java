@@ -34,7 +34,7 @@ public class SignUpService implements SignUpUseCase {
         }
 
         // 비밀번호 암호화
-        Member.passwordEncoder(member);
+        member.passwordEncoder();
 
         return signUpPort.signUpMember(member);
     }

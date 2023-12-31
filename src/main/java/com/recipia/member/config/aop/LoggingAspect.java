@@ -18,8 +18,7 @@ public class LoggingAspect {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-    // todo: 나중에 hexagonal 패키지 제외
-    @Around("execution(* com.recipia.member.hexagonal.adapter.in.web..*.*(..))")
+    @Around("execution(* com.recipia.member.adapter.in.web..*.*(..))")
     public Object logMethodExecution(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
         try {
