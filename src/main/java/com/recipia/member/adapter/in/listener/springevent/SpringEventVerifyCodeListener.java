@@ -7,25 +7,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class SpringEventVerifyCodeListener {
 
     private final RedisService redisService;
-    private static final int TIMEOUT = 5 * 60; // 5분을 초로 변환
+    private final Duration TIMEOUT = Duration.ofMinutes(5); // 5분
 
     @EventListener
     public void eventVerifyCodeListener(SendVerifyCodeSpringEvent event) {
         String phoneNumber = event.phoneNumber();
         String verificationCode = event.verificationCode();
 
-        // Redis에 저장 (키: 전화번호, 값: 인증코드)
-        redisService.setValues(phoneNumber, verificationCode);
-        log.info("Saved Redis: key {}, value {}", phoneNumber,verificationCode);
-
-        // 설정한 만료 시간 (5분)
-        redisService.expireValues(phoneNumber, TIMEOUT);
+        // Redis에 저장 (키: 전화번호, 값: 인증코드, 만료 시간: 5분)
+        redisService.setValues(phoneNumber, verificationCode, TIMEOUT);
+        log.info("Saved in Redis with expiration: key {}, value {}, duration {}", phoneNumber, verificationCode, TIMEOUT);
     }
 
 }
