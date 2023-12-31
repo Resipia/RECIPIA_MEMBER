@@ -22,13 +22,17 @@ public class RedisConfig {
     @Value("${spring.redis.password}")
     private String password;
 
-    // RedisProperties로 yaml에 저장한 host, post, password를 연결
+    @Value("${spring.redis.database}")
+    private int database;
+
+    // RedisProperties로 yaml에 저장한 host, post, password, database를 연결
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(host);
         redisStandaloneConfiguration.setPort(port);
         redisStandaloneConfiguration.setPassword(password);
+        redisStandaloneConfiguration.setDatabase(database);
         return new LettuceConnectionFactory(redisStandaloneConfiguration);
     }
 
