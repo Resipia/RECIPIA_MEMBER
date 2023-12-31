@@ -9,4 +9,9 @@ public record SendVerifyCodeSpringEvent (
         String phoneNumber,
         String verificationCode
 ) {
+
+    public static SendVerifyCodeSpringEvent of(String phoneNumber, String verificationCode) {
+        return new SendVerifyCodeSpringEvent(phoneNumber, verificationCode);
+    }
+
 }

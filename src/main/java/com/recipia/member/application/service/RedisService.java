@@ -21,7 +21,6 @@ public class RedisService {
     private final StringRedisTemplate stringRedisTemplate;
 
     public void setValues(String key, String data) {
-        log.info("Setting value in Redis: key={}, value={}", key, data);
         stringRedisTemplate.opsForValue().set(key, data);
     }
 
