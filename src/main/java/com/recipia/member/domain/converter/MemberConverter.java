@@ -1,6 +1,6 @@
 package com.recipia.member.domain.converter;
 
-import com.recipia.member.adapter.in.web.dto.SignUpRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
