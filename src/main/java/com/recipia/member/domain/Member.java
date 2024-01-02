@@ -29,12 +29,8 @@ public class Member {
     private String cookieConsentYn;    // 쿠키 및 추적 기술 사용 동의 여부
     private RoleType roleType;      // 계정 권한
 
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
-    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
-
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_PASSWORD_LENGTH = 20;
-
 
     private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String collectionConsentYn, String marketingConsentYn, String privacyPolicyConsentYn, String cookieConsentYn, RoleType roleType) {
         this.id = id;
@@ -56,19 +52,6 @@ public class Member {
 
     public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String collectionConsentYn, String marketingConsentYn, String privacyPolicyConsentYn, String cookieConsentYn, RoleType roleType) {
         return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, collectionConsentYn, marketingConsentYn, privacyPolicyConsentYn, cookieConsentYn, roleType);
-    }
-
-    /**
-     * 유효한 이메일인지 검증하는 메소드
-     * @param email
-     * @return
-     */
-    public static boolean isValidEmail(String email) {
-        if (email == null) {
-            return false;
-        }
-        Matcher matcher = EMAIL_PATTERN.matcher(email);
-        return matcher.matches();
     }
 
     /**
