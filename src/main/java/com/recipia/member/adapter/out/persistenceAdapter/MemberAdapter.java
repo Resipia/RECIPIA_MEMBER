@@ -17,11 +17,12 @@ import java.util.Optional;
 public class MemberAdapter implements MemberPort {
 
     private final MemberRepository memberRepository;
+    private final MemberConverter converter;
 
     @Override
     public Member findMemberById(Long memberId) {
         MemberEntity memberEntityOptional = memberRepository.findMemberById(memberId).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
-        return MemberConverter.entityToDomain(memberEntityOptional);
+        return converter.entityToDomain(memberEntityOptional);
     }
 
     /**
@@ -31,7 +32,7 @@ public class MemberAdapter implements MemberPort {
     @Override
     public Optional<Member> findMemberByEmail(String email) {
         Optional<MemberEntity> memberEntityOptional = memberRepository.findMemberByEmail(email);
-        return memberEntityOptional.map(MemberConverter::entityToDomain);
+        return memberEntityOptional.map(converter::entityToDomain);
     }
 
     /**
@@ -44,7 +45,7 @@ public class MemberAdapter implements MemberPort {
     @Override
     public Optional<Member> findMemberByEmailAndStatus(String email, MemberStatus status) {
         Optional<MemberEntity> memberEntityOptional = memberRepository.findMemberByEmailAndStatus(email, status);
-        return memberEntityOptional.map(MemberConverter::entityToDomain);
+        return memberEntityOptional.map(converter::entityToDomain);
 
     }
 }

@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class JwtController {
 
     private final JwtUseCase jwtUseCase;
+    private final JwtConverter jwtConverter;
 
     @PostMapping("/republish")
     public ResponseEntity<ResponseDto<JwtRepublishResponseDto>> republish (@Valid @RequestBody JwtRepublishRequestDto republishReqDto) {
-        String accessToken = jwtUseCase.republishAccessToken(JwtConverter.requestDtoToDomain(republishReqDto));
+        String accessToken = jwtUseCase.republishAccessToken(jwtConverter.requestDtoToDomain(republishReqDto));
         return ResponseEntity.ok(
                 ResponseDto.success(JwtRepublishResponseDto.of(accessToken))
         );
