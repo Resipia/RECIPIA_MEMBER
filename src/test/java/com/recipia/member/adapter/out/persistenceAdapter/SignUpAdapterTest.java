@@ -4,6 +4,7 @@ import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
 import com.recipia.member.config.TotalTestSupport;
 import com.recipia.member.domain.Member;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ class SignUpAdapterTest extends TotalTestSupport {
     @Test
     void checkEmailDuplicationTestFail() {
         //given
-        String email = "test1@example.com";
+        String email = "hong1@example.com";
 
         //when
         boolean isEmailAvailable = sut.isEmailAvailable(email);

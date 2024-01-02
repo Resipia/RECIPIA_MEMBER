@@ -1,4 +1,4 @@
-package com.recipia.member.adapter.in.web;
+package com.recipia.member.adapter.in.web.dto.request;
 
 import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import jakarta.validation.ConstraintViolation;
