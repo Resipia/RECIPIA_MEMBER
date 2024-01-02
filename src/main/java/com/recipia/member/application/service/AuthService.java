@@ -25,14 +25,13 @@ public class AuthService implements AuthUseCase {
         authentication.formatPhoneNumber();
         String verificationCode = generateRandomCode();
 
+        // aws SMS 이용해서 문자 전송
         tokyoSnsService.sendVerificationCode(authentication.getPhoneNumber(), verificationCode);
 
         // 문자 메시지 발생 완료 스프링 이벤트 발행
         eventPublisher.publishEvent(new SendVerifyCodeSpringEvent(authentication.getPhoneNumber(), verificationCode));
 
     }
-
-
 
     // 랜덤 6자리 숫자 생성
     private String generateRandomCode() {
@@ -43,8 +42,14 @@ public class AuthService implements AuthUseCase {
 
     public boolean checkVerifyCode(Authentication authentication) {
         authentication.formatPhoneNumber();
-        return Optional.ofNullable(redisService.getValues(authentication.getPhoneNumber()))
-                .map(verifyCode -> verifyCode.equals(authentication.getVerifyCode()))
+        String phoneNumber = authentication.getPhoneNumber();
+
+        return Optional.ofNullable(redisService.getValues(phoneNumber))
+                .filter(verifyCode -> verifyCode.equals(authentication.getVerifyCode()))
+                .map(verifyCode -> {
+                    redisService.deleteValues(phoneNumber); // 인증 코드가 일치하면 레디스에서 해당 키값을 삭제한다.
+                    return true;
+                })
                 .orElse(false);
     }
 }
