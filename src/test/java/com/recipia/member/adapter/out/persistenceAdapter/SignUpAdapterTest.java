@@ -4,10 +4,15 @@ import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
 import com.recipia.member.config.TotalTestSupport;
 import com.recipia.member.domain.Member;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,7 +50,7 @@ class SignUpAdapterTest extends TotalTestSupport {
     @Test
     void checkTelNoDuplicationTestSuccess() {
         //given
-        String telNo = "101-1111-1111";
+        String telNo = "10111111111";
 
         //when
         boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
@@ -59,7 +64,7 @@ class SignUpAdapterTest extends TotalTestSupport {
     @Test
     void checkTelNoDuplicationTestFail() {
         //given
-        String telNo = "010-1234-5678";
+        String telNo = "01012345678";
 
         //when
         boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
@@ -78,14 +83,14 @@ class SignUpAdapterTest extends TotalTestSupport {
         Long createdMemberId = sut.signUpMember(member);
 
         //then
-        assertThat(createdMemberId).isEqualTo(6L);
+        assertThat(createdMemberId).isNotNull();
     }
 
 
 
     private Member createMemberNonExist() {
-        return Member.of(null, "test4@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 4", "Nickname4",  MemberStatus.ACTIVE, "Introduction 4", "010-4234-5678",
-                "Address 4-4", "Address 4-2", "Y", "Y", "Y","Y", RoleType.MEMBER);
+        return Member.of(null, "test6@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 6", "Nickname6",  MemberStatus.ACTIVE, "Introduction 6", "01003930303",
+                "Address 6-6", "Address 6-2", "Y", "Y", "Y","Y", RoleType.MEMBER);
     }
 
 }

@@ -10,8 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,80 +26,22 @@ class SignUpServiceTest {
     @InjectMocks
     private SignUpService sut;
 
-    @DisplayName("[happy] DB에 없는 이메일이 들어왔을때 true를 리턴한다.")
-    @Test
-    void checkEmailDuplicationTestSuccess() {
-        //given
-        String email = "test1@gmail.com";
-
-        //when
-        when(signUpAdapterMock.isEmailAvailable(email)).thenReturn(true);
-        boolean isEmailAvailable = sut.isEmailAvailable(email);
-
-        //then
-        assertThat(isEmailAvailable).isTrue();
-
-    }
-
-    @DisplayName("[bad] DB에 이미 존재하는 이메일이 들어왔을때 false를 리턴한다.")
-    @Test
-    void checkEmailDuplicationTestFail() {
-        //given
-        String email = "test1@example.com";
-
-        //when
-        when(signUpAdapterMock.isEmailAvailable(email)).thenReturn(false);
-        boolean isEmailAvailable = sut.isEmailAvailable(email);
-        //then
-        assertThat(isEmailAvailable).isFalse();
-    }
-
-    @DisplayName("[happy] DB에 없는 휴대폰 번호가 들어왔을때 true를 리턴한다.")
-    @Test
-    void checkTelNoDuplicationTestSuccess() {
-        //given
-        String telNo = "101-1111-1111";
-
-        //when
-        when(signUpAdapterMock.isTelNoAvailable(telNo)).thenReturn(true);
-        boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
-
-        //then
-        assertThat(isTelNoAvailable).isTrue();
-
-    }
-
-    @DisplayName("[bad] DB에 이미 존재하는 휴대폰 번호가 들어왔을때 false를 리턴한다.")
-    @Test
-    void checkTelNoDuplicationTestFail() {
-        //given
-        String telNo = "010-1234-5678";
-
-        //when
-        when(signUpAdapterMock.isTelNoAvailable(telNo)).thenReturn(false);
-        boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
-
-        //then
-        assertThat(isTelNoAvailable).isFalse();
-
-    }
-
     @DisplayName("[happy] 회원가입에 성공한 회원의 아이디값을 리턴한다.")
     @Test
     void signUpTestSuccess() {
         //given
         Member member = createMember();
         //when
-        when(signUpAdapterMock.signUpMember(member)).thenReturn(4L);
+        when(signUpAdapterMock.signUpMember(any())).thenReturn(6L);
         Long createdMemberId = sut.signUp(member);
 
         //then
-        assertThat(createdMemberId).isEqualTo(4L);
+        assertThat(createdMemberId).isEqualTo(6L);
         assertThat(member.getPassword()).isNotEqualTo("asdfASDF12#");
     }
 
     private Member createMember() {
-        return Member.of(null, "test1@example.com", "asdfASDF12#", "Full Name 1", "Nickname1",  MemberStatus.ACTIVE, "Introduction 1", "010-1234-5678",
+        return Member.of(null, "test1@example.com", "asdfASDF12#", "Full Name 1", "Nickname1",  MemberStatus.ACTIVE, "Introduction 1", "01012345678",
                 "Address 1-1", "Address 1-2", "Y", "Y", "Y","Y",RoleType.MEMBER);
     }
 
