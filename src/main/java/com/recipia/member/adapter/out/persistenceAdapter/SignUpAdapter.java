@@ -15,6 +15,7 @@ import java.util.Optional;
 public class SignUpAdapter implements SignUpPort {
 
     private final MemberRepository memberRepository;
+    private final MemberConverter converter;
 
     @Override
     public boolean isEmailAvailable(String email) {
@@ -31,7 +32,7 @@ public class SignUpAdapter implements SignUpPort {
     @Transactional
     @Override
     public Long signUpMember(Member member) {
-        MemberEntity memberEntity = MemberConverter.domainToEntity(member);
+        MemberEntity memberEntity = converter.domainToEntity(member);
         memberRepository.save(memberEntity);
 
         return memberEntity.getId();

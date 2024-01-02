@@ -11,14 +11,16 @@ public class Authentication {
 
     private String phoneNumber;
     private String email;
+    private String verifyCode;
 
-    private Authentication(String phoneNumber, String email) {
+    private Authentication(String phoneNumber, String email, String verifyCode) {
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.verifyCode = verifyCode;
     }
 
-    public static Authentication of(String phoneNumber, String email) {
-        return new Authentication(phoneNumber, email);
+    public static Authentication of(String phoneNumber, String email, String verifyCode) {
+        return new Authentication(phoneNumber, email, verifyCode);
     }
 
     /**

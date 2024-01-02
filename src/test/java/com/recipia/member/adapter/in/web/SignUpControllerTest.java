@@ -1,7 +1,7 @@
 package com.recipia.member.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.recipia.member.adapter.in.web.dto.SignUpRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.config.TotalTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -43,18 +43,12 @@ public class TokyoSnsService {
                 .build();
 
         try {
-            PublishResponse response = tokyoSnsClient().publish(request);
-            log.info("Sent message {} to {} with messageId {}", message, phoneNumber, response.messageId());
+            // fixme: 테스트할때는 일단 제외 (비용 문제)
+//            PublishResponse response = tokyoSnsClient().publish(request);
+//            log.info("Sent message {} to {} with messageId {}", message, phoneNumber, response.messageId());
         } catch (Exception e) {
             log.error("Error sending SMS: {}", e.getMessage());
         }
-    }
-
-    // 랜덤 6자리 숫자 생성
-    private String generateRandomCode() {
-        Random random = new Random();
-        int number = random.nextInt(900000) + 100000; // 100000부터 999999까지
-        return String.valueOf(number);
     }
 
 }

@@ -26,10 +26,10 @@ class SpringEventVerifyCodeListenerTest extends TotalTestSupport {
     private RedisService redisService;
 
     @Test
-    @DisplayName("문자 메시지 전송 이벤트 발행시 리스너가 반응하여 동작하는지를 검증한다.")
+    @DisplayName("[happy] 문자 메시지 전송 이벤트 발행시 리스너가 반응하여 동작하는지를 검증한다.")
     void whenEventPublished_thenEventListenerIsTriggered() {
         // given
-        SendVerifyCodeSpringEvent event = createSnedVerifyCondeSpringEvent();
+        SendVerifyCodeSpringEvent event = createSendVerifyCondeSpringEvent();
 
         // when
         applicationContext.publishEvent(event);
@@ -38,11 +38,11 @@ class SpringEventVerifyCodeListenerTest extends TotalTestSupport {
         Mockito.verify(springEventVerifyCodeListener).eventVerifyCodeListener(event);
     }
 
-    @DisplayName("문자 메시지 전송 이벤트 발행시 리스너 메서드가 호출되고 그 내부의 레디스에 전화번호와 인증코드를 저장하는 로직이 호출된다.")
+    @DisplayName("[happy] 문자 메시지 전송 이벤트 발행시 리스너 메서드가 호출되고 그 내부의 레디스에 전화번호와 인증코드를 저장하는 로직이 호출된다.")
     @Test
     void whenEventPublished_thenTriggerEventListenerMethods() {
         //given
-        SendVerifyCodeSpringEvent event = createSnedVerifyCondeSpringEvent();
+        SendVerifyCodeSpringEvent event = createSendVerifyCondeSpringEvent();
         Duration TIMEOUT = Duration.ofMinutes(5); // 5분
 
         //when
@@ -53,7 +53,7 @@ class SpringEventVerifyCodeListenerTest extends TotalTestSupport {
 
     }
 
-    private static SendVerifyCodeSpringEvent createSnedVerifyCondeSpringEvent() {
+    private SendVerifyCodeSpringEvent createSendVerifyCondeSpringEvent() {
         String testPhoneNumber = "01012345678";
         String testVerificationCode = "123456";
         return SendVerifyCodeSpringEvent.of(testPhoneNumber, testVerificationCode);
