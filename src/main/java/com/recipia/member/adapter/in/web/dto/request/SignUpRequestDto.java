@@ -1,10 +1,12 @@
-package com.recipia.member.adapter.in.web.dto;
+package com.recipia.member.adapter.in.web.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @Getter
 @NoArgsConstructor
 public class SignUpRequestDto {

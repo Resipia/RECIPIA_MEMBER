@@ -1,6 +1,6 @@
 package com.recipia.member.adapter.in.web;
 
-import com.recipia.member.adapter.in.web.dto.SignUpRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
 import com.recipia.member.application.port.in.SignUpUseCase;
 import com.recipia.member.domain.converter.MemberConverter;
