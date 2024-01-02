@@ -3,12 +3,13 @@ package com.recipia.member.application.service;
 import com.recipia.member.adapter.out.aws.TokyoSnsService;
 import com.recipia.member.application.port.in.AuthUseCase;
 import com.recipia.member.common.event.SendVerifyCodeSpringEvent;
+import com.recipia.member.common.exception.ErrorCode;
+import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Authentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -19,9 +20,18 @@ public class AuthService implements AuthUseCase {
     private final TokyoSnsService tokyoSnsService;
     private final ApplicationEventPublisher eventPublisher;
     private final RedisService redisService;
+    private final MemberManagementService memberManagementService;
 
     @Override
     public void verifyPhoneNumber(Authentication authentication) {
+
+        // db에 이미 존재하는 전화번호인지 확인
+        boolean isAvailableTelNo = memberManagementService.isTelNoAvailable(authentication.getPhoneNumber());
+
+        if (!isAvailableTelNo) {
+            throw new MemberApplicationException(ErrorCode.TEL_NO_ALREADY_EXISTS);
+        }
+
         authentication.formatPhoneNumber();
         String verificationCode = generateRandomCode();
 
@@ -42,6 +52,7 @@ public class AuthService implements AuthUseCase {
 
     public boolean checkVerifyCode(Authentication authentication) {
         authentication.formatPhoneNumber();
+
         String phoneNumber = authentication.getPhoneNumber();
 
         return Optional.ofNullable(redisService.getValues(phoneNumber))
