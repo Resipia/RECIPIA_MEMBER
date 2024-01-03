@@ -1,5 +1,6 @@
 package com.recipia.member.config.filter;
 
+import com.recipia.member.config.dto.TokenMemberInfoDto;
 import com.recipia.member.config.jwt.TokenUtils;
 import com.recipia.member.config.jwt.TokenValidator;
 import jakarta.servlet.FilterChain;
@@ -53,12 +54,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken extractUserDetails(String token) {
         // JWT 토큰에서 사용자 정보를 추출
         Long memberId = TokenUtils.getMemberIdFromToken(token);
-        // 사용자의 권한을 토큰에서 직접 추출
+        String email = TokenUtils.getEmailFromToken(token);
+        String nickname = TokenUtils.getNicknameFromToken(token);
         String role = TokenUtils.getRoleFromToken(token);
+
+        // 사용자의 권한을 토큰에서 직접 추출
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
 
-        // 원래 username 넣어줬는데 지금 memberId로 수정
-        return new UsernamePasswordAuthenticationToken(memberId, null, authorities);
+        // TokenMemberInfoDto 객체 생성
+        TokenMemberInfoDto tokenMemberInfoDto = TokenMemberInfoDto.of(memberId, email, nickname);
+
+        // TokenMemberInfoDto를 principal로 사용하여 UsernamePasswordAuthenticationToken 생성
+        return new UsernamePasswordAuthenticationToken(tokenMemberInfoDto, null, authorities);
     }
 
 }
