@@ -43,5 +43,19 @@ class PhoneNumberRequestDtoTest {
         assertThat(violations).hasSize(1); // 전화번호가 비어있으므로
     }
 
+    @DisplayName("[bad] 전화번호에 숫자 말고 문자가 들어왔을때 에러를 반환한다.")
+    @Test
+    void invalidPhoneNumberWithString() {
+        //given
+        PhoneNumberRequestDto dto = PhoneNumberRequestDto.of("onethothree");
+
+        //when
+        Set<ConstraintViolation<PhoneNumberRequestDto>> violations = validator.validate(dto);
+
+        //then
+        assertThat(violations).isNotEmpty();
+        assertThat(violations).hasSize(1); // 전화번호가 숫자가 아니라 문자가 들어왔기 때문
+    }
+
 
 }

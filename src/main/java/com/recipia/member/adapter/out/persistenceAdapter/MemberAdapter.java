@@ -25,6 +25,12 @@ public class MemberAdapter implements MemberPort {
         return converter.entityToDomain(memberEntityOptional);
     }
 
+    @Override
+    public Member findMemberByIdAndStatus(Long memberId, MemberStatus status) {
+        MemberEntity memberEntityOptional = memberRepository.findMemberByIdAndStatus(memberId, MemberStatus.ACTIVE).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
+        return converter.entityToDomain(memberEntityOptional);
+    }
+
     /**
      * 회원가입에서도 사용되기 때문에 일부러 어기서 exception 발생시키지 않음
      * 회원가입 할때 사용자가 입력한 이메일이 db에 존재하지 않으면 true를 반환해야하기 때문
