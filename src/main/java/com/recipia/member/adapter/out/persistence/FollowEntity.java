@@ -23,15 +23,21 @@ public class FollowEntity extends CreateDateTimeForEntity {
     @Column(name = "follow_id", nullable = false)
     private Long id;            // 팔로우 pk
 
+    /**
+     * 팔로우를 요청하는 본인 pk
+     */
     @ToString.Exclude
     @JoinColumn(name = "follower_member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private MemberEntity followerMember;  // 팔로워 회원 pk
+    private MemberEntity followerMember;
 
+    /**
+     * 팔로우 대상 회원의 pk
+     */
     @ToString.Exclude
     @JoinColumn(name = "following_member_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private MemberEntity followingMember; // 팔로잉 회원 pk
+    private MemberEntity followingMember;
 
     private FollowEntity(Long id, MemberEntity followerMember, MemberEntity followingMember) {
         this.id = id;

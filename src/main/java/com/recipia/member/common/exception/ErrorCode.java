@@ -29,6 +29,9 @@ public enum ErrorCode {
     INVALID_EMAIL_FORMAT(400, "INVALID_EMAIL_FORMAT", "유효하지 않은 이메일 형식입니다."),
     ACCOUNT_LOCKED(401, "ACCOUNT_LOCKED", "계정이 잠겼습니다."),
 
+    // 회원 관리 관련 에러
+    ALREADY_FOLLOWING(400, "ALREADY_FOLLOWING", "이미 팔로우 하고 있는 회원입니다."),
+
     // DB 관련 에러
     REQUIRED_FIELD_NULL(404, "REQUIRED_FIELD_NULL", "필수 컬럼값이 존재하지 않습니다."),
     FILE_NOT_FOUND(404, "FILE_NOT_FOUND", "파일 경로에 파일이 존재하지 않습니다."),
