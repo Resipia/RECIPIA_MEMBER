@@ -27,7 +27,7 @@ class AuthenticationTest {
     }
 
     private static Authentication createAuthentication() {
-        return Authentication.of("        010-0000-1111   ", null);
+        return Authentication.of("        01000001111   ", null, null);
     }
 
 }

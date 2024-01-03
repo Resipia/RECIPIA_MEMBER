@@ -1,7 +1,7 @@
 package com.recipia.member.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.recipia.member.adapter.in.web.dto.SignUpRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.config.TotalTestSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class SignUpControllerTest extends TotalTestSupport {
         //given
         SignUpRequestDto validRequest = SignUpRequestDto.of(
                 "user@example.com", "password123P!", "John Doe", "johndoe",
-                "Hello, I'm John", "010-1234-5678", "123 Main St", "Apt 101",
+                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101",
                 "Y", "Y", "Y", "Y"
         );
 
@@ -49,7 +49,7 @@ class SignUpControllerTest extends TotalTestSupport {
         //given
         SignUpRequestDto invalidRequest = SignUpRequestDto.of(
                 null, "password123", null, "johndoe",
-                "Hello, I'm John", "010-1234-5678", "123 Main St", "Apt 101",
+                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101",
                 "Y", "Y", "Y", "Y"
         );
 
@@ -73,7 +73,7 @@ class SignUpControllerTest extends TotalTestSupport {
         //given
         SignUpRequestDto invalidRequest = SignUpRequestDto.of(
                 null, "password123", null, "johndoe",
-                "Hello, I'm John", "010-1234-5678", "123 Main St", "Apt 101",
+                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101",
                 "Y", "Y", "Y", "Y"
         );
 

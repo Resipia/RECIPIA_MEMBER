@@ -13,7 +13,7 @@ import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// fixme: 단위로 할지, 통합으로 할지 결정
+@DisplayName("[통합] 레디스 서비스 테스트")
 class RedisServiceTest extends TotalTestSupport {
 
     final String KEY = "key";

@@ -16,10 +16,11 @@ import java.util.Optional;
 public class JwtAdapter implements JwtPort {
 
     private final JwtRepository jwtRepository;
+    private final JwtConverter converter;
 
     @Override
     public void save(Jwt jwt) {
-        jwtRepository.save(JwtConverter.domainToEntity(jwt));
+        jwtRepository.save(converter.domainToEntity(jwt));
     }
 
     /**
@@ -28,7 +29,7 @@ public class JwtAdapter implements JwtPort {
     @Override
     public Jwt getJwt(Jwt jwt) {
         JwtEntity jwtEntity = jwtRepository.findJwtByMemberIdAndRefreshToken(jwt.getMemberId(), jwt.getRefreshToken()).orElseThrow(() -> new MemberApplicationException(ErrorCode.JWT_NOT_FOUND));
-        return JwtConverter.entityToDomain(jwtEntity);
+        return converter.entityToDomain(jwtEntity);
     }
 
 }

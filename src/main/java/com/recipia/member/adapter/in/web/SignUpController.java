@@ -1,6 +1,6 @@
 package com.recipia.member.adapter.in.web;
 
-import com.recipia.member.adapter.in.web.dto.SignUpRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
 import com.recipia.member.application.port.in.SignUpUseCase;
 import com.recipia.member.domain.converter.MemberConverter;
@@ -18,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class SignUpController {
 
     private final SignUpUseCase signUpUseCase;
+    private final MemberConverter memberConverter;
 
     @PostMapping("/signUp")
     public ResponseEntity<ResponseDto<Long>> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
-        Long memberId = signUpUseCase.signUp(MemberConverter.requestDtoToDomain(requestDto));
+        Long memberId = signUpUseCase.signUp(memberConverter.requestDtoToDomain(requestDto));
         return ResponseEntity.ok(
                 ResponseDto.success(memberId)
         );
