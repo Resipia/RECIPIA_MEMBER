@@ -1,5 +1,5 @@
 -- member 테이블에 테스트 데이터 삽입
-INSERT INTO public.member (password,
+INSERT INTO member (password,
                            full_name,
                            email,
                            nickname,

@@ -1,6 +1,7 @@
 package com.recipia.member.adapter.in.web.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,8 +14,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class PhoneNumberRequestDto {
 
-    // todo: 숫자만인거 확인
     @NotBlank
+    @Pattern(regexp = "\\d+")
     private String phoneNumber;
 
     private PhoneNumberRequestDto(String phoneNumber) {

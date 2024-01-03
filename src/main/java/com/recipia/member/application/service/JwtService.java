@@ -1,5 +1,6 @@
 package com.recipia.member.application.service;
 
+import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.application.port.in.JwtUseCase;
 import com.recipia.member.application.port.out.port.JwtPort;
 import com.recipia.member.application.port.out.port.MemberPort;
@@ -49,7 +50,7 @@ public class JwtService implements JwtUseCase {
             throw new MemberApplicationException(ErrorCode.EXPIRED_REFRESH_TOKEN);
         }
 
-        Member member = memberPort.findMemberById(jwt.getMemberId());
+        Member member = memberPort.findMemberByIdAndStatus(jwt.getMemberId(), MemberStatus.ACTIVE);
 
         TokenMemberInfoDto tokenMemberInfoDto = TokenMemberInfoDto.of(member.getId(), member.getEmail(), null, member.getNickname(), member.getStatus(), member.getRoleType());
         String accessToken = TokenUtils.generateAccessToken(tokenMemberInfoDto);

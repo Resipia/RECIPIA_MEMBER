@@ -42,7 +42,7 @@ class JwtServiceTest {
         Jwt jwt = createJwtUsingValidRefresh();
         when(jwtPort.getJwt(any())).thenReturn(jwt);
         Member member = createMember();
-        when(memberPort.findMemberById(any())).thenReturn(member);
+        when(memberPort.findMemberByIdAndStatus(any(), any())).thenReturn(member);
 
         try (MockedStatic<TokenUtils> mockedStatic = mockStatic(TokenUtils.class)) {
             mockedStatic.when(() -> TokenUtils.generateAccessToken(any())).thenReturn("successfully-generate-access-token");

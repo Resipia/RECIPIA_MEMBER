@@ -67,7 +67,7 @@ public class MemberEntity extends UpdateDateTimeForEntity {
 
     @Column(name = "role_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private RoleType roleType;        // 회원상태
+    private RoleType roleType;        // 회원 권한
 
 
     // private 생성자
@@ -97,7 +97,11 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     // 기존 엔티티 로드용 팩토리 메소드
     public static MemberEntity of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String collectionConsentYn, String marketingConsentYn, String privacyPolicyConsentYn, String cookieConsentYn, RoleType roleType) {
         return new MemberEntity(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, collectionConsentYn, marketingConsentYn, privacyPolicyConsentYn, cookieConsentYn, roleType);
+    }
 
+    // 다른 엔티티 fk용으로 객체 참조할때 사용하는 팩토리 메서드
+    public static MemberEntity of(Long id) {
+        return new MemberEntity(id, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     @Override
