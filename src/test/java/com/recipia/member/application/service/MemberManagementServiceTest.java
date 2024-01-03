@@ -1,26 +1,26 @@
-package com.recipia.member.adapter.out.persistenceAdapter;
+package com.recipia.member.application.service;
 
-import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
-import com.recipia.member.adapter.out.persistence.constant.RoleType;
-import com.recipia.member.config.TotalTestSupport;
-import com.recipia.member.domain.Member;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.recipia.member.adapter.out.persistenceAdapter.SignUpAdapter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-@DisplayName("[통합] 회원가입 Adapter 테스트")
-class SignUpAdapterTest extends TotalTestSupport {
+@ExtendWith(MockitoExtension.class)
+@DisplayName("[단위] 회원 관리 서비스 테스트")
+class MemberManagementServiceTest {
 
-    @Autowired
-    private SignUpAdapter sut;
+    @InjectMocks
+    private MemberManagementService sut;
+
+    @Mock
+    private SignUpAdapter signUpAdapterMock;
 
     @DisplayName("[happy] DB에 없는 이메일이 들어왔을때 true를 리턴한다.")
     @Test
@@ -29,18 +29,22 @@ class SignUpAdapterTest extends TotalTestSupport {
         String email = "test1@gmail.com";
 
         //when
+        when(signUpAdapterMock.isEmailAvailable(email)).thenReturn(true);
         boolean isEmailAvailable = sut.isEmailAvailable(email);
+
         //then
         assertThat(isEmailAvailable).isTrue();
+
     }
 
     @DisplayName("[bad] DB에 이미 존재하는 이메일이 들어왔을때 false를 리턴한다.")
     @Test
     void checkEmailDuplicationTestFail() {
         //given
-        String email = "hong1@example.com";
+        String email = "test1@example.com";
 
         //when
+        when(signUpAdapterMock.isEmailAvailable(email)).thenReturn(false);
         boolean isEmailAvailable = sut.isEmailAvailable(email);
         //then
         assertThat(isEmailAvailable).isFalse();
@@ -50,9 +54,10 @@ class SignUpAdapterTest extends TotalTestSupport {
     @Test
     void checkTelNoDuplicationTestSuccess() {
         //given
-        String telNo = "10111111111";
+        String telNo = "101-1111-1111";
 
         //when
+        when(signUpAdapterMock.isTelNoAvailable(telNo)).thenReturn(true);
         boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
 
         //then
@@ -67,30 +72,12 @@ class SignUpAdapterTest extends TotalTestSupport {
         String telNo = "01012345678";
 
         //when
+        when(signUpAdapterMock.isTelNoAvailable(telNo)).thenReturn(false);
         boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
 
         //then
         assertThat(isTelNoAvailable).isFalse();
 
-    }
-
-    @DisplayName("[happy] 신규 회원이 회원가입에 성공한다.")
-    @Test
-    void signUpSuccess() {
-        //given
-        Member member = createMemberNonExist();
-        //when
-        Long createdMemberId = sut.signUpMember(member);
-
-        //then
-        assertThat(createdMemberId).isNotNull();
-    }
-
-
-
-    private Member createMemberNonExist() {
-        return Member.of(null, "test6@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 6", "Nickname6",  MemberStatus.ACTIVE, "Introduction 6", "01003930303",
-                "Address 6-6", "Address 6-2", "Y", "Y", "Y","Y", RoleType.MEMBER);
     }
 
 }

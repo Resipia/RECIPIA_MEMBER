@@ -15,15 +15,15 @@ INSERT INTO public.member (password,
                            create_dttm,
                            update_dttm,
                            role_type)
-VALUES ('password1', '홍길동', 'hong1@example.com', 'hong1', 'ACTIVE', '안녕하세요', '010-1234-5678', '서울시 강남구', '123번지', 'Y', 'Y',
+VALUES ('password1', '홍길동', 'hong1@example.com', 'hong1', 'ACTIVE', '안녕하세요', '01012345678', '서울시 강남구', '123번지', 'Y', 'Y',
         'Y', 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
-       ('password2', '김철수', 'kim2@example.com', 'kim2', 'DORMANT', '반갑습니다', '010-2345-6789', '서울시 서초구', '456번지', 'Y', 'N',
+       ('password2', '김철수', 'kim2@example.com', 'kim2', 'DORMANT', '반갑습니다', '01023456789', '서울시 서초구', '456번지', 'Y', 'N',
         'Y', 'N', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
-       ('password3', '이영희', 'lee3@example.com', 'lee3', 'ACTIVE', '잘 부탁드립니다', '010-3456-7890', '부산시 해운대구', '789번지', 'N',
+       ('password3', '이영희', 'lee3@example.com', 'lee3', 'ACTIVE', '잘 부탁드립니다', '01034567890', '부산시 해운대구', '789번지', 'N',
         'Y', 'N', 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ADMIN'),
-       ('password4', '박지민', 'park4@example.com', 'park4', 'DEACTIVATED', '반가워요', '010-4567-8901', '대구시 중구', '1011번지', 'Y', 'Y',
+       ('password4', '박지민', 'park4@example.com', 'park4', 'DEACTIVATED', '반가워요', '01045678901', '대구시 중구', '1011번지', 'Y', 'Y',
         'Y', 'N', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
-       ('password5', '정수민', 'jung5@example.com', 'jung5', 'ACTIVE', '안녕하세요!', '010-5678-9012', '인천시 남동구', '1213번지', 'N',
+       ('password5', '정수민', 'jung5@example.com', 'jung5', 'ACTIVE', '안녕하세요!', '01056789012', '인천시 남동구', '1213번지', 'N',
         'N', 'Y', 'Y', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER');
 
 -- member_event_record 테이블에 가짜 데이터 삽입
