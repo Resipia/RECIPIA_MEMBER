@@ -21,8 +21,5 @@ public class AuthConverter {
         return Authentication.of(dto.getPhoneNumber(), null, dto.getVerifyCode());
     }
 
-//    public static Authentication domainToResponse(Authentication domain) {
-//
-//    }
 
 }

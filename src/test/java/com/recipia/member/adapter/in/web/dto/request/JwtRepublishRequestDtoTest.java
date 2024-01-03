@@ -11,6 +11,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("[단위] jwt 재발행 request dto 테스트")
 class JwtRepublishRequestDtoTest {
 
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
