@@ -49,6 +49,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         Pair<String, LocalDateTime> refreshTokenPair = TokenUtils.generateRefreshToken(tokenMemberInfoDto);
 
         // Refresh Token DB에 저장
+        // fixme: 계속 로그인하면 데이터 누적으로 저장되는 이슈
         jwtUseCase.insertRefreshTokenToDB(tokenMemberInfoDto.email(), refreshTokenPair);
 
         // ResponseDto 객체 생성
