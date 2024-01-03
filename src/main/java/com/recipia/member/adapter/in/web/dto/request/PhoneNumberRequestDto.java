@@ -13,6 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class PhoneNumberRequestDto {
 
+    // todo: 숫자만인거 확인
     @NotBlank
     private String phoneNumber;
 
