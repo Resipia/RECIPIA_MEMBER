@@ -24,10 +24,10 @@ public class MyPageQueryRepository {
                         memberEntity.introduction,
                         JPAExpressions.select(followEntity.count())
                                 .from(followEntity)
-                                .where(followEntity.followerMember.id.eq(memberEntity.id)),
+                                .where(followEntity.followerMember.id.eq(memberId)),
                         JPAExpressions.select(followEntity.count())
                                 .from(followEntity)
-                                .where(followEntity.followingMember.id.eq(memberEntity.id))))
+                                .where(followEntity.followingMember.id.eq(memberId))))
                 .from(memberEntity)
                 .where(memberEntity.id.eq(memberId))
                 .fetchOne();
