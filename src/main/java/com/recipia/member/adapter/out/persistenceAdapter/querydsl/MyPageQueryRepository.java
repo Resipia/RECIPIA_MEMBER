@@ -32,4 +32,13 @@ public class MyPageQueryRepository {
                 .where(memberEntity.id.eq(memberId))
                 .fetchOne();
     }
+
+    public Long updateMyPage(MyPage requestMyPage) {
+        return jpaQueryFactory
+                .update(memberEntity)
+                .set(memberEntity.nickname, requestMyPage.getNickname())
+                .set(memberEntity.introduction, requestMyPage.getIntroduction())
+                .where(memberEntity.id.eq(requestMyPage.getMemberId()))
+                .execute();
+    }
 }

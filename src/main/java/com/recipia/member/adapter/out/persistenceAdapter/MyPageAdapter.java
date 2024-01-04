@@ -17,4 +17,10 @@ public class MyPageAdapter implements MyPagePort {
         MyPage myPage = myPageQueryRepository.viewMyPage(memberId);
         return myPage;
     }
+
+    @Override
+    public Long updateMyPage(MyPage requestMyPage) {
+        Long updatedCount = myPageQueryRepository.updateMyPage(requestMyPage);
+        return updatedCount;
+    }
 }
