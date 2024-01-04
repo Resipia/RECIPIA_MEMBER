@@ -1,31 +1,31 @@
 package com.recipia.member.config;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
+import com.recipia.member.adapter.out.persistence.constant.RoleType;
+import com.recipia.member.config.dto.TokenMemberInfoDto;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import java.util.Collections;
 
 /**
  * 테스트용 jwt를 세팅하는 유틸 클래스
  */
 public class TestJwtConfig {
 
-    public static void setupMockJwt(Long memberId, String nickname) {
-        Jwt jwt = mock(Jwt.class);
-        when(jwt.getClaim("memberId")).thenReturn(memberId);
-        when(jwt.getClaim("nickname")).thenReturn(nickname);
+    public static void setupMockAuthentication(Long memberId, String email, String nickname) {
+        TokenMemberInfoDto tokenMemberInfoDto = TokenMemberInfoDto.of(memberId, email, nickname);
+        // 권한 목록을 생성한다.
+        GrantedAuthority authority = new SimpleGrantedAuthority(RoleType.MEMBER.name());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                tokenMemberInfoDto, null, Collections.singletonList(authority));
 
-        Authentication authentication = mock(Authentication.class);
-        when(authentication.isAuthenticated()).thenReturn(true);
-        when(authentication.getPrincipal()).thenReturn(jwt);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
 
-        SecurityContext securityContext = mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-
-        SecurityContextHolder.setContext(securityContext);
+    public static void clearSecurityContext() {
+        SecurityContextHolder.clearContext();
     }
 
 }

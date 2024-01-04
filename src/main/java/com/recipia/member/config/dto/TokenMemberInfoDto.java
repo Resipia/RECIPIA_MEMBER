@@ -26,6 +26,10 @@ public record TokenMemberInfoDto(
         return new TokenMemberInfoDto(id, email, password, nickname, memberStatus, roleType);
     }
 
+    public static TokenMemberInfoDto of(Long id, String email, String nickname) {
+        return new TokenMemberInfoDto(id, email, null, nickname, null, null);
+    }
+
     public static TokenMemberInfoDto fromMemberEntity(MemberEntity entity) {
         return TokenMemberInfoDto.of(entity.getId(), entity.getEmail(), entity.getPassword(), entity.getNickname(), entity.getStatus(), entity.getRoleType());
     }
