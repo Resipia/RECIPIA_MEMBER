@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static reactor.core.publisher.Mono.when;
 
 @DisplayName("[통합] 마이페이지 Adapter 테스트")
 class MyPageAdapterTest extends TotalTestSupport {
@@ -40,6 +41,19 @@ class MyPageAdapterTest extends TotalTestSupport {
 
         // then
         assertNull(result);
+    }
+
+    @DisplayName("[happy] 마이페이지 수정 성공")
+    @Test
+    void updateMyPageInfoSuccess() {
+        // given
+        MyPage requestMyPage = MyPage.of(1L, "update-nickname", "update-intro");
+
+        // when
+        Long updatedCount = sut.updateMyPage(requestMyPage);
+
+        // then
+        assertEquals(updatedCount, 1L);
     }
 
 }
