@@ -5,8 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.adapter.in.listener.aws.dto.MessageMemberIdDto;
 import com.recipia.member.adapter.in.listener.aws.dto.SnsNotificationDto;
-import com.recipia.member.common.utils.MemberStringUtils;
 import com.recipia.member.application.port.in.MemberEventRecordUseCase;
+import com.recipia.member.common.utils.MemberStringUtils;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +35,7 @@ public class SqsEventRecordListener {
         String topicName = MemberStringUtils.extractLastPart(snsNotificationDto.TopicArn());
         Long memberId = messageMemberIdDto.memberId();
 
+        // SNS 받으면 해당 이벤트는 이벤트 저장소에서 published=true로 바꿔주기
         memberEventRecordUseCase.changePublishedToTrue(memberId, topicName);
 
     }
