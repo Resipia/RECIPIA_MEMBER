@@ -29,6 +29,10 @@ public enum ErrorCode {
     INVALID_EMAIL_FORMAT(400, "INVALID_EMAIL_FORMAT", "유효하지 않은 이메일 형식입니다."),
     ACCOUNT_LOCKED(401, "ACCOUNT_LOCKED", "계정이 잠겼습니다."),
 
+    // Security 관련 에러
+    MEMBER_INFO_NOT_FOUND_IN_SECURITY(404, "MEMBER_INFO_NOT_FOUND_IN_SECURITY", "인증된 사용자의 정보를 찾을 수 없습니다."),
+
+
     // 회원 관리 관련 에러
     ALREADY_FOLLOWING(400, "ALREADY_FOLLOWING", "이미 팔로우 하고 있는 회원입니다."),
 
