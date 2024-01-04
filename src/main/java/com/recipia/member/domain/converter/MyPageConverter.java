@@ -1,6 +1,8 @@
 package com.recipia.member.domain.converter;
 
+import com.recipia.member.adapter.in.web.dto.request.UpdateMyPageRequestDto;
 import com.recipia.member.adapter.in.web.dto.response.MyPageViewResponseDto;
+import com.recipia.member.common.utils.SecurityUtils;
 import com.recipia.member.domain.MyPage;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +21,14 @@ public class MyPageConverter {
                 myPage.getFollowingCount(),
                 myPage.getFollowerCount()
         );
+    }
 
+    public MyPage updateRequestDtoToDomain(UpdateMyPageRequestDto dto) {
+        return MyPage.of(
+                SecurityUtils.getCurrentMemberId(),
+                dto.getNickname(),
+                dto.getIntroduction()
+        );
     }
 
 }
