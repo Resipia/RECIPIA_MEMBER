@@ -1,5 +1,6 @@
 package com.recipia.member.adapter.out.persistenceAdapter;
 
+import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.domain.Member;
@@ -37,6 +38,16 @@ public class SignUpAdapter implements SignUpPort {
 
         return memberEntity.getId();
 
+    }
+
+    @Override
+    public Optional<SignUpRequestDto> findById(String email) {
+        return Optional.empty();
+    }
+
+    @Override
+    public SignUpRequestDto saveUser(String email, String password, String nickname, String introduction) {
+        return null;
     }
 
 }
