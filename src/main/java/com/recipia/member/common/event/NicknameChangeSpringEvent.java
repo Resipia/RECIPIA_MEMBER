@@ -7,4 +7,7 @@ package com.recipia.member.common.event;
 public record NicknameChangeSpringEvent(
         Long memberId
 ) {
+    public static NicknameChangeSpringEvent of(Long memberId){
+        return new NicknameChangeSpringEvent(memberId);
+    }
 }

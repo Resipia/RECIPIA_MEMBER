@@ -4,4 +4,5 @@ import com.recipia.member.domain.MyPage;
 
 public interface MyPagePort {
     MyPage viewMyPage(Long memberId);
+    Long updateMyPage(MyPage requestMyPage);
 }

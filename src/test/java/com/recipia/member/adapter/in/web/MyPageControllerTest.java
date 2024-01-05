@@ -1,6 +1,7 @@
 package com.recipia.member.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.recipia.member.adapter.in.web.dto.request.UpdateMyPageRequestDto;
 import com.recipia.member.application.port.in.MyPageUseCase;
 import com.recipia.member.config.TestJwtConfig;
 import com.recipia.member.config.TotalTestSupport;
@@ -12,11 +13,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,7 +43,7 @@ class MyPageControllerTest extends TotalTestSupport {
     }
 
 
-    @DisplayName("[happy] 마이페이지 조회 성공")
+    @DisplayName("[happy] 인증된 사용자가 마이페이지 조회")
     @Test
     void whenAuthenticatedUserViewsMyPage_thenSuccess() throws Exception {
         // given
@@ -49,8 +51,38 @@ class MyPageControllerTest extends TotalTestSupport {
         when(myPageUseCase.viewMyPage(requestMyPage)).thenReturn(any(MyPage.class));
 
         // when & then
-        mockMvc.perform(get("/member/myPage/view"))
+        mockMvc.perform(post("/member/myPage/view"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+
+    @DisplayName("[happy] 마이페이지 수정 요청 성공")
+    @Test
+    void whenAuthenticatedUserRequestsMyPageUpdate_thenSuccess() throws Exception {
+        // given
+        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.of("update-nickname", "update-intro");
+        MyPage beforeServiceDomain = MyPage.of(1L, "update-nickname", "update-intro");
+        MyPage result = MyPage.of(1L, "update-nickname", "update-intro", 3L, 4L);
+
+        when(myPageConverter.updateRequestDtoToDomain(dto)).thenReturn(result);
+        when(myPageUseCase.updateAndViewMyPage(beforeServiceDomain)).thenReturn(result);
+
+        // when & then
+        mockMvc.perform(post("/member/myPage/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(dto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+
+    // JSON 문자열 변환을 위한 유틸리티 메서드
+    private String asJsonString(final Object obj) {
+        try {
+            return objectMapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

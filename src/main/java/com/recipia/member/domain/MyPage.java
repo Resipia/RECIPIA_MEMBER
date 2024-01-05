@@ -21,11 +21,25 @@ public class MyPage {
         this.followerCount = followerCount;
     }
 
+    /**
+     * 마이페이지 조회 응답 test용
+     */
     public static MyPage of(Long memberId, String nickname, String introduction, Long followingCount, Long followerCount) {
         return new MyPage(memberId, nickname, introduction, followingCount, followerCount);
     }
 
+    /**
+     * 마이페이지 조회 요청 test용
+     * @param memberId 마이페이지 조회 요청 memberId
+     */
     public static MyPage of(Long memberId) {
         return new MyPage(memberId, null, null, null, null);
+    }
+
+    /**
+     * 마이페이지 수정 요청 test용
+     */
+    public static MyPage of(Long memberId, String nickname, String introduction) {
+        return new MyPage(memberId, nickname, introduction, null, null);
     }
 }

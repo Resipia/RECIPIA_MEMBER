@@ -40,7 +40,7 @@ class PhoneNumberRequestDtoTest {
 
         //then
         assertThat(violations).isNotEmpty();
-        assertThat(violations).hasSize(1); // 전화번호가 비어있으므로
+        assertThat(violations).hasSize(2); // 전화번호가 비어있고, 숫자로 이루어진게 아니므로 2개
     }
 
     @DisplayName("[bad] 전화번호에 숫자 말고 문자가 들어왔을때 에러를 반환한다.")
