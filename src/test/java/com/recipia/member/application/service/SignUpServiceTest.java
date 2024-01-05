@@ -42,7 +42,7 @@ class SignUpServiceTest {
 
     private Member createMember() {
         return Member.of(null, "test1@example.com", "asdfASDF12#", "Full Name 1", "Nickname1",  MemberStatus.ACTIVE, "Introduction 1", "01012345678",
-                "Address 1-1", "Address 1-2", "Y", "Y", "Y","Y",RoleType.MEMBER);
+                "Address 1-1", "Address 1-2", RoleType.MEMBER);
     }
 
 }
