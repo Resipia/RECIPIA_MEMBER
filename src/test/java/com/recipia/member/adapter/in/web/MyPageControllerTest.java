@@ -60,9 +60,9 @@ class MyPageControllerTest extends TotalTestSupport {
     @Test
     void whenAuthenticatedUserRequestsMyPageUpdate_thenSuccess() throws Exception {
         // given
-        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.of("update-nickname", "update-intro");
-        MyPage beforeServiceDomain = MyPage.of(1L, "update-nickname", "update-intro");
-        MyPage result = MyPage.of(1L, "update-nickname", "update-intro", 3L, 4L);
+        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.of("update-nickname", "update-introduction");
+        MyPage beforeServiceDomain = MyPage.of(1L, "update-nickname", "update-introduction");
+        MyPage result = MyPage.of(1L, "update-nickname", "update-introduction", 3L, 4L);
 
         when(myPageConverter.updateRequestDtoToDomain(dto)).thenReturn(result);
         when(myPageUseCase.updateAndViewMyPage(beforeServiceDomain)).thenReturn(result);
