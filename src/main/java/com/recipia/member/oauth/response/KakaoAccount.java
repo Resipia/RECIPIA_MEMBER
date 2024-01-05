@@ -6,13 +6,19 @@ import java.util.Map;
  * 카카오 계정 정보
  */
 public record KakaoAccount(
-        Boolean profileNicknameNeedsAgreement,
-        Profile profile,
-        Boolean hasEmail,
-        Boolean emailNeedsAgreement,
-        Boolean isEmailValid,
-        Boolean isEmailVerified,
-        String email
+        String nickname,
+        String profileImage,
+        String email,
+        String name,
+        String phoneNumber
+
+//        Boolean profileNicknameNeedsAgreement,
+//        Profile profile,
+//        Boolean hasEmail,
+//        Boolean emailNeedsAgreement,
+//        Boolean isEmailValid,
+//        Boolean isEmailVerified,
+//        String email,
 ) {
 
     /**
@@ -21,15 +27,13 @@ public record KakaoAccount(
      */
     public static KakaoAccount from(Map<String, Object> attributes) {
         return new KakaoAccount(
-                Boolean.valueOf(String.valueOf(attributes.get("profile_nickname_needs_agreement"))),
-                Profile.from((Map<String, Object>) attributes.get("profile")),
-                Boolean.valueOf(String.valueOf(attributes.get("has_email"))),
-                Boolean.valueOf(String.valueOf(attributes.get("email_needs_agreement"))),
-                Boolean.valueOf(String.valueOf(attributes.get("is_email_valid"))),
-                Boolean.valueOf(String.valueOf(attributes.get("is_email_verified"))),
-                String.valueOf(attributes.get("email"))
+                String.valueOf(attributes.get("profile_nickname")),
+                String.valueOf(attributes.get("profile_image")),
+                String.valueOf(attributes.get("account_email")),
+                String.valueOf(attributes.get("name")),
+                String.valueOf(attributes.get("phone_number"))
         );
     }
 
-    public String nickname() { return this.profile().nickname(); }
+//    public String nickname() { return this.profile().nickname(); }
 }

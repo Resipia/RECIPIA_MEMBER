@@ -4,11 +4,13 @@ import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Setter
 @Getter
 @NoArgsConstructor
 public class Member {
