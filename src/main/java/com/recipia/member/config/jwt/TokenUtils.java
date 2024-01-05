@@ -109,7 +109,7 @@ public class TokenUtils {
     private static Map<String, Object> createClaims(TokenMemberInfoDto tokenMemberInfoDto, String tokenType) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(MEMBER_ID, tokenMemberInfoDto.id());
-//        claims.put(EMAIL, tokenMemberInfoDto.email());
+        claims.put(EMAIL, tokenMemberInfoDto.email());
         claims.put(NICKNAME, tokenMemberInfoDto.nickname());
         claims.put("type", tokenType); // Token 종류를 저장
         claims.put(ROLE, tokenMemberInfoDto.roleType().name());

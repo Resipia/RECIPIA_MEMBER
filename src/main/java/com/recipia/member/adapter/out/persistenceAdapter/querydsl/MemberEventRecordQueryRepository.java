@@ -2,7 +2,6 @@ package com.recipia.member.adapter.out.persistenceAdapter.querydsl;
 
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +16,10 @@ public class MemberEventRecordQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public long changePublishedToTrue(Long memberId, String snsTopic) {
-
+    /**
+     * 가장 최근에 발행 성공한 이벤트를 published = true로 업데이트
+     */
+    public Long changePublishedToTrue(Long memberId, String snsTopic) {
         return jpaQueryFactory
                 .update(memberEventRecordEntity)
                 .set(memberEventRecordEntity.published, true)
@@ -39,4 +40,19 @@ public class MemberEventRecordQueryRepository {
                 .execute();
     }
 
+    /**
+     * 새로운 이벤트를 발행하기 전에 기존에 누락되었던 이벤트 전부 published = true로 업데이트
+     */
+    public Long changeBeforeEventAllPublishedToTrue(Long memberId, String topicName) {
+        return  jpaQueryFactory
+                .update(memberEventRecordEntity)
+                .set(memberEventRecordEntity.published, true)
+                .set(memberEventRecordEntity.publishedAt, LocalDateTime.now())
+                .where(
+                        memberEventRecordEntity.member.id.eq(memberId),
+                        memberEventRecordEntity.snsTopic.eq(topicName),
+                        memberEventRecordEntity.published.isFalse()
+                )
+                .execute();
+    }
 }
