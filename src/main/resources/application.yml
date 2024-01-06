@@ -33,6 +33,25 @@ spring:
         default_batch_fetch_size: 10
         highlight_sql: true
 
+  # kakao OAuth2 정보 추가
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_OAUTH_CLIENT_ID}
+            client-secret: ${KAKAO_OAUTH_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8081/login/oauth2/code/kakao #springBoot의 기본 방식을 적용
+#            redirect-uri: "{baseUrl}/login/oauth2/code/kakao" #이렇게하면 알아서 {}안에 domain을 넣어준다. 근데 yml에서는 {}은 제대로 못읽는다.그래서 ""로 감싸주어야 한다.
+            client-authentication-method: none #http method도 설정해준다.
+        provider:
+          kakao: # 공식 페이지에서 정보를 확인해서 넣어주자
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
   sleuth:
     http:
       include-patterns=/member/nicknameChange,/feign/member/getNickname

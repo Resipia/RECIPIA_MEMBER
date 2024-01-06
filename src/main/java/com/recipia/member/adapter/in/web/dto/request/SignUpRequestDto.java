@@ -71,4 +71,8 @@ public class SignUpRequestDto {
         return new SignUpRequestDto(email, password, fullName, nickname, introduction, telNo, address1, address2, collectionConsentYn, marketingConsentYn, privacyPolicyConsentYn, cookieConsentYn);
     }
 
+    public static SignUpRequestDto of(String email, String password, String nickname, String introduction) {
+        return new SignUpRequestDto(email, password, null, nickname, introduction, null, null, null, null, null, null, null);
+    }
+
 }

@@ -52,26 +52,13 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     @Column(name = "addr2")
     private String address2;        // 주소2
 
-    @Column(name = "collection_consent_yn", nullable = false)
-    private String collectionConsentYn; // 개인정보 수집 및 이용 동의 여부
-
-    @Column(name = "marketing_consent_yn", nullable = false)
-    private String marketingConsentYn; // 마케팅 활용 동의 여부
-
-    @Column(name = "privacy_policy_consent_yn", nullable = false)
-    private String privacyPolicyConsentYn; // 개인정보 보호 정책 동의 여부
-
-    @Column(name = "cookie_consent_yn", nullable = false)
-    private String cookieConsentYn; // 쿠키 및 추적 기술 사용 동의 여부
-
-
     @Column(name = "role_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleType roleType;        // 회원 권한
 
 
     // private 생성자
-    private MemberEntity(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String collectionConsentYn, String marketingConsentYn, String privacyPolicyConsentYn, String cookieConsentYn, RoleType roleType) {
+    private MemberEntity(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -82,26 +69,22 @@ public class MemberEntity extends UpdateDateTimeForEntity {
         this.telNo = telNo;
         this.address1 = address1;
         this.address2 = address2;
-        this.collectionConsentYn = collectionConsentYn;
-        this.marketingConsentYn = marketingConsentYn;
-        this.privacyPolicyConsentYn = privacyPolicyConsentYn;
-        this.cookieConsentYn = cookieConsentYn;
         this.roleType = roleType;
     }
 
     // 새 엔티티 생성용 팩토리 메소드
-    public static MemberEntity of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String collectionConsentYn, String marketingConsentYn, String privacyPolicyConsentYn, String cookieConsentYn, RoleType roleType) {
-        return new MemberEntity(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, collectionConsentYn, marketingConsentYn, privacyPolicyConsentYn, cookieConsentYn, roleType);
+    public static MemberEntity of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
+        return new MemberEntity(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType);
     }
 
     // 기존 엔티티 로드용 팩토리 메소드
-    public static MemberEntity of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String collectionConsentYn, String marketingConsentYn, String privacyPolicyConsentYn, String cookieConsentYn, RoleType roleType) {
-        return new MemberEntity(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, collectionConsentYn, marketingConsentYn, privacyPolicyConsentYn, cookieConsentYn, roleType);
+    public static MemberEntity of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
+        return new MemberEntity(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType);
     }
 
     // 다른 엔티티 fk용으로 객체 참조할때 사용하는 팩토리 메서드
     public static MemberEntity of(Long id) {
-        return new MemberEntity(id, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        return new MemberEntity(id, null, null, null, null, null, null, null, null, null, null);
     }
 
     @Override

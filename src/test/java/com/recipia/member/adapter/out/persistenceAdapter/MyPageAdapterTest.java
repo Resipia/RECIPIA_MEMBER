@@ -47,7 +47,7 @@ class MyPageAdapterTest extends TotalTestSupport {
     @Test
     void updateMyPageInfoSuccess() {
         // given
-        MyPage requestMyPage = MyPage.of(1L, "update-nickname", "update-intro");
+        MyPage requestMyPage = MyPage.of(1L, "update-nickname", "update-introduction");
 
         // when
         Long updatedCount = sut.updateMyPage(requestMyPage);

@@ -7,6 +7,7 @@ import com.recipia.member.config.handler.CustomAuthFailureHandler;
 import com.recipia.member.config.handler.CustomAuthSuccessHandler;
 import com.recipia.member.config.handler.CustomAuthenticationProvider;
 import com.recipia.member.config.jwt.TokenValidator;
+import com.recipia.member.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -79,7 +80,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(
             HttpSecurity http,
             CustomAuthenticationFilter customAuthenticationFilter,
-            JwtAuthorizationFilter jwtAuthorizationFilter
+            JwtAuthorizationFilter jwtAuthorizationFilter,
+            CustomOAuth2UserService oAuth2UserService
     ) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -88,6 +90,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 new AntPathRequestMatcher("/resources/**"),
                                 new AntPathRequestMatcher("/member/**"),
+                                new AntPathRequestMatcher("/oauth/kakao/callback"),     // kakao 로그인 요청 엔드포인트
 //                                new AntPathRequestMatcher("/member/jwt/republish"),   // access token 재발급 요청때는 접근을 허용
                                 new AntPathRequestMatcher("/feign/member/*"),   // feign 으로 들어온 접근을 허용
                                 new AntPathRequestMatcher("/health"),           // ALB에서 상태 검사용으로 들어온 '/health' 경로에 대한 접근을 허용
@@ -100,8 +103,12 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(customAuthenticationFilter, JwtAuthorizationFilter.class)
+                .oauth2Login(oAuth -> oAuth                     // OAuth2 로그인 설정
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserService)
+                        )
+                )
                 .build();
-
     }
 
 
