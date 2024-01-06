@@ -2,8 +2,10 @@ package com.recipia.member.adapter.out.persistenceAdapter;
 
 import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.adapter.out.persistence.MemberEntity;
+import com.recipia.member.adapter.out.persistence.MemberFileEntity;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.domain.Member;
+import com.recipia.member.domain.MemberFile;
 import com.recipia.member.domain.converter.MemberConverter;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class SignUpAdapter implements SignUpPort {
 
     private final MemberRepository memberRepository;
+    private final MemberFileRepository memberFileRepository;
     private final MemberConverter converter;
 
     @Override
@@ -41,13 +44,11 @@ public class SignUpAdapter implements SignUpPort {
     }
 
     @Override
-    public Optional<SignUpRequestDto> findById(String email) {
-        return Optional.empty();
+    public Long saveMemberFile(MemberFile memberFile) {
+        MemberFileEntity memberFileEntity = converter.domainToEntity(memberFile);
+        memberFileEntity = memberFileRepository.save(memberFileEntity);
+        return memberFileEntity.getId();
     }
 
-    @Override
-    public SignUpRequestDto saveUser(String email, String password, String nickname, String introduction) {
-        return null;
-    }
 
 }

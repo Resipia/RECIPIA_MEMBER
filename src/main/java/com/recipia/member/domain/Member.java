@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,11 +27,12 @@ public class Member {
     private String address1;        // 주소1
     private String address2;        // 주소2
     private RoleType roleType;      // 계정 권한
+    private MemberFile profileImage; // 프로필 이미지
 
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_PASSWORD_LENGTH = 20;
 
-    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
+    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -42,10 +44,25 @@ public class Member {
         this.address1 = address1;
         this.address2 = address2;
         this.roleType = roleType;
+        this.profileImage = profileImage;
     }
 
+    /**
+     * 파일 이미지 없을때 생성하는 컨버터
+     */
     public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
-        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType);
+        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
+    }
+
+    /**
+     * 파일 이미지 있을때 생성하는 컨버터
+     */
+    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage) {
+        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, profileImage);
+    }
+
+    public static Member of(Long id) {
+        return new Member(id, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     /**

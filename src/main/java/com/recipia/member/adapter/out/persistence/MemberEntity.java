@@ -56,9 +56,12 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;        // 회원 권한
 
+    @OneToOne(mappedBy = "member")
+    private MemberFileEntity memberFileEntity;  // 회원 프로필 이미지
+
 
     // private 생성자
-    private MemberEntity(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
+    private MemberEntity(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFileEntity memberFileEntity) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -70,21 +73,22 @@ public class MemberEntity extends UpdateDateTimeForEntity {
         this.address1 = address1;
         this.address2 = address2;
         this.roleType = roleType;
+        this.memberFileEntity = memberFileEntity;
     }
 
     // 새 엔티티 생성용 팩토리 메소드
     public static MemberEntity of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
-        return new MemberEntity(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType);
+        return new MemberEntity(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
     }
 
     // 기존 엔티티 로드용 팩토리 메소드
     public static MemberEntity of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
-        return new MemberEntity(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType);
+        return new MemberEntity(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
     }
 
     // 다른 엔티티 fk용으로 객체 참조할때 사용하는 팩토리 메서드
     public static MemberEntity of(Long id) {
-        return new MemberEntity(id, null, null, null, null, null, null, null, null, null, null);
+        return new MemberEntity(id, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     @Override
@@ -99,8 +103,4 @@ public class MemberEntity extends UpdateDateTimeForEntity {
         return Objects.hash(getId());
     }
 
-    // update용 메소드
-    public void changeNickname(String newNickname) {
-        this.nickname = newNickname;
-    }
 }
