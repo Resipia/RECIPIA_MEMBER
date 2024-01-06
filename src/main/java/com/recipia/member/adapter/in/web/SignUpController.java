@@ -7,10 +7,11 @@ import com.recipia.member.domain.converter.MemberConverter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -21,8 +22,9 @@ public class SignUpController {
     private final MemberConverter memberConverter;
 
     @PostMapping("/signUp")
-    public ResponseEntity<ResponseDto<Long>> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
-        Long memberId = signUpUseCase.signUp(memberConverter.requestDtoToDomain(requestDto));
+    public ResponseEntity<ResponseDto<Long>> signUp(@Valid @ModelAttribute SignUpRequestDto requestDto) {
+        MultipartFile profileImage = requestDto.getProfileImage();
+        Long memberId = signUpUseCase.signUp(memberConverter.requestDtoToDomain(requestDto), profileImage);
         return ResponseEntity.ok(
                 ResponseDto.success(memberId)
         );
