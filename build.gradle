@@ -73,6 +73,8 @@ dependencies {
 	implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.1")
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
 	implementation 'io.awspring.cloud:spring-cloud-aws-starter-sns'
+	implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.529')
+	implementation 'com.amazonaws:aws-java-sdk-s3'
 
 	// zipkin
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
