@@ -56,7 +56,7 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;        // 회원 권한
 
-    @OneToOne(mappedBy = "member")
+    @OneToOne(mappedBy = "memberEntity")
     private MemberFileEntity memberFileEntity;  // 회원 프로필 이미지
 
 

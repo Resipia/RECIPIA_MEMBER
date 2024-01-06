@@ -23,7 +23,7 @@ class SignUpRequestDtoTest {
         //given
         SignUpRequestDto dto = SignUpRequestDto.of(
                 "test@example.com", "password123", "John Doe", "johnny", "Hello, I'm John",
-                "1234567890", "123 Street", "Apt 101", "Y", "Y", "Y", "Y"
+                "1234567890", "123 Street", "Apt 101"
         );
 
         //when
@@ -42,7 +42,7 @@ class SignUpRequestDtoTest {
         //given
         SignUpRequestDto dto = SignUpRequestDto.of(
                 "", "", "John Doe", "johnny", "Hello, I'm John",
-                "1234567890", "123 Street", "Apt 101", "Y", "Y", "Y", "Y"
+                "1234567890", "123 Street", "Apt 101"
         );
 
         //when

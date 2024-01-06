@@ -15,9 +15,9 @@ class MemberTest {
     void validPasswordTestSuccess() {
         //given
         String password = "HelloNick2MeetU!";
-
+        Member member = Member.of(1L);
         //when
-        boolean isValidPassword = Member.isValidPassword(password);
+        boolean isValidPassword = member.isValidPassword(password);
 
         //then
         assertThat(isValidPassword).isTrue();
@@ -41,11 +41,11 @@ class MemberTest {
     @Test
     void validPasswordTestFail() {
         //given
-//        String password = "hello";
         String password = "hello!!!!!!!!!";
+        Member member = Member.of(1L);
 
         //when
-        boolean isValidPassword = Member.isValidPassword(password);
+        boolean isValidPassword = member.isValidPassword(password);
 
         //then
         assertThat(isValidPassword).isFalse();

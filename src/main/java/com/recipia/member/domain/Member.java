@@ -54,6 +54,10 @@ public class Member {
         return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
     }
 
+    public static Member of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
+        return new Member(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
+    }
+
     /**
      * 파일 이미지 있을때 생성하는 컨버터
      */
@@ -70,7 +74,7 @@ public class Member {
      * @param password
      * @return
      */
-    public static boolean isValidPassword(String password) {
+    public boolean isValidPassword(String password) {
         if (password == null || password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
             return false;
         }

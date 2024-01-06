@@ -2,9 +2,11 @@ package com.recipia.member.adapter.in.web.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
 @ToString
@@ -36,9 +38,10 @@ public class SignUpRequestDto {
     private String address1;        // 주소1
     private String address2;        // 주소2
 
+    @JsonIgnore
     private MultipartFile profileImage; // 프로필 이미지
 
-
+    @Builder
     private SignUpRequestDto(String email, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, MultipartFile profileImage) {
         this.email = email;
         this.password = password;
@@ -55,8 +58,16 @@ public class SignUpRequestDto {
         return new SignUpRequestDto(email, password, fullName, nickname, introduction, telNo, address1, address2, profileImage);
     }
 
+    public static SignUpRequestDto of(String email, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2) {
+        return new SignUpRequestDto(email, password, fullName, nickname, introduction, telNo, address1, address2, null);
+    }
+
     public static SignUpRequestDto of(String email, String password, String nickname, String introduction, MultipartFile profileImage) {
         return new SignUpRequestDto(email, password, null, nickname, introduction, null, null, null, profileImage);
+    }
+
+    public static SignUpRequestDto of(String email, String password, String nickname, String introduction) {
+        return new SignUpRequestDto(email, password, null, nickname, introduction, null, null, null, null);
     }
 
 }

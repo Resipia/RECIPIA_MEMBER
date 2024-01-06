@@ -82,10 +82,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     kakaoAccount.phoneNumber(),
                     null,
                     null,
-                    "N",
-                    "N",
-                    "N",
-                    "N"
+                    null
             );
 
             Member member = memberConverter.requestDtoToDomain(signUpRequestDto);
