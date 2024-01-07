@@ -1,26 +1,27 @@
 package com.recipia.member.adapter.out.persistenceAdapter;
 
 import com.recipia.member.adapter.out.persistence.JwtEntity;
+import com.recipia.member.adapter.out.persistence.TokenBlacklistEntity;
 import com.recipia.member.application.port.out.port.JwtPort;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Jwt;
+import com.recipia.member.domain.TokenBlacklist;
 import com.recipia.member.domain.converter.JwtConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
 public class JwtAdapter implements JwtPort {
 
     private final JwtRepository jwtRepository;
-    private final JwtConverter converter;
+    private final JwtConverter jwtConverter;
+    private final TokenBlacklistRepository tokenBlacklistRepository;
 
     @Override
     public void save(Jwt jwt) {
-        jwtRepository.save(converter.domainToEntity(jwt));
+        jwtRepository.save(jwtConverter.domainToEntity(jwt));
     }
 
     /**
@@ -29,7 +30,18 @@ public class JwtAdapter implements JwtPort {
     @Override
     public Jwt getJwt(Jwt jwt) {
         JwtEntity jwtEntity = jwtRepository.findJwtByMemberIdAndRefreshToken(jwt.getMemberId(), jwt.getRefreshToken()).orElseThrow(() -> new MemberApplicationException(ErrorCode.JWT_NOT_FOUND));
-        return converter.entityToDomain(jwtEntity);
+        return jwtConverter.entityToDomain(jwtEntity);
+    }
+
+    @Override
+    public void deleteRefreshToken(Long memberId) {
+        jwtRepository.deleteById(memberId);
+    }
+
+    @Override
+    public void insertTokenBlacklist(TokenBlacklist tokenBlacklist) {
+        TokenBlacklistEntity tokenBlacklistEntity = jwtConverter.domainToEntity(tokenBlacklist);
+        tokenBlacklistRepository.save(tokenBlacklistEntity);
     }
 
 }
