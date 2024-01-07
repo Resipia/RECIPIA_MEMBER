@@ -2,10 +2,14 @@ package com.recipia.member.application.service;
 
 import com.recipia.member.adapter.out.aws.TokyoSnsService;
 import com.recipia.member.application.port.in.AuthUseCase;
+import com.recipia.member.application.port.out.port.JwtPort;
 import com.recipia.member.common.event.SendVerifyCodeSpringEvent;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Authentication;
+import com.recipia.member.domain.Logout;
+import com.recipia.member.domain.TokenBlacklist;
+import com.recipia.member.domain.converter.JwtConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,8 @@ public class AuthService implements AuthUseCase {
     private final ApplicationEventPublisher eventPublisher;
     private final RedisService redisService;
     private final MemberManagementService memberManagementService;
+    private final JwtPort jwtPort;
+    private final JwtConverter jwtConverter;
 
     @Override
     public void verifyPhoneNumber(Authentication authentication) {
@@ -43,13 +49,17 @@ public class AuthService implements AuthUseCase {
 
     }
 
-    // 랜덤 6자리 숫자 생성
-    private String generateRandomCode() {
-        Random random = new Random();
-        int number = random.nextInt(900000) + 100000; // 100000부터 999999까지
-        return String.valueOf(number);
+
+    @Override
+    public void logout(Logout logout) {
+        // DB에서 리프레시 토큰 삭제
+        jwtPort.deleteRefreshToken(logout.getMemberId());
+
+        // token blacklist에 추가
+        jwtPort.insertTokenBlacklist(jwtConverter.logoutToTokenBlacklist(logout));
     }
 
+    @Override
     public boolean checkVerifyCode(Authentication authentication) {
         authentication.formatPhoneNumber();
 
@@ -63,4 +73,14 @@ public class AuthService implements AuthUseCase {
                 })
                 .orElse(false);
     }
+
+
+    // 랜덤 6자리 숫자 생성
+    private String generateRandomCode() {
+        Random random = new Random();
+        int number = random.nextInt(900000) + 100000; // 100000부터 999999까지
+        return String.valueOf(number);
+    }
+
+
 }

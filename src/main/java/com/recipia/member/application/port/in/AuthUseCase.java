@@ -5,4 +5,5 @@ import com.recipia.member.domain.Authentication;
 public interface AuthUseCase {
     void verifyPhoneNumber(Authentication authentication);
     boolean checkVerifyCode(Authentication authentication);
+    void logout(Long memberId);
 }
