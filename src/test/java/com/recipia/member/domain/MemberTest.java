@@ -15,9 +15,9 @@ class MemberTest {
     void validPasswordTestSuccess() {
         //given
         String password = "HelloNick2MeetU!";
-
+        Member member = Member.of(1L);
         //when
-        boolean isValidPassword = Member.isValidPassword(password);
+        boolean isValidPassword = member.isValidPassword(password);
 
         //then
         assertThat(isValidPassword).isTrue();
@@ -41,11 +41,11 @@ class MemberTest {
     @Test
     void validPasswordTestFail() {
         //given
-//        String password = "hello";
         String password = "hello!!!!!!!!!";
+        Member member = Member.of(1L);
 
         //when
-        boolean isValidPassword = Member.isValidPassword(password);
+        boolean isValidPassword = member.isValidPassword(password);
 
         //then
         assertThat(isValidPassword).isFalse();
@@ -53,7 +53,7 @@ class MemberTest {
 
     private Member createMember() {
         return Member.of(1L, "test1@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 1", "Nickname1",  MemberStatus.ACTIVE, "Introduction 1", "01012345678",
-                "Address 1-1", "Address 1-2", "Y", "Y", "Y","Y",RoleType.MEMBER);
+                "Address 1-1", "Address 1-2", RoleType.MEMBER);
     }
 
 }

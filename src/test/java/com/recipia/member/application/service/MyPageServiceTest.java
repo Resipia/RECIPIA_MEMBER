@@ -42,7 +42,7 @@ class MyPageServiceTest {
     void viewMyPageSuccess() {
         // given
         MyPage requestMyPage = MyPage.of(1L);
-        MyPage responseMyPage = MyPage.of(1L, "nickname", "intro", 3L, 4L);
+        MyPage responseMyPage = MyPage.of(1L, "nickname", "introduction", 3L, 4L);
         when(myPagePort.viewMyPage(1L)).thenReturn(responseMyPage);
 
         // when
@@ -71,8 +71,8 @@ class MyPageServiceTest {
     @Test
     void updateAndViewMyPageSuccess() {
         // given
-        MyPage requestMyPage = MyPage.of(1L, "update-nickname", "update-intro");
-        MyPage responseMyPage = MyPage.of(1L, "update-nickname", "update-intro", 3L, 4L);
+        MyPage requestMyPage = MyPage.of(1L, "update-nickname", "update-introduction");
+        MyPage responseMyPage = MyPage.of(1L, "update-nickname", "update-introduction", 3L, 4L);
         Member member = createMember();
 
         when(myPagePort.updateMyPage(requestMyPage)).thenReturn(1L);
@@ -92,7 +92,7 @@ class MyPageServiceTest {
     @Test
     void updateAndViewMyPageFail() {
         // given
-        MyPage requestMyPage = MyPage.of(1L, "update-nickname", "update-intro");
+        MyPage requestMyPage = MyPage.of(1L, "update-nickname", "update-introduction");
         Member member = createMember();
 
         // DB 에러 시뮬레이션: 업데이트가 실패하여 0을 반환
@@ -108,7 +108,7 @@ class MyPageServiceTest {
 
     private Member createMember() {
         return Member.of(1L, "test1@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 1", "Nickname1",  MemberStatus.ACTIVE, "Introduction 1", "01012345678",
-                "Address 1-1", "Address 1-2", "Y", "Y", "Y","Y", RoleType.MEMBER);
+                "Address 1-1", "Address 1-2", RoleType.MEMBER);
     }
 
 }

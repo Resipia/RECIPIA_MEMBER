@@ -35,6 +35,8 @@ spring:
           nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:NicknameChange
       sqs:
         record-sqs-name: member-event-record-sqs
+      s3:
+        bucketName: recipia-file
 
   sql:
     init:

@@ -28,6 +28,7 @@ public enum ErrorCode {
     TEL_NO_ALREADY_EXISTS(400, "TEL_NO_ALREADY_EXISTS", "이미 존재하는 휴대폰 번호입니다."),
     INVALID_EMAIL_FORMAT(400, "INVALID_EMAIL_FORMAT", "유효하지 않은 이메일 형식입니다."),
     ACCOUNT_LOCKED(401, "ACCOUNT_LOCKED", "계정이 잠겼습니다."),
+    MEMBER_FILE_SAVE_ERROR(500, "MEMBER_FILE_SAVE_ERROR", "데이터 베이스에 파일을 저장하던중 예외가 발생했습니다."),
 
     // Security 관련 에러
     MEMBER_INFO_NOT_FOUND_IN_SECURITY(404, "MEMBER_INFO_NOT_FOUND_IN_SECURITY", "인증된 사용자의 정보를 찾을 수 없습니다."),
@@ -59,7 +60,9 @@ public enum ErrorCode {
     // 외부 서비스 에러
     RECIPE_SERVICE_ERROR(500, "RECIPE_SERVICE_ERROR", "RECIPE 서비스 에러"),
     WRIGGLE_SERVICE_ERROR(500, "WRIGGLE_SERVICE_ERROR", "WRIGGLE 서비스 에러"),
-    CHAT_SERVICE_ERROR(500, "CHAT_SERVICE_ERROR", "CHAT 서비스 에러");
+    CHAT_SERVICE_ERROR(500, "CHAT_SERVICE_ERROR", "CHAT 서비스 에러"),
+    S3_UPLOAD_ERROR(500, "S3_UPLOAD_ERROR", "AWS S3 서비스 에러")
+    ;
 
 
     private final int status;
