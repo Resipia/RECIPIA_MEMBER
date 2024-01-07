@@ -2,44 +2,54 @@ package com.recipia.member.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
+import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
+import com.recipia.member.adapter.out.persistence.constant.RoleType;
+import com.recipia.member.application.port.in.SignUpUseCase;
 import com.recipia.member.config.TotalTestSupport;
+import com.recipia.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("[통합] 회원가입 테스트")
 @AutoConfigureMockMvc
 class SignUpControllerTest extends TotalTestSupport {
 
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private SignUpUseCase signUpUseCase;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @DisplayName("[happy] 필수 입력값이 전부 충족된 dto가 들어왔을때 회원가입 정상 작동한다")
     @Test
     void fulfillRequiredFields() throws Exception {
-        //given
-        SignUpRequestDto validRequest = SignUpRequestDto.of(
+        MultipartFile mockFile = mock(MultipartFile.class);
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.of(
                 "user@example.com", "password123P!", "John Doe", "johndoe",
-                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101",
-                "Y", "Y", "Y", "Y"
+                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101"
         );
+        Member member = Member.of(1L);
+        when(signUpUseCase.signUp(member, mockFile)).thenReturn(1L);
 
         //when & then
-
         mockMvc.perform(post("/member/signUp")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(validRequest)))
-                .andExpect(status().isOk())
-                .andDo(print());
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .flashAttr("signUpRequestDto", signUpRequestDto))
+                .andExpect(status().isOk());
     }
 
 
@@ -47,18 +57,18 @@ class SignUpControllerTest extends TotalTestSupport {
     @DisplayName("[bad] 필수 입력값이 누락된 dto가 들어왔을 때 BadRequest를 반환한다")
     void testMissingRequiredFields() throws Exception {
         //given
-        SignUpRequestDto invalidRequest = SignUpRequestDto.of(
-                null, "password123", null, "johndoe",
-                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101",
-                "Y", "Y", "Y", "Y"
+        MultipartFile mockFile = mock(MultipartFile.class);
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.of(
+                " ", "password123P!", "", "johndoe",
+                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101"
         );
+        Member member = Member.of(1L);
+        when(signUpUseCase.signUp(member, mockFile)).thenReturn(1L);
 
         //when & then
         mockMvc.perform(post("/member/signUp")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(invalidRequest)))
-                .andExpect(status().isBadRequest())
-                .andDo(print())
+                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                        .flashAttr("signUpRequestDto", signUpRequestDto))
                 .andExpect(result -> {
                     String responseString = result.getResponse().getContentAsString();
                     assertThat(responseString).contains("email");
@@ -73,8 +83,7 @@ class SignUpControllerTest extends TotalTestSupport {
         //given
         SignUpRequestDto invalidRequest = SignUpRequestDto.of(
                 null, "password123", null, "johndoe",
-                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101",
-                "Y", "Y", "Y", "Y"
+                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101"
         );
 
 

@@ -4,11 +4,14 @@ import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Setter
 @Getter
 @NoArgsConstructor
 public class Member {
@@ -23,16 +26,13 @@ public class Member {
     private String telNo;           // 전화번호
     private String address1;        // 주소1
     private String address2;        // 주소2
-    private String collectionConsentYn;    // 개인정보 수집 및 이용 동의 여부
-    private String marketingConsentYn;    // 마케팅 활용 동의 여부
-    private String privacyPolicyConsentYn;    // 개인정보 보호 정책 동의 여부
-    private String cookieConsentYn;    // 쿠키 및 추적 기술 사용 동의 여부
     private RoleType roleType;      // 계정 권한
+    private MemberFile profileImage; // 프로필 이미지
 
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_PASSWORD_LENGTH = 20;
 
-    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String collectionConsentYn, String marketingConsentYn, String privacyPolicyConsentYn, String cookieConsentYn, RoleType roleType) {
+    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -43,15 +43,30 @@ public class Member {
         this.telNo = telNo;
         this.address1 = address1;
         this.address2 = address2;
-        this.collectionConsentYn = collectionConsentYn;
-        this.marketingConsentYn = marketingConsentYn;
-        this.privacyPolicyConsentYn = privacyPolicyConsentYn;
-        this.cookieConsentYn = cookieConsentYn;
         this.roleType = roleType;
+        this.profileImage = profileImage;
     }
 
-    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, String collectionConsentYn, String marketingConsentYn, String privacyPolicyConsentYn, String cookieConsentYn, RoleType roleType) {
-        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, collectionConsentYn, marketingConsentYn, privacyPolicyConsentYn, cookieConsentYn, roleType);
+    /**
+     * 파일 이미지 없을때 생성하는 컨버터
+     */
+    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
+        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
+    }
+
+    public static Member of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
+        return new Member(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
+    }
+
+    /**
+     * 파일 이미지 있을때 생성하는 컨버터
+     */
+    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage) {
+        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, profileImage);
+    }
+
+    public static Member of(Long id) {
+        return new Member(id, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     /**
@@ -59,7 +74,7 @@ public class Member {
      * @param password
      * @return
      */
-    public static boolean isValidPassword(String password) {
+    public boolean isValidPassword(String password) {
         if (password == null || password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
             return false;
         }
