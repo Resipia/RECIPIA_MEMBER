@@ -2,6 +2,7 @@ package com.recipia.member.adapter.out.persistenceAdapter;
 
 import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
+import com.recipia.member.adapter.out.persistenceAdapter.querydsl.MemberQueryRepository;
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
@@ -18,6 +19,7 @@ public class MemberAdapter implements MemberPort {
 
     private final MemberRepository memberRepository;
     private final MemberConverter converter;
+    private final MemberQueryRepository memberQueryRepository;
 
     @Override
     public Member findMemberById(Long memberId) {
@@ -53,5 +55,11 @@ public class MemberAdapter implements MemberPort {
         Optional<MemberEntity> memberEntityOptional = memberRepository.findMemberByEmailAndStatus(email, status);
         return memberEntityOptional.map(converter::entityToDomain);
 
+    }
+
+    @Override
+    public Long deactivateMember(Long memberId) {
+        Long updatedCount = memberQueryRepository.deactivateMemberByMemberId(memberId);
+        return updatedCount;
     }
 }
