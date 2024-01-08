@@ -53,6 +53,18 @@ public class TokenUtils {
     }
 
     /**
+     * Authorization 헤더의 key값에서 'Bearer '를 제거하고 순수 access token만 추출한다.
+     * @return
+     */
+    public static String extractAccessToken(String authorizationHeaderValue) {
+        if (authorizationHeaderValue != null && authorizationHeaderValue.startsWith("Bearer ")) {
+            return authorizationHeaderValue.substring(7); // Remove "Bearer " prefix
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * 사용자 pk를 기준으로 Refresh Token을 발급하여 반환해 준다.
      * 이때 Refresh Token은 DB에 저장해야 한다.
      */
