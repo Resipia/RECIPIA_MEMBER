@@ -10,7 +10,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@DisplayName("[단위] 휴대폰 번호 문자 전송 요청 dto 테스트")
 class PhoneNumberRequestDtoTest {
 
 

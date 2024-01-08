@@ -1,7 +1,6 @@
 package com.recipia.member.config.jwt;
 
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
-import com.recipia.member.adapter.out.persistenceAdapter.MemberRepository;
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.domain.Member;
 import io.jsonwebtoken.Claims;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class TokenValidator {
 
-    private final MemberRepository memberRepository;
     private final MemberPort memberPort;
 
     public boolean isValidToken(String token, String tokenType) {

@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("[통합] JWT 컨트롤러 테스트")
 @AutoConfigureMockMvc
 class JwtControllerTest extends TotalTestSupport {
 

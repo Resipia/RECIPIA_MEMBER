@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.adapter.in.web.dto.request.CheckVerifyCodeRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.PhoneNumberRequestDto;
 import com.recipia.member.application.port.in.AuthUseCase;
+import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.config.TotalTestSupport;
+import com.recipia.member.config.dto.TokenMemberInfoDto;
+import com.recipia.member.domain.Logout;
 import com.recipia.member.domain.converter.AuthConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,10 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -229,6 +240,53 @@ class AuthControllerTest extends TotalTestSupport {
         //then
         verify(authUseCase).checkVerifyCode(authConverter.checkVerifyCodeRequestDtoToDomain(requestDto));
     }
+
+//    @WithMockUser
+//    @DisplayName("[happy] 올바른 헤더로 로그아웃 요청 시 로그아웃 로직 실행")
+//    @Test
+//    void logoutWithValidHeader() throws Exception {
+//        // given
+//        String accessToken = "eyJyZWdEYXRlIjoxNzA0Njk5MjgxMjUwLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...";
+//
+//        // when & then
+//        mockMvc.perform(post("/member/auth/logout")
+//                        .header("Authorization", "Bearer " + accessToken)
+//                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//
+//        // then
+//        verify(authUseCase).logout(any(Logout.class));
+//    }
+
+    @DisplayName("[bad] 헤더가 없는 로그아웃 요청 시 로그아웃 로직 실행 실패")
+    @Test
+    void logoutWithoutHeader() throws Exception {
+        // when & then
+        mockMvc.perform(post("/member/auth/logout"))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+//    @DisplayName("[happy] 올바른 헤더로 회원 탈퇴 요청 시 탈퇴 로직 실행")
+//    @Test
+//    void withdrawWithValidHeader() throws Exception {
+//        // given
+//        String accessToken = "eyJr..."; // 적절한 토큰 값 설정
+//        String authorizationHeader = "Bearer " + accessToken;
+//
+//        // when
+//        mockMvc.perform(post("/member/auth/deactivate")
+//                        .header("Authorization", authorizationHeader))
+//                .andExpect(status().isOk())
+//                .andDo(print());
+//
+//        // then
+//        verify(authUseCase).logout(any(Logout.class));
+//        verify(authUseCase).deactivateMember(any(Long.class));
+//    }
+
+
 
     private PhoneNumberRequestDto createPhoneNumberRequestDtoRequiredField() {
         return PhoneNumberRequestDto.of("01000001111");

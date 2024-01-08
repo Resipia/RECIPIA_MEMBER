@@ -11,5 +11,5 @@ public interface MemberPort {
     Member findMemberByIdAndStatus(Long memberId, MemberStatus status);
     Optional<Member> findMemberByEmail(String email);
     Optional<Member> findMemberByEmailAndStatus(String email, MemberStatus status);
-
+    Long deactivateMember(Long memberId);
 }
