@@ -14,7 +14,7 @@ INSERT INTO member (password,
 VALUES ('password1', '홍길동', 'hong1@example.com', 'hong1', 'ACTIVE', '안녕하세요', '01012345678', '서울시 강남구', '123번지', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
        ('password2', '김철수', 'kim2@example.com', 'kim2', 'DORMANT', '반갑습니다', '01023456789', '서울시 서초구', '456번지', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
        ('password3', '이영희', 'lee3@example.com', 'lee3', 'ACTIVE', '잘 부탁드립니다', '01034567890', '부산시 해운대구', '789번지', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ADMIN'),
-       ('password4', '박지민', 'park4@example.com', 'park4', 'DEACTIVATED', '반가워요', '01045678901', '대구시 중구', '1011번지', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
+       ('password4', '박지민', 'user@example.com', 'park4', 'ACTIVE', '반가워요', '01045678901', '대구시 중구', '1011번지', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
        ('password5', '정수민', 'jung5@example.com', 'jung5', 'ACTIVE', '안녕하세요!', '01056789012', '인천시 남동구', '1213번지',  CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER');
 
 -- member_event_record 테이블에 가짜 데이터 삽입
