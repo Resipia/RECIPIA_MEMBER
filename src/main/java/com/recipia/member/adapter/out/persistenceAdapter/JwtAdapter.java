@@ -11,6 +11,8 @@ import com.recipia.member.domain.converter.JwtConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Component
 public class JwtAdapter implements JwtPort {
@@ -35,13 +37,19 @@ public class JwtAdapter implements JwtPort {
 
     @Override
     public void deleteRefreshToken(Long memberId) {
-        jwtRepository.deleteById(memberId);
+        jwtRepository.deleteByMemberId(memberId);
     }
 
     @Override
     public void insertTokenBlacklist(TokenBlacklist tokenBlacklist) {
         TokenBlacklistEntity tokenBlacklistEntity = jwtConverter.domainToEntity(tokenBlacklist);
         tokenBlacklistRepository.save(tokenBlacklistEntity);
+    }
+
+    @Override
+    public TokenBlacklist getTokenBlacklist(TokenBlacklist tokenBlacklist) {
+        Optional<TokenBlacklistEntity> optionalTokenBlacklistEntity = tokenBlacklistRepository.findByToken(tokenBlacklist.getToken());
+        return optionalTokenBlacklistEntity.map(jwtConverter::entityToDomain).orElse(null);
     }
 
 }

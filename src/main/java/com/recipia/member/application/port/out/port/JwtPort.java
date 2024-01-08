@@ -4,6 +4,8 @@ import com.recipia.member.domain.Jwt;
 import com.recipia.member.domain.TokenBlacklist;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 public interface JwtPort {
     // refresh token 저장용
     void save(Jwt jwt);
@@ -12,4 +14,6 @@ public interface JwtPort {
     void deleteRefreshToken(Long memberId);
 
     void insertTokenBlacklist(TokenBlacklist tokenBlacklist);
+
+    TokenBlacklist getTokenBlacklist(TokenBlacklist tokenBlacklist);
 }
