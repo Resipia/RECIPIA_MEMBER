@@ -22,10 +22,11 @@ public class MyPageController {
 
     private final MyPageUseCase myPageUseCase;
     private final MyPageConverter myPageConverter;
+    private final SecurityUtils securityUtils;
 
     @PostMapping("/view")
     public ResponseEntity<ResponseDto<MyPageViewResponseDto>> view() {
-        MyPage myPage = MyPage.of(SecurityUtils.getCurrentMemberId());
+        MyPage myPage = MyPage.of(securityUtils.getCurrentMemberId());
         myPage = myPageUseCase.viewMyPage(myPage);
         return ResponseEntity.ok(
                 ResponseDto.success(myPageConverter.domainToResponseDto(myPage))

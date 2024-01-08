@@ -5,6 +5,7 @@ import com.recipia.member.adapter.in.web.dto.request.CheckVerifyCodeRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.PhoneNumberRequestDto;
 import com.recipia.member.application.port.in.AuthUseCase;
 import com.recipia.member.common.exception.MemberApplicationException;
+import com.recipia.member.common.utils.SecurityUtils;
 import com.recipia.member.config.TotalTestSupport;
 import com.recipia.member.config.dto.TokenMemberInfoDto;
 import com.recipia.member.domain.Logout;
@@ -31,6 +32,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -47,6 +49,8 @@ class AuthControllerTest extends TotalTestSupport {
 
     @MockBean
     private AuthConverter authConverter;
+    @MockBean
+    private SecurityUtils securityUtils;
 
     @DisplayName("[happy] PhoneNumberRequestDto의 필수 필드값이 전부 채워진채로 요청이 들어오면 문자 메시지 전송 성공")
     @Test
@@ -241,53 +245,40 @@ class AuthControllerTest extends TotalTestSupport {
         verify(authUseCase).checkVerifyCode(authConverter.checkVerifyCodeRequestDtoToDomain(requestDto));
     }
 
-//    @WithMockUser
-//    @DisplayName("[happy] 올바른 헤더로 로그아웃 요청 시 로그아웃 로직 실행")
-//    @Test
-//    void logoutWithValidHeader() throws Exception {
-//        // given
-//        String accessToken = "eyJyZWdEYXRlIjoxNzA0Njk5MjgxMjUwLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...";
-//
-//        // when & then
-//        mockMvc.perform(post("/member/auth/logout")
-//                        .header("Authorization", "Bearer " + accessToken)
-//                        .with(SecurityMockMvcRequestPostProcessors.csrf()))
-//                .andExpect(status().isOk())
-//                .andDo(print());
-//
-//        // then
-//        verify(authUseCase).logout(any(Logout.class));
-//    }
-
-    @DisplayName("[bad] 헤더가 없는 로그아웃 요청 시 로그아웃 로직 실행 실패")
+<<<<<<< Updated upstream
+=======
+    @WithMockUser
+    @DisplayName("[happy] 올바른 헤더로 로그아웃 요청 시 로그아웃 로직 실행")
     @Test
-    void logoutWithoutHeader() throws Exception {
-        // when & then
-        mockMvc.perform(post("/member/auth/logout"))
-                .andExpect(status().isNotFound())
-                .andDo(print());
+    void logoutWithValidHeader() throws Exception {
+        // given
+        when(securityUtils.getCurrentMemberId()).thenReturn(1L);
+
+        mockMvc.perform(post("/member/auth/logout")
+                        .header("Authorization", "Bearer your_token_here"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        // then
+        verify(authUseCase).logout(any(Logout.class));
     }
 
-//    @DisplayName("[happy] 올바른 헤더로 회원 탈퇴 요청 시 탈퇴 로직 실행")
-//    @Test
-//    void withdrawWithValidHeader() throws Exception {
-//        // given
-//        String accessToken = "eyJr..."; // 적절한 토큰 값 설정
-//        String authorizationHeader = "Bearer " + accessToken;
-//
-//        // when
-//        mockMvc.perform(post("/member/auth/deactivate")
-//                        .header("Authorization", authorizationHeader))
-//                .andExpect(status().isOk())
-//                .andDo(print());
-//
-//        // then
-//        verify(authUseCase).logout(any(Logout.class));
-//        verify(authUseCase).deactivateMember(any(Long.class));
-//    }
+    @DisplayName("[happy] 올바른 헤더로 회원 탈퇴 요청 시 탈퇴 로직 실행")
+    @Test
+    void withdrawWithValidHeader() throws Exception {
+        // given
+        when(securityUtils.getCurrentMemberId()).thenReturn(1L);
+
+        mockMvc.perform(post("/member/auth/deactivate")
+                        .header("Authorization", "Bearer your_token_here"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        // then
+        verify(authUseCase).deactivateMember(1L);
+    }
 
 
 
+>>>>>>> Stashed changes
     private PhoneNumberRequestDto createPhoneNumberRequestDtoRequiredField() {
         return PhoneNumberRequestDto.of("01000001111");
     }

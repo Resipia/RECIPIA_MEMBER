@@ -24,6 +24,7 @@ public class AuthController {
 
     private final AuthUseCase authUseCase;
     private final AuthConverter authConverter;
+    private final SecurityUtils securityUtils;
 
     @PostMapping("/phone")
     public ResponseEntity<ResponseDto<Void>> sendPhoneNumber(@Valid @RequestBody PhoneNumberRequestDto requestDto) {
@@ -61,11 +62,11 @@ public class AuthController {
         );
     }
 
-    private static Logout extractLogoutDetailsFromRequest(HttpServletRequest request) {
+    private Logout extractLogoutDetailsFromRequest(HttpServletRequest request) {
         String authorizationHeaderValue = request.getHeader("Authorization");
         String accessToken = TokenUtils.extractAccessToken(authorizationHeaderValue);
 
-        Logout logout = Logout.of(SecurityUtils.getCurrentMemberId(), accessToken);
+        Logout logout = Logout.of(securityUtils.getCurrentMemberId(), accessToken);
         return logout;
     }
 

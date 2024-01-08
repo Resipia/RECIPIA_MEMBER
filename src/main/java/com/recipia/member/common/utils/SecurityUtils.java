@@ -12,7 +12,7 @@ public class SecurityUtils {
 
 
     // 현재 인증된 사용자의 TokenMemberInfoDto를 가져온다.
-    private static TokenMemberInfoDto getCurrentTokenMemberInfoDto() {
+    private TokenMemberInfoDto getCurrentTokenMemberInfoDto() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -30,20 +30,20 @@ public class SecurityUtils {
     }
 
     // memberId와 email이 존재하는지 검증한다.
-    private static void validateTokenMemberInfoDto(TokenMemberInfoDto tokenMemberInfoDto) {
+    private void validateTokenMemberInfoDto(TokenMemberInfoDto tokenMemberInfoDto) {
         if (tokenMemberInfoDto.id() == null || tokenMemberInfoDto.email() == null) {
             throw new MemberApplicationException(ErrorCode.MEMBER_INFO_NOT_FOUND_IN_SECURITY);
         }
     }
 
     // 현재 인증된 사용자의 memberId를 가져온다.
-    public static Long getCurrentMemberId() {
+    public Long getCurrentMemberId() {
         TokenMemberInfoDto tokenMemberInfoDto = getCurrentTokenMemberInfoDto();
         return tokenMemberInfoDto.id();
     }
 
     // 현재 인증된 사용자의 email을 가져온다.
-    public static String getCurrentMemberEmail() {
+    public String getCurrentMemberEmail() {
         TokenMemberInfoDto tokenMemberInfoDto = getCurrentTokenMemberInfoDto();
         return tokenMemberInfoDto.email();
     }

@@ -4,14 +4,18 @@ import com.recipia.member.adapter.in.web.dto.request.UpdateMyPageRequestDto;
 import com.recipia.member.adapter.in.web.dto.response.MyPageViewResponseDto;
 import com.recipia.member.common.utils.SecurityUtils;
 import com.recipia.member.domain.MyPage;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
  * dto, entity와 domain을 변환해주는 로직과
  * domain을 entity로 변환해주는 로직을 담당
  */
+@RequiredArgsConstructor
 @Component
 public class MyPageConverter {
+
+    private final SecurityUtils securityUtils;
 
     public MyPageViewResponseDto domainToResponseDto(MyPage myPage) {
         return MyPageViewResponseDto.of(
@@ -25,7 +29,7 @@ public class MyPageConverter {
 
     public MyPage updateRequestDtoToDomain(UpdateMyPageRequestDto dto) {
         return MyPage.of(
-                SecurityUtils.getCurrentMemberId(),
+                securityUtils.getCurrentMemberId(),
                 dto.getNickname(),
                 dto.getIntroduction()
         );
