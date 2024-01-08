@@ -3,7 +3,6 @@ package com.recipia.member.domain.converter;
 import com.recipia.member.adapter.in.web.dto.request.CheckVerifyCodeRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.PhoneNumberRequestDto;
 import com.recipia.member.domain.Authentication;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
