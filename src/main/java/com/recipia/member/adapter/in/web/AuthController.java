@@ -43,10 +43,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<ResponseDto<Void>> logout(HttpServletRequest request) {
-        String authorizationHeaderValue = request.getHeader("Authorization");
-        String accessToken = TokenUtils.extractAccessToken(authorizationHeaderValue);
-
-        Logout logout = Logout.of(SecurityUtils.getCurrentMemberId(), accessToken);
+        Logout logout = extractLogoutDetailsFromRequest(request);
         authUseCase.logout(logout);
 
         return ResponseEntity.ok(
@@ -54,5 +51,22 @@ public class AuthController {
         );
     }
 
+    @PostMapping("/deactivate")
+    public ResponseEntity<ResponseDto<Void>> withdraw(HttpServletRequest request) {
+        Logout logout = extractLogoutDetailsFromRequest(request);
+        authUseCase.logout(logout);
+        authUseCase.deactivateMember(logout.getMemberId());
+        return ResponseEntity.ok(
+                ResponseDto.success()
+        );
+    }
+
+    private static Logout extractLogoutDetailsFromRequest(HttpServletRequest request) {
+        String authorizationHeaderValue = request.getHeader("Authorization");
+        String accessToken = TokenUtils.extractAccessToken(authorizationHeaderValue);
+
+        Logout logout = Logout.of(SecurityUtils.getCurrentMemberId(), accessToken);
+        return logout;
+    }
 
 }
