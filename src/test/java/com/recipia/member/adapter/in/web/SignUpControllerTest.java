@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("[통합] 회원가입 테스트")
+@DisplayName("[통합] 회원가입 controller 테스트")
 @AutoConfigureMockMvc
 class SignUpControllerTest extends TotalTestSupport {
 
@@ -51,6 +51,7 @@ class SignUpControllerTest extends TotalTestSupport {
                         .flashAttr("signUpRequestDto", signUpRequestDto))
                 .andExpect(status().isOk());
     }
+
 
 
     @Test

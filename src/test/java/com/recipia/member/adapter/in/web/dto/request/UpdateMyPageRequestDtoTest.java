@@ -10,6 +10,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("[단위] 마이페이지 수정 요청 dto 테스트")
 class UpdateMyPageRequestDtoTest {
 
     // Java의 Bean Validation API를 사용해 유효성 검증을 수행하기 위한 Validator 객체를 생성
