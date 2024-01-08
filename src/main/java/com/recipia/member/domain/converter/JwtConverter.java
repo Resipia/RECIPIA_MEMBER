@@ -24,7 +24,7 @@ public class JwtConverter {
     }
 
     public JwtEntity domainToEntity(Jwt jwt) {
-        return JwtEntity.of(jwt.getId(), jwt.getMemberId(), jwt.getRefreshToken(), jwt.getExpiredDateTime());
+        return JwtEntity.of(jwt.getMemberId(), jwt.getRefreshToken(), jwt.getExpiredDateTime());
     }
 
     public Jwt requestDtoToDomain(JwtRepublishRequestDto requestDto) {
@@ -40,4 +40,10 @@ public class JwtConverter {
     public TokenBlacklistEntity domainToEntity(TokenBlacklist domain) {
         return TokenBlacklistEntity.of(domain.getToken(), domain.getExpiredDateTime());
     }
+
+    public TokenBlacklist entityToDomain(TokenBlacklistEntity entity) {
+        return TokenBlacklist.of(entity.getId(), entity.getToken(), entity.getExpiredDateTime());
+    }
+
+
 }

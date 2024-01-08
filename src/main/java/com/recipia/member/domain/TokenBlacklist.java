@@ -19,6 +19,10 @@ public class TokenBlacklist {
         this.expiredDateTime = expiredDateTime;
     }
 
+    public static TokenBlacklist of(Long id, String token, LocalDateTime expiredDateTime) {
+        return new TokenBlacklist(id, token, expiredDateTime);
+    }
+
     public static TokenBlacklist of(String token, LocalDateTime expiredDateTime) {
         return new TokenBlacklist(null, token, expiredDateTime);
     }
