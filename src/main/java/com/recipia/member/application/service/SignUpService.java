@@ -8,6 +8,7 @@ import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class SignUpService implements SignUpUseCase {
     private final SignUpPort signUpPort;
     private final ImageS3Service imageS3Service;
 
+    @Transactional
     @Override
     public Long signUp(Member member, MultipartFile profileImage) {
         // 비밀번호 형태 검증

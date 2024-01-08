@@ -2,15 +2,12 @@ package com.recipia.member.adapter.in.web.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import net.minidev.json.annotate.JsonIgnore;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @ToString
 @Getter
+@Setter
 @NoArgsConstructor
 public class SignUpRequestDto {
 
@@ -38,7 +35,6 @@ public class SignUpRequestDto {
     private String address1;        // 주소1
     private String address2;        // 주소2
 
-    @JsonIgnore
     private MultipartFile profileImage; // 프로필 이미지
 
     @Builder

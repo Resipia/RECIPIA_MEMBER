@@ -1,13 +1,11 @@
 package com.recipia.member.adapter.out.persistenceAdapter;
 
-import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.MemberFileEntity;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
 import com.recipia.member.domain.converter.MemberConverter;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +31,6 @@ public class SignUpAdapter implements SignUpPort {
         return member.isEmpty(); // 휴대폰 번호가 DB에 존재하지 않으면 true 반환
     }
 
-    @Transactional
     @Override
     public Long signUpMember(Member member) {
         MemberEntity memberEntity = converter.domainToEntity(member);
