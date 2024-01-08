@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.adapter.in.web.dto.request.CheckVerifyCodeRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.PhoneNumberRequestDto;
 import com.recipia.member.application.port.in.AuthUseCase;
+import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.config.TotalTestSupport;
+import com.recipia.member.domain.Logout;
 import com.recipia.member.domain.converter.AuthConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -229,6 +234,31 @@ class AuthControllerTest extends TotalTestSupport {
         //then
         verify(authUseCase).checkVerifyCode(authConverter.checkVerifyCodeRequestDtoToDomain(requestDto));
     }
+
+    @DisplayName("[happy] 올바른 헤더로 로그아웃 요청 시 로그아웃 로직 실행")
+    @Test
+    void logoutWithValidHeader() throws Exception {
+        // given
+        String accessToken = "eyJyZWdEYXRlIjoxNzA0Njk5MjgxMjUwLCJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6Ik1FTUJFUiIsIm5pY2tuYW1lIjoidXBkYXRlLW5pY2tuYW1lIiwiaXNzIjoiUmVjaXBpYSIsInR5cGUiOiJhY2Nlc3MiLCJleHAiOjE3MDQ3MDEwODEsImVtYWlsIjoidXNlckBleGFtcGxlLmNvbSIsIm1lbWJlcklkIjoxMX0.H96AmkQrP06fmT_SwA8cLAkPArw7Uu1of1zCoP7oPSs";
+        String authorizationHeader = "Bearer " + accessToken;
+        // when & then
+        mockMvc.perform(post("/member/auth/logout")
+                        .header("Authorization", authorizationHeader))
+                .andExpect(status().isOk())
+                .andDo(print());
+        // then
+        verify(authUseCase).logout(any(Logout.class));
+    }
+
+    @DisplayName("[bad] 헤더가 없는 로그아웃 요청 시 로그아웃 로직 실행 실패")
+    @Test
+    void logoutWithoutHeader() throws Exception {
+        // when & then
+        mockMvc.perform(post("/member/auth/logout"))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
 
     private PhoneNumberRequestDto createPhoneNumberRequestDtoRequiredField() {
         return PhoneNumberRequestDto.of("01000001111");
