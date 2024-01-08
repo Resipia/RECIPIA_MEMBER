@@ -2,6 +2,7 @@ package com.recipia.member.application.service;
 
 import com.recipia.member.adapter.out.aws.TokyoSnsService;
 import com.recipia.member.application.port.out.port.JwtPort;
+import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.domain.Authentication;
 import com.recipia.member.domain.Logout;
 import com.recipia.member.domain.TokenBlacklist;
@@ -41,6 +42,8 @@ class AuthServiceTest {
     private JwtConverter jwtConverter;
     @Mock
     private JwtPort jwtPort;
+    @Mock
+    private MemberPort memberPort;
 
 
 
@@ -85,6 +88,18 @@ class AuthServiceTest {
         // then
         verify(jwtPort).deleteRefreshToken(logout.getMemberId());
         verify(jwtPort).insertTokenBlacklist(tokenBlacklist);
+    }
+
+    @DisplayName("[happy] memberId가 들어왔을때 회원 탈퇴가 성공한다.")
+    @Test
+    void deactivateMemberSuccess() {
+        // given
+        Long memberId = 1L;
+        when(memberPort.deactivateMember(memberId)).thenReturn(1L);
+        // when
+        Long updatedCount = sut.deactivateMember(memberId);
+        // then
+        assertEquals(updatedCount, 1L);
     }
 
     private static Authentication createAuthenticationWoCode() {
