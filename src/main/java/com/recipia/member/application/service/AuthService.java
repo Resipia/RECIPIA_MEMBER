@@ -3,6 +3,7 @@ package com.recipia.member.application.service;
 import com.recipia.member.adapter.out.aws.TokyoSnsService;
 import com.recipia.member.application.port.in.AuthUseCase;
 import com.recipia.member.application.port.out.port.JwtPort;
+import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.common.event.SendVerifyCodeSpringEvent;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
@@ -27,6 +28,7 @@ public class AuthService implements AuthUseCase {
     private final MemberManagementService memberManagementService;
     private final JwtPort jwtPort;
     private final JwtConverter jwtConverter;
+    private final MemberPort memberPort;
 
     @Override
     public void verifyPhoneNumber(Authentication authentication) {
@@ -58,6 +60,13 @@ public class AuthService implements AuthUseCase {
         // token blacklist에 추가
         jwtPort.insertTokenBlacklist(jwtConverter.logoutToTokenBlacklist(logout));
     }
+
+    @Override
+    public Long deactivateMember(Long memberId) {
+        Long updatedCount = memberPort.deactivateMember(memberId);
+        return updatedCount;
+    }
+
 
     @Override
     public boolean checkVerifyCode(Authentication authentication) {

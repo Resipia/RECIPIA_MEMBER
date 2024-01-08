@@ -7,4 +7,5 @@ public interface AuthUseCase {
     void verifyPhoneNumber(Authentication authentication);
     boolean checkVerifyCode(Authentication authentication);
     void logout(Logout logout);
+    Long deactivateMember(Long memberId);
 }
