@@ -245,8 +245,6 @@ class AuthControllerTest extends TotalTestSupport {
         verify(authUseCase).checkVerifyCode(authConverter.checkVerifyCodeRequestDtoToDomain(requestDto));
     }
 
-<<<<<<< Updated upstream
-=======
     @WithMockUser
     @DisplayName("[happy] 올바른 헤더로 로그아웃 요청 시 로그아웃 로직 실행")
     @Test
@@ -276,9 +274,6 @@ class AuthControllerTest extends TotalTestSupport {
         verify(authUseCase).deactivateMember(1L);
     }
 
-
-
->>>>>>> Stashed changes
     private PhoneNumberRequestDto createPhoneNumberRequestDtoRequiredField() {
         return PhoneNumberRequestDto.of("01000001111");
     }
