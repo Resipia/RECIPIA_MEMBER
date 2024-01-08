@@ -2,28 +2,20 @@ package com.recipia.member.application.service;
 
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
-import com.recipia.member.adapter.out.persistenceAdapter.SignUpAdapter;
 import com.recipia.member.application.port.out.port.SignUpPort;
-import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Member;
-import com.recipia.member.domain.MemberFile;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @Transactional
 @ExtendWith(MockitoExtension.class)
@@ -37,27 +29,25 @@ class SignUpServiceTest {
     @InjectMocks
     private SignUpService sut;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    @Test
+    void signUpTestWithoutProfileImage() {
+        // 멤버 객체 생성 및 유효한 정보 설정
+        Member member = Member.of("email@naver.com", "Passworddf12!", "fullname", "nickname", MemberStatus.ACTIVE, "intro", "1010", "add1", "add2", RoleType.MEMBER);
+
+        // Mock 객체의 행동 정의
+        when(signUpPort.signUpMember(any(Member.class))).thenReturn(1L); // 성공적인 회원 가입 가정
+
+        // 테스트 실행
+        Long result = sut.signUp(member, null);
+
+        // 결과 검증
+        assertEquals(1L, result);
+
+        // 검증: signUpPort.signUpMember가 정확히 한 번 호출되었는지 확인
+        verify(signUpPort, times(1)).signUpMember(any(Member.class));
+
+        // 검증: 프로필 이미지가 null이므로, imageS3Service.createMemberFile가 호출되지 않았는지 확인
+        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyInt(), anyLong());
     }
-
-//    @DisplayName("[happy] 프로필 이미지가 없을때 정상적으로 회원가입이 진행된다.")
-//    @Test
-//    void signUp_Success() {
-//        // Given
-//        Member member = Member.of("email@naver.com", "passWord12!@", "fullname", "nickname", MemberStatus.ACTIVE, "intro", "1010", "add1", "add2", RoleType.MEMBER);
-//
-//        MultipartFile profileImage = mock(MultipartFile.class);
-//        when(profileImage.isEmpty()).thenReturn(true);
-//        when(signUpPort.signUpMember(any(Member.class))).thenReturn(1L);
-//
-//        // When
-//        Long result = sut.signUp(member, profileImage);
-//
-//        // Then
-//        assertEquals(1L, result);
-//    }
-
 
 }
