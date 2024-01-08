@@ -1,6 +1,5 @@
 package com.recipia.member.adapter.in.web.dto.request;
 
-import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -11,6 +10,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayName("[단위] 회원가입 요청 dto 테스트")
 class SignUpRequestDtoTest {
 
     // Java의 Bean Validation API를 사용해 유효성 검증을 수행하기 위한 Validator 객체를 생성
