@@ -37,6 +37,12 @@ public enum ErrorCode {
     // 회원 관리 관련 에러
     ALREADY_FOLLOWING(400, "ALREADY_FOLLOWING", "이미 팔로우 하고 있는 회원입니다."),
 
+    // S3 관련 에러
+    S3_UPLOAD_ERROR(500, "S3_UPLOAD_ERROR", "AWS S3 서비스 에러"),
+    S3_UPLOAD_FILE_NOT_FOUND(404, "S3_UPLOAD_FILE_NOT_FOUND", "업로드할 파일이 존재하지 않습니다."),
+    INVALID_FILE_TYPE(404, "INVALID_FILE_TYPE", "S3에 업로드 할 수 없는 파일 타입입니다."),
+
+
     // DB 관련 에러
     REQUIRED_FIELD_NULL(404, "REQUIRED_FIELD_NULL", "필수 컬럼값이 존재하지 않습니다."),
     FILE_NOT_FOUND(404, "FILE_NOT_FOUND", "파일 경로에 파일이 존재하지 않습니다."),
@@ -60,8 +66,7 @@ public enum ErrorCode {
     // 외부 서비스 에러
     RECIPE_SERVICE_ERROR(500, "RECIPE_SERVICE_ERROR", "RECIPE 서비스 에러"),
     WRIGGLE_SERVICE_ERROR(500, "WRIGGLE_SERVICE_ERROR", "WRIGGLE 서비스 에러"),
-    CHAT_SERVICE_ERROR(500, "CHAT_SERVICE_ERROR", "CHAT 서비스 에러"),
-    S3_UPLOAD_ERROR(500, "S3_UPLOAD_ERROR", "AWS S3 서비스 에러")
+    CHAT_SERVICE_ERROR(500, "CHAT_SERVICE_ERROR", "CHAT 서비스 에러")
     ;
 
 
