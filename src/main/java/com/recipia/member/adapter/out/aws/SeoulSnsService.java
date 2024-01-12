@@ -4,7 +4,6 @@ import brave.Span;
 import brave.Tracer;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
-import com.recipia.member.config.aws.SnsConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
