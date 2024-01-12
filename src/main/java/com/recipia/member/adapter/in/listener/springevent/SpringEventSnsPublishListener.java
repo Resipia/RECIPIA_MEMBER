@@ -3,7 +3,6 @@ package com.recipia.member.adapter.in.listener.springevent;
 import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.adapter.out.aws.SeoulSnsService;
-import com.recipia.member.common.event.SignUpSpringEvent;
 import com.recipia.member.common.utils.CustomJsonBuilder;
 import com.recipia.member.common.event.NicknameChangeSpringEvent;
 import com.recipia.member.config.aws.SnsConfig;
