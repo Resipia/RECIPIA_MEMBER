@@ -1,8 +1,8 @@
 package com.recipia.member.config.batch;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.adapter.out.aws.SeoulSnsService;
 import com.recipia.member.adapter.out.persistence.MemberEventRecordEntity;
+import com.recipia.member.config.aws.SnsConfig;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
 
     private final SeoulSnsService seoulSnsService;
     private final EntityManagerFactory entityManagerFactory;
-    private final ObjectMapper objectMapper;
+    private final SnsConfig snsConfig;
 
 
     // 배치 작업에서 사용할 chunkSize 값 설정. 기본값은 1000
@@ -107,7 +107,8 @@ public class BatchConfig extends DefaultBatchConfiguration {
             log.info("processItem 동작중");
 
             switch (item.getSnsTopic()) {
-                case "NicknameChange" -> seoulSnsService.publishNicknameToTopic(item.getAttribute(), item.getTraceId());
+                case "NicknameChange" -> seoulSnsService.publishSnsMessage(item.getAttribute(), item.getTraceId(), snsConfig.getNicknameChangeArn());
+                case "signUp" -> seoulSnsService.publishSnsMessage(item.getAttribute(), item.getTraceId(), snsConfig.getSignUpArn());
             }
             return item;
         };
