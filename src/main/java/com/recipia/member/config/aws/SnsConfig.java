@@ -24,7 +24,10 @@ public class SnsConfig {
     private String awsRegion;
 
     @Value("${spring.cloud.aws.sns.topics.nickname-change}")
-    private String snsTopicNicknameChangeARN;
+    private String nicknameChangeArn;
+
+    @Value("${spring.cloud.aws.sns.topics.signUp}")
+    private String signUpArn;
 
     @Bean
     public SnsClient getSnsClient () {
