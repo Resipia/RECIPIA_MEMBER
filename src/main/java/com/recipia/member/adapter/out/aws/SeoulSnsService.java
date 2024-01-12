@@ -22,11 +22,10 @@ import java.util.Map;
 public class SeoulSnsService {
 
     private final SnsClient snsClient;
-    private final SnsConfig snsConfig;
     private final Tracer tracer;
 
 
-    public PublishResponse publishNicknameToTopic(String message, String traceId) {
+    public PublishResponse publishSnsMessage(String message, String traceId, String snsArn) {
 
         // SNS 발행 Span 생성
         Span span = tracer.nextSpan().name("SNS Publish").start();
@@ -43,7 +42,7 @@ public class SeoulSnsService {
             PublishRequest publishRequest = PublishRequest.builder()
                     .message(message)
                     .messageAttributes(messageAttributes)
-                    .topicArn(snsConfig.getSnsTopicNicknameChangeARN())
+                    .topicArn(snsArn)
                     .build();
 
             // SNS 클라이언트를 통해 메시지 발행
