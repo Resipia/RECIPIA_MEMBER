@@ -26,8 +26,7 @@ public class MyPageController {
 
     @PostMapping("/view")
     public ResponseEntity<ResponseDto<MyPageViewResponseDto>> view() {
-        MyPage myPage = MyPage.of(securityUtils.getCurrentMemberId());
-        myPage = myPageUseCase.viewMyPage(myPage);
+        MyPage myPage = myPageUseCase.viewMyPage(securityUtils.getCurrentMemberId());
         return ResponseEntity.ok(
                 ResponseDto.success(myPageConverter.domainToResponseDto(myPage))
         );

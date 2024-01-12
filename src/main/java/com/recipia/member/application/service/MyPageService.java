@@ -16,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
+/**
+ * 마이페이지 서비스 클래스
+ */
 @RequiredArgsConstructor
 @Service
 public class MyPageService implements MyPageUseCase {
@@ -23,10 +26,24 @@ public class MyPageService implements MyPageUseCase {
     private final MyPagePort myPagePort;
     private final ApplicationEventPublisher eventPublisher;
     private final MemberPort memberPort;
+    private final ImageS3Service imageS3Service;
 
+
+    /**
+     * [READ] 마이페이지 조회를 담당하는 메서드
+     * 1단계 - db에 저장된 멤버 정보를 가져온다.
+     * 2단계 - 프로필 이미지 저장 경로를 기반으로 프로필 이미지의 pre-signed-url을 생성해서 profileIamgeUrl에 세팅한다.
+     * 위 단계가 끝나면 마이 페이지 데이터를 반환한다.
+     */
     @Override
-    public MyPage viewMyPage(MyPage myPage) {
-        myPage = myPagePort.viewMyPage(myPage.getMemberId());
+    public MyPage viewMyPage(Long memberId) {
+        // 1단계
+        MyPage myPage = myPagePort.viewMyPage(memberId);
+
+        // 2단계
+        String preSignedUrl = imageS3Service.generatePreSignedUrl(myPage.getProfileImageFilePath(), 60); // 여기서 'profileImageUrl'는 MyPage 객체에 저장되어 있는 파일 경로를 의미한다.
+        myPage.setProfileImageUrl(preSignedUrl);
+
         return myPage;
     }
 
@@ -52,7 +69,7 @@ public class MyPageService implements MyPageUseCase {
             if (isNicknameChanged) {
                 eventPublisher.publishEvent(new NicknameChangeSpringEvent(myPage.getMemberId()));
             }
-            return viewMyPage(myPage);
+            return viewMyPage(myPage.getMemberId());
         } else {
             throw new MemberApplicationException(ErrorCode.DB_ERROR);
         }

@@ -16,10 +16,15 @@ public class MyPageQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+    /**
+     * [READ] memberId에 해당하는 멤버 정보 조회
+     */
     public MyPage viewMyPage(Long memberId) {
         return jpaQueryFactory
                 .select(constructor(MyPage.class,
                         memberEntity.id,
+                        memberEntity.memberFileEntity.storedFilePath.as("profileImageFilePath"),
+                        null,
                         memberEntity.nickname,
                         memberEntity.introduction,
                         JPAExpressions.select(followEntity.count())
