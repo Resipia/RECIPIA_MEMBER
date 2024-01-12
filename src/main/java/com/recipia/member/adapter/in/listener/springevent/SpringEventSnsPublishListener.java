@@ -3,7 +3,6 @@ package com.recipia.member.adapter.in.listener.springevent;
 import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.adapter.out.aws.SeoulSnsService;
-import com.recipia.member.common.event.SignUpSpringEvent;
 import com.recipia.member.common.utils.CustomJsonBuilder;
 import com.recipia.member.common.event.NicknameChangeSpringEvent;
 import lombok.RequiredArgsConstructor;
@@ -26,23 +25,6 @@ public class SpringEventSnsPublishListener {
      */
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void snsPublishListener(NicknameChangeSpringEvent event) throws JsonProcessingException {
-
-        // 현재 TraceID 추출
-        String traceId = tracer.currentSpan().context().traceIdString();
-
-        // message에 memberId 주입
-        String messageJson = customJsonBuilder
-                .add("memberId", event.memberId().toString())
-                .build();
-
-        seoulSnsService.publishNicknameToTopic(messageJson, traceId);
-    }
-
-    /**
-     * 회원가입시 호출되어 SNS에 메시지를 발행한다.
-     */
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void signUpSnsPublishListener(SignUpSpringEvent event) throws JsonProcessingException {
 
         // 현재 TraceID 추출
         String traceId = tracer.currentSpan().context().traceIdString();

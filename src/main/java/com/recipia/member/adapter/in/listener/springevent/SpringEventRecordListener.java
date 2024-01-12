@@ -3,7 +3,6 @@ package com.recipia.member.adapter.in.listener.springevent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.application.port.in.MemberEventRecordUseCase;
 import com.recipia.member.common.event.NicknameChangeSpringEvent;
-import com.recipia.member.common.event.SignUpSpringEvent;
 import com.recipia.member.domain.MemberEventRecord;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -24,16 +23,6 @@ public class SpringEventRecordListener {
     @EventListener
     public void eventRecordListener(NicknameChangeSpringEvent event) throws JsonProcessingException {
         MemberEventRecord memberEventRecord = MemberEventRecord.of(event.memberId(), String.valueOf(NicknameChangeSpringEvent.class));
-        memberEventRecordUseCase.saveNewEventRecord(memberEventRecord);
-    }
-
-    /**
-     * 회원가입 후 이벤트 발행 여부를 기록 (transactional out box pattern)
-     */
-    @Transactional
-    @EventListener
-    public void signUpListener(SignUpSpringEvent event) throws JsonProcessingException {
-        MemberEventRecord memberEventRecord = MemberEventRecord.of(event.memberId(), String.valueOf(SignUpSpringEvent.class));
         memberEventRecordUseCase.saveNewEventRecord(memberEventRecord);
     }
 

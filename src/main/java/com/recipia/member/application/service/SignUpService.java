@@ -2,13 +2,11 @@ package com.recipia.member.application.service;
 
 import com.recipia.member.application.port.in.SignUpUseCase;
 import com.recipia.member.application.port.out.port.SignUpPort;
-import com.recipia.member.common.event.SignUpSpringEvent;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +17,6 @@ public class SignUpService implements SignUpUseCase {
 
     private final SignUpPort signUpPort;
     private final ImageS3Service imageS3Service;
-    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     @Override
@@ -44,10 +41,6 @@ public class SignUpService implements SignUpUseCase {
                 throw new MemberApplicationException(ErrorCode.MEMBER_FILE_SAVE_ERROR);
             }
         }
-
-        // 이벤트 발행: 레시피 서버에 회원가입된 유저 정보 저장
-        eventPublisher.publishEvent(SignUpSpringEvent.of(savedMemberId));
-
         return savedMemberId;
     }
 
