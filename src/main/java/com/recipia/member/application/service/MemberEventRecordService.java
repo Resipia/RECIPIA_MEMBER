@@ -48,7 +48,7 @@ public class MemberEventRecordService implements MemberEventRecordUseCase {
                 .add("memberId", memberId)
                 .build();
 
-        String topicName = MemberStringUtils.extractLastPart(snsConfig.getSnsTopicNicknameChangeARN());
+        String topicName = MemberStringUtils.extractLastPart(snsConfig.getNicknameChangeArn());
 
         // 이벤트 저장소에 이벤트 저장하기 전에 기존에 누락되었던(published = false) 동일한 이벤트는 전부 발행 처리(published = true)로 수정
         memberEventRecordPort.changeBeforeEventAllPublishedToTrue(memberId, topicName);

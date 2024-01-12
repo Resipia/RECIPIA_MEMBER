@@ -6,6 +6,7 @@ import com.recipia.member.adapter.out.aws.SeoulSnsService;
 import com.recipia.member.common.event.SignUpSpringEvent;
 import com.recipia.member.common.utils.CustomJsonBuilder;
 import com.recipia.member.common.event.NicknameChangeSpringEvent;
+import com.recipia.member.config.aws.SnsConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ public class SpringEventSnsPublishListener {
 
     private final SeoulSnsService seoulSnsService;
     private final CustomJsonBuilder customJsonBuilder;
+    private final SnsConfig snsConfig;
     private final Tracer tracer;
 
     /**
@@ -35,7 +37,8 @@ public class SpringEventSnsPublishListener {
                 .add("memberId", event.memberId().toString())
                 .build();
 
-        seoulSnsService.publishNicknameToTopic(messageJson, traceId);
+        String snsArn = snsConfig.getNicknameChangeArn();
+        seoulSnsService.publishSnsMessage(messageJson, traceId, snsArn);
     }
 
     /**
@@ -52,7 +55,8 @@ public class SpringEventSnsPublishListener {
                 .add("memberId", event.memberId().toString())
                 .build();
 
-        seoulSnsService.publishNicknameToTopic(messageJson, traceId);
+        String snsArn = snsConfig.getSignUpArn();
+        seoulSnsService.publishSnsMessage(messageJson, traceId, snsArn);
     }
 
 }

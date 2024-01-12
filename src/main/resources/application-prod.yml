@@ -16,6 +16,7 @@ spring:
       sns:
         topics:
           nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:NicknameChange
+          signUp: arn:aws:sns:${REGION}:${ACCOUNT_ID}:signUp
       sqs:
         record-sqs-name: member-event-record-sqs
       s3:
