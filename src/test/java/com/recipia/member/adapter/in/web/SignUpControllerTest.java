@@ -2,8 +2,6 @@ package com.recipia.member.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
-import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
-import com.recipia.member.adapter.out.persistence.constant.RoleType;
 import com.recipia.member.application.port.in.SignUpUseCase;
 import com.recipia.member.config.TotalTestSupport;
 import com.recipia.member.domain.Member;
@@ -13,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,7 +37,7 @@ class SignUpControllerTest extends TotalTestSupport {
     @DisplayName("[happy] 필수 입력값이 전부 충족된 dto가 들어왔을때 회원가입 정상 작동한다")
     @Test
     void fulfillRequiredFields() throws Exception {
-        MultipartFile mockFile = mock(MultipartFile.class);
+        MockMultipartFile mockFile = new MockMultipartFile("file", "filename.txt", "text/plain", "some xml".getBytes());
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.of(
                 "user@example.com", "password123P!", "John Doe", "johndoe",
                 "Hello, I'm John", "01012345678", "123 Main St", "Apt 101"
@@ -46,8 +46,8 @@ class SignUpControllerTest extends TotalTestSupport {
         when(signUpUseCase.signUp(member, mockFile)).thenReturn(1L);
 
         //when & then
-        mockMvc.perform(post("/member/signUp")
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
+        mockMvc.perform(multipart("/member/signUp")
+                        .file(mockFile)
                         .flashAttr("signUpRequestDto", signUpRequestDto))
                 .andExpect(status().isOk());
     }
