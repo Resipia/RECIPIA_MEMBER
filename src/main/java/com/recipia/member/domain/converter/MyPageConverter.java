@@ -20,6 +20,7 @@ public class MyPageConverter {
     public MyPageViewResponseDto domainToResponseDto(MyPage myPage) {
         return MyPageViewResponseDto.of(
                 myPage.getMemberId(),
+                myPage.getProfileImageUrl(),
                 myPage.getNickname(),
                 myPage.getIntroduction(),
                 myPage.getFollowingCount(),

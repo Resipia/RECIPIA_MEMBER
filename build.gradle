@@ -68,6 +68,8 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.mockito:mockito-inline:5.2.0'
 	testImplementation 'org.awaitility:awaitility:4.2.0'
+	testImplementation 'io.findify:s3mock_2.12:0.2.4'
+
 
 	// AWS SNS, SQS - spring3.x.x
 	implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.1")

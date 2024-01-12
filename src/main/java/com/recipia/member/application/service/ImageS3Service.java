@@ -1,5 +1,6 @@
 package com.recipia.member.application.service;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.recipia.member.common.exception.ErrorCode;
@@ -13,8 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,24 +41,23 @@ public class ImageS3Service {
      */
     public MemberFile createMemberFile(MultipartFile image, Integer fileOrder, Long savedMemberId) {
 
+        // 1. input 파라미터 검증
+        validateInput(image, savedMemberId);
         String originFileName = image.getOriginalFilename(); //원본 이미지 이름
 
-        // 확장자 추출 과정에서의 안전한 처리
-        String fileExtension = "";
-        if (originFileName != null && originFileName.contains(".")) {
-            fileExtension = originFileName.substring(originFileName.lastIndexOf("."));
-        }
+        // 2. 파일 확장자 추출 및 검증
+        String fileExtension = getFileExtension(originFileName);
+        validateFileExtension(fileExtension);
 
-        /**
-         * 프로픽 파일 저장 엔티티를 만들기 위한 값들을 세팅한다.
-         */
+
+        // 3. 파일 도메인을 만들기 위한 값 세팅
         String storedFileNameWithExtension = changeFileName(fileExtension); // 새로 생성된 이미지 이름 (UUID 적용)
         String datePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd")); // 현재 날짜를 [년/월/일] 형식으로 가져와서 최종 저장될 파일 경로를 만들어 준다.
         String finalPath = "member/" + datePath + "/" + savedMemberId + "/" + storedFileNameWithExtension; // s3 파일 저장 경로
         String objectUrl = uploadImageToS3(image, fileExtension, finalPath); // 저장된 s3 객체의 URL
         Integer fileSize = (int) image.getSize(); // 파일 사이즈 추출
 
-        // 도메인으로 변환
+        // 4. 파일 도메인으로 변환
         return MemberFile.of(
                 Member.of(savedMemberId),
                 fileOrder,                      // 파일 정렬 순서
@@ -107,6 +110,66 @@ public class ImageS3Service {
     public void deleteImage(String key) {
         DeleteObjectRequest deleteRequest = new DeleteObjectRequest(bucketName, key);
         amazonS3.deleteObject(deleteRequest);
+    }
+
+    /**
+     * Pre-Signed URL을 생성하고 반환한다.
+     * @param filePath 버킷에서의 파일 경로
+     * @param duration URL의 유효 시간(분 단위)
+     * @return 생성된 Pre-Signed URL
+     */
+    public String generatePreSignedUrl(String filePath, int duration) {
+        java.util.Date expiration = new java.util.Date();
+        long expTimeMillis = expiration.getTime();
+        expTimeMillis += 1000 * 60 * duration; // 예: 60분
+        expiration.setTime(expTimeMillis);
+
+        // Pre-Signed URL 요청 생성
+        GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                new GeneratePresignedUrlRequest(bucketName, filePath)
+                        .withMethod(HttpMethod.GET)
+                        .withExpiration(expiration);
+
+        // Pre-Signed URL 생성
+        URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
+        return url.toString();
+    }
+
+
+    /**
+     * 파일의 확장자를 안전하게 추출한다.
+     */
+    private static String getFileExtension(String originFileName) {
+        String fileExtension = "";
+        if (originFileName != null && originFileName.contains(".")) {
+            fileExtension = originFileName.substring(originFileName.lastIndexOf("."));
+        }
+        return fileExtension;
+    }
+
+    /**
+     * 파라미터로 들어온 값들의 유효성을 검증한다.
+     */
+    private static void validateInput(MultipartFile image, Long savedMemberId) {
+        if (image == null || image.isEmpty()) {
+            throw new MemberApplicationException(ErrorCode.S3_UPLOAD_FILE_NOT_FOUND);
+        }
+        if (savedMemberId == null) {
+            throw new MemberApplicationException(ErrorCode.USER_NOT_FOUND);
+        }
+    }
+
+    /**
+     * 파일의 확장자가 지원되는 확장자인지 검증한다.
+     */
+    private static void validateFileExtension(String fileExtension) {
+        // 지원되는 이미지 확장자 목록
+        List<String> supportedExtensions = Arrays.asList(".jpg", ".jpeg", ".png");
+
+        // 파일 확장자 검사
+        if (!supportedExtensions.contains(fileExtension.toLowerCase())) {
+            throw new MemberApplicationException(ErrorCode.INVALID_FILE_TYPE);
+        }
     }
 
 }
