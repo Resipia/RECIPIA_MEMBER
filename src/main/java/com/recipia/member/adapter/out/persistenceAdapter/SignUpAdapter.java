@@ -1,10 +1,8 @@
 package com.recipia.member.adapter.out.persistenceAdapter;
 
 import com.recipia.member.adapter.out.persistence.MemberEntity;
-import com.recipia.member.adapter.out.persistence.MemberFileEntity;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.domain.Member;
-import com.recipia.member.domain.MemberFile;
 import com.recipia.member.domain.converter.MemberConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -38,13 +36,6 @@ public class SignUpAdapter implements SignUpPort {
 
         return memberEntity.getId();
 
-    }
-
-    @Override
-    public Long saveMemberFile(MemberFile memberFile) {
-        MemberFileEntity memberFileEntity = converter.domainToEntity(memberFile);
-        memberFileEntity = memberFileRepository.save(memberFileEntity);
-        return memberFileEntity.getId();
     }
 
 
