@@ -6,6 +6,7 @@ import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.application.port.out.port.MyPagePort;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Member;
+import com.recipia.member.domain.MemberFile;
 import com.recipia.member.domain.MyPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -72,48 +76,71 @@ class MyPageServiceTest {
         assertEquals("데이터베이스 오류", exception.getMessage());
     }
 
-//    @DisplayName("[happy] 정상적인 마이페이지 수정")
-//    @Test
-//    void updateAndViewMyPageSuccess() {
-//        // given
-//        MyPage requestMyPage = MyPage.of(1L, "update-nickname", "update-introduction");
-//        MyPage responseMyPage = MyPage.of(1L, "update-nickname", "update-introduction", 3L, 4L);
-//        Member member = createMember();
-//
-//        when(myPagePort.updateMyPage(requestMyPage)).thenReturn(1L);
-//        when(myPagePort.viewMyPage(requestMyPage.getMemberId())).thenReturn(responseMyPage);
-//        when(memberPort.findMemberByIdAndStatus(anyLong(), any(MemberStatus.class))).thenReturn(member);
-//
-//        // when
-//        MyPage result = sut.updateAndViewMyPage(requestMyPage);
-//
-//        // then
-//        assertEquals(result.getMemberId(), requestMyPage.getMemberId());
-//        assertEquals(result.getIntroduction(), requestMyPage.getIntroduction());
-//
-//    }
-//
-//    @DisplayName("[bad] DB에러로 인한 마이페이지 수정 실패")
-//    @Test
-//    void updateAndViewMyPageFail() {
-//        // given
-//        MyPage requestMyPage = MyPage.of(1L, "update-nickname", "update-introduction");
-//        Member member = createMember();
-//
-//        // DB 에러 시뮬레이션: 업데이트가 실패하여 0을 반환
-//        when(myPagePort.updateMyPage(requestMyPage)).thenReturn(0L);
-//        when(memberPort.findMemberByIdAndStatus(anyLong(), any(MemberStatus.class))).thenReturn(member);
-//
-//        // when & then
-//        assertThrows(MemberApplicationException.class, () -> {
-//            sut.updateAndViewMyPage(requestMyPage);
-//        });
-//    }
-//
-//
-//    private Member createMember() {
-//        return Member.of(1L, "test1@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 1", "Nickname1",  MemberStatus.ACTIVE, "Introduction 1", "01012345678",
-//                "Address 1-1", "Address 1-2", RoleType.MEMBER);
-//    }
+    @DisplayName("[happy] 프로필 이미지가 없는 상황에서 정상적인 마이페이지 수정 성공")
+    @Test
+    void updateMyPageWithoutProfileImage() {
+        // given
+        MyPage myPage = MyPage.of(1L, "nickname", "intro");
+        Member member = createMember();
+        when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
+        when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
+
+        // when
+        Long updatedCount = sut.updateMyPage(myPage, null);
+
+        // then
+        assertEquals(updatedCount, 1L);
+    }
+
+
+    @DisplayName("[happy] 프로필 이미지가 있는 상황에서 정상적인 마이페이지 수정 성공")
+    @Test
+    void updateMyPageWithProfileImage() {
+        // given
+        MyPage myPage = MyPage.of(1L, "nickname", "intro");
+        MockMultipartFile mockImage = new MockMultipartFile(
+                "image", "test.jpg", "image/jpeg", "test image content".getBytes());
+        Member member = createMember();
+        MemberFile memberFile = MemberFile.of(1L, member, 0, "path", "object-url", "origin", "stored", "jpg", 10, "N");
+
+        when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
+        when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
+        when(imageS3Service.createMemberFile(mockImage, 0, myPage.getMemberId())).thenReturn(memberFile);
+        when(memberPort.saveMemberFile(memberFile)).thenReturn(2L);
+
+        // when
+        Long updatedCount = sut.updateMyPage(myPage, mockImage);
+
+        // then
+        assertEquals(updatedCount, 1L);
+    }
+
+    @DisplayName("[bad] DB에러로 인한 마이페이지 수정 실패")
+    @Test
+    void updateMyPageFail() {
+        // given
+        MyPage myPage = MyPage.of(1L, "nickname", "intro");
+        MockMultipartFile mockImage = new MockMultipartFile(
+                "image", "test.jpg", "image/jpeg", "test image content".getBytes());
+        Member member = createMember();
+        MemberFile memberFile = MemberFile.of(1L, member, 0, "path", "object-url", "origin", "stored", "jpg", 10, "N");
+
+        when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
+        when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
+        when(imageS3Service.createMemberFile(mockImage, 0, myPage.getMemberId())).thenReturn(memberFile);
+        when(memberPort.saveMemberFile(memberFile)).thenReturn(0L);
+
+        // when % then
+        assertThrows(MemberApplicationException.class, () -> {
+            sut.updateMyPage(myPage, mockImage);
+        });
+
+    }
+
+
+    private Member createMember() {
+        return Member.of(1L, "test1@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 1", "Nickname1", MemberStatus.ACTIVE, "Introduction 1", "01012345678",
+                "Address 1-1", "Address 1-2", RoleType.MEMBER);
+    }
 
 }
