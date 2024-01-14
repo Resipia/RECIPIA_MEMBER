@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * 마이페이지에 관련된 도메인
+ */
 @Setter
 @Getter
 @NoArgsConstructor
