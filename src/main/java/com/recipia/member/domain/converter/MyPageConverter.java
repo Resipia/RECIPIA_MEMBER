@@ -20,7 +20,7 @@ public class MyPageConverter {
     public MyPageViewResponseDto domainToResponseDto(MyPage myPage) {
         return MyPageViewResponseDto.of(
                 myPage.getMemberId(),
-                myPage.getProfileImageUrl(),
+                myPage.getImagePreUrl(),
                 myPage.getNickname(),
                 myPage.getIntroduction(),
                 myPage.getFollowingCount(),
@@ -32,7 +32,8 @@ public class MyPageConverter {
         return MyPage.of(
                 securityUtils.getCurrentMemberId(),
                 dto.getNickname(),
-                dto.getIntroduction()
+                dto.getIntroduction(),
+                dto.getDeleteFileOrder()
         );
     }
 

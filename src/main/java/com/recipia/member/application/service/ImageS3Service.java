@@ -3,6 +3,7 @@ package com.recipia.member.application.service;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Member;
@@ -31,6 +32,7 @@ import java.util.UUID;
 public class ImageS3Service {
 
     private final AmazonS3 amazonS3;
+    private final MemberPort memberPort;
 
     @Value("${spring.cloud.aws.s3.bucketName}")
     private String bucketName; //버킷 이름
@@ -39,7 +41,7 @@ public class ImageS3Service {
     /**
      * 데이터베이스에 저장할 MemberFile 객체를 생성하여 반환한다.
      */
-    public MemberFile createMemberFile(MultipartFile image, Integer fileOrder, Long savedMemberId) {
+    public MemberFile createMemberFile(MultipartFile image, Long savedMemberId) {
 
         // 1. input 파라미터 검증
         validateInput(image, savedMemberId);
@@ -49,6 +51,8 @@ public class ImageS3Service {
         String fileExtension = getFileExtension(originFileName);
         validateFileExtension(fileExtension);
 
+        // file order는 1부터 시작
+        Integer fileOrder = memberPort.findMaxFileOrder(savedMemberId) + 1;
 
         // 3. 파일 도메인을 만들기 위한 값 세팅
         String storedFileNameWithExtension = changeFileName(fileExtension); // 새로 생성된 이미지 이름 (UUID 적용)

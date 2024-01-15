@@ -18,13 +18,15 @@ public class MyPageAdapter implements MyPagePort {
      */
     @Override
     public MyPage viewMyPage(Long memberId) {
-        MyPage myPage = myPageQueryRepository.viewMyPage(memberId);
-        return myPage;
+        return myPageQueryRepository.viewMyPage(memberId);
     }
 
+    /**
+     * [UPDATE] 마이페이지 수정
+     * 마이페이지에서 기본 정보를 수정한 후 업데이트 된 row 갯수를 반환한다.
+     */
     @Override
     public Long updateMyPage(MyPage requestMyPage) {
-        Long updatedCount = myPageQueryRepository.updateMyPage(requestMyPage);
-        return updatedCount;
+        return myPageQueryRepository.updateMyPage(requestMyPage);
     }
 }

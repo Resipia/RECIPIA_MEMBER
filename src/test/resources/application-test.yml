@@ -33,7 +33,11 @@ spring:
       sns:
         topics:
           nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:NicknameChange
+<<<<<<< HEAD
           signUp: arn:aws:sns:${REGION}:${ACCOUNT_ID}:dev-sns-test
+=======
+          signUp: arn:aws:sns:${REGION}:473709498430:dev-sns-test
+>>>>>>> 4db7a8008e546758f2501779ca4ad6ec3ed4b747
 
       sqs:
         record-sqs-name: member-event-record-sqs
