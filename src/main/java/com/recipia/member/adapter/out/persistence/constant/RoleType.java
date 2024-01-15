@@ -2,10 +2,11 @@ package com.recipia.member.adapter.out.persistence.constant;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
+/**
+ * 사용자 권한에 사용되는 ENUM 객체
+ */
 @Getter
 @AllArgsConstructor
 public enum RoleType {

@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 import static com.recipia.member.adapter.out.persistence.QMemberEventRecordEntity.memberEventRecordEntity;
 
-
 @RequiredArgsConstructor
 @Repository
 public class MemberEventRecordQueryRepository {
@@ -17,7 +16,7 @@ public class MemberEventRecordQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     /**
-     * 가장 최근에 발행 성공한 이벤트를 published = true로 업데이트
+     * [UPDATE] 가장 최근에 발행 성공한 이벤트를 published = true로 업데이트한다.
      */
     public Long changePublishedToTrue(Long memberId, String snsTopic) {
         return jpaQueryFactory
@@ -41,7 +40,7 @@ public class MemberEventRecordQueryRepository {
     }
 
     /**
-     * 새로운 이벤트를 발행하기 전에 기존에 누락되었던 이벤트 전부 published = true로 업데이트
+     * [UPDATE] 새로운 이벤트를 발행하기 전에 기존에 누락되었던 이벤트 전부 published = true로 업데이트한다.
      */
     public Long changeBeforeEventAllPublishedToTrue(Long memberId, String topicName) {
         return  jpaQueryFactory
