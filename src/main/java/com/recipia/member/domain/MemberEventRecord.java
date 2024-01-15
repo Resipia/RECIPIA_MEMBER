@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * 이벤트 저장소 도메인 객체
+ */
 @Getter
 @NoArgsConstructor
 public class MemberEventRecord {

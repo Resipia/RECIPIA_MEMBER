@@ -7,7 +7,6 @@ import com.recipia.member.adapter.out.persistence.TokenBlacklistEntity;
 import com.recipia.member.domain.Jwt;
 import com.recipia.member.domain.Logout;
 import com.recipia.member.domain.TokenBlacklist;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

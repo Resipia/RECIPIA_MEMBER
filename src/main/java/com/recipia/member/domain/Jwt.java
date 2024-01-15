@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Builder
+/**
+ * Jwt 도메인 객체
+ */
 @Getter
 @NoArgsConstructor
 public class Jwt {
@@ -16,6 +18,7 @@ public class Jwt {
     private String refreshToken;
     private LocalDateTime expiredDateTime;
 
+    @Builder
     private Jwt(Long id, Long memberId, String refreshToken, LocalDateTime expiredDateTime) {
         this.id = id;
         this.memberId = memberId;

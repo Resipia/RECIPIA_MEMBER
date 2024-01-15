@@ -9,15 +9,19 @@ import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Authentication;
 import com.recipia.member.domain.Logout;
-import com.recipia.member.domain.TokenBlacklist;
 import com.recipia.member.domain.converter.JwtConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Random;
 
+/**
+ * 본인 인증 서비스 클래스
+ */
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class AuthService implements AuthUseCase {
@@ -30,6 +34,9 @@ public class AuthService implements AuthUseCase {
     private final JwtConverter jwtConverter;
     private final MemberPort memberPort;
 
+    /**
+     * 전화번호로 인증 코드 전송 메서드 호출
+     */
     @Override
     public void verifyPhoneNumber(Authentication authentication) {
 
@@ -40,6 +47,7 @@ public class AuthService implements AuthUseCase {
             throw new MemberApplicationException(ErrorCode.TEL_NO_ALREADY_EXISTS);
         }
 
+        // 휴대폰 번호에 국제번호 추가
         authentication.formatPhoneNumber();
         String verificationCode = generateRandomCode();
 
@@ -52,22 +60,36 @@ public class AuthService implements AuthUseCase {
     }
 
 
+    /**
+     * [DELETE/CREATE] 로그아웃
+     * 1. 리프레시 토큰을 DB에서 제거
+     * 2. token blacklist에 access token 저장
+     */
+    @Transactional
     @Override
     public void logout(Logout logout) {
-        // DB에서 리프레시 토큰 삭제
+        // 1. DB에서 리프레시 토큰 삭제
         jwtPort.deleteRefreshToken(logout.getMemberId());
 
-        // token blacklist에 추가
+        // 2. token blacklist에 추가
         jwtPort.insertTokenBlacklist(jwtConverter.logoutToTokenBlacklist(logout));
     }
 
+    /**
+     * [UPDATE] 회원 탈퇴
+     * 수정된 row 갯수를 반환한다.
+     */
+    @Transactional
     @Override
     public Long deactivateMember(Long memberId) {
-        Long updatedCount = memberPort.deactivateMember(memberId);
-        return updatedCount;
+        return memberPort.deactivateMember(memberId);
     }
 
 
+    /**
+     * 인증코드 검증
+     * 인증코드가 일치하면 true, 틀리면 false 반환한다.
+     */
     @Override
     public boolean checkVerifyCode(Authentication authentication) {
         authentication.formatPhoneNumber();
@@ -84,7 +106,9 @@ public class AuthService implements AuthUseCase {
     }
 
 
-    // 랜덤 6자리 숫자 생성
+    /**
+     * 랜덤 6자리 숫자 생성
+     */
     private String generateRandomCode() {
         Random random = new Random();
         int number = random.nextInt(900000) + 100000; // 100000부터 999999까지
