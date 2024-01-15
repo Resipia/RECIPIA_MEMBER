@@ -36,18 +36,26 @@ public class MyPageQueryRepository {
                 .select(Expressions.numberTemplate(Long.class, "coalesce({0}, 0)", followEntity.count()))
                 .from(followEntity)
                 .where(followEntity.followerMember.id.eq(memberId));
+//        JPQLQuery<Long> followingCountSubQuery = JPAExpressions
+//                .select(followEntity.count())
+//                .from(followEntity)
+//                .where(followEntity.followerMember.id.eq(memberId));
 
         // 팔로워 수 가져오는 서브쿼리
         JPQLQuery<Long> followerCountSubQuery = JPAExpressions
                 .select(Expressions.numberTemplate(Long.class, "coalesce({0}, 0)", followEntity.count()))
                 .from(followEntity)
                 .where(followEntity.followingMember.id.eq(memberId));
+//        JPQLQuery<Long> followerCountSubQuery = JPAExpressions
+//                .select(followEntity.count())
+//                .from(followEntity)
+//                .where(followEntity.followingMember.id.eq(memberId));
 
 
         return jpaQueryFactory
                 .select(Projections.fields(MyPage.class,
                         memberEntity.id.as("memberId"),
-                        ExpressionUtils.as(filePathSubQuery, "profileImageFilePath"),
+                        ExpressionUtils.as(filePathSubQuery, "imageFilePath"),
                         memberEntity.nickname.as("nickname"),
                         memberEntity.introduction.as("introduction"),
                         ExpressionUtils.as(followingCountSubQuery, "followingCount"),

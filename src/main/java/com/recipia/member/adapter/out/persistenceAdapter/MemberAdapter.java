@@ -9,6 +9,7 @@ import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
+import com.recipia.member.domain.MyPage;
 import com.recipia.member.domain.converter.MemberConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -75,8 +76,7 @@ public class MemberAdapter implements MemberPort {
      */
     @Override
     public Long deactivateMember(Long memberId) {
-        Long updatedCount = memberQueryRepository.deactivateMemberByMemberId(memberId);
-        return updatedCount;
+        return memberQueryRepository.deactivateMemberByMemberId(memberId);
     }
 
     /**
@@ -94,9 +94,17 @@ public class MemberAdapter implements MemberPort {
      * [UPDATE] 사용자 프로필 이미지 삭제처리(del_yn = 'Y')를 담당한다.
      */
     @Override
-    public Long softDeleteProfileImage(Long memberId) {
-        Long updatedCount = memberQueryRepository.softDeleteMemberFile(memberId);
-        return updatedCount;
+    public Long softDeleteProfileImage(MyPage myPage) {
+        return memberQueryRepository.softDeleteMemberFile(myPage);
+    }
+
+    /**
+     * [READ] memberId에 해당하는 파일의 최대 file order값을 반환한다.
+     * 만약에 데이터가 없으면 0을, max값이 존재하면 max값을 반환한다.
+     */
+    @Override
+    public Integer findMaxFileOrder(Long memberId) {
+        return memberFileRepository.findMaxFileOrderByMemberEntity_Id(memberId).orElse(0);
     }
 
 

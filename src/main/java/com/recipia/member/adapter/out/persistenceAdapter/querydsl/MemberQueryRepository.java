@@ -2,6 +2,7 @@ package com.recipia.member.adapter.out.persistenceAdapter.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
+import com.recipia.member.domain.MyPage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ public class MemberQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     /**
-     * memberId에 해당하는 멤버를 탈퇴처리한다.
+     * [UPDATE] memberId에 해당하는 멤버를 탈퇴처리한다.
      */
     public Long deactivateMemberByMemberId(Long memberId) {
         return jpaQueryFactory
@@ -26,13 +27,13 @@ public class MemberQueryRepository {
     }
 
     /**
-     * memberId에 해당하는 멤버의 프로필 이미지를 soft delete 처리한다.
+     * [DELETE] memberId, fileOrder에 해당하는 멤버 파일을 soft delete 처리한다.
      */
-    public Long softDeleteMemberFile(Long memberId) {
+    public Long softDeleteMemberFile(MyPage myPage) {
         return jpaQueryFactory
                 .update(memberFileEntity)
                 .set(memberFileEntity.delYn, "Y")
-                .where(memberFileEntity.memberEntity.id.eq(memberId))
+                .where(memberFileEntity.memberEntity.id.eq(myPage.getMemberId()), memberFileEntity.fileOrder.eq(myPage.getDeleteFileOrder()))
                 .execute();
     }
 }
