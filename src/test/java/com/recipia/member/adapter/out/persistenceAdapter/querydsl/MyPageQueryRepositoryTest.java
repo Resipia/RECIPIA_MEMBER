@@ -12,31 +12,30 @@ import static org.junit.jupiter.api.Assertions.*;
 class MyPageQueryRepositoryTest extends TotalTestSupport {
 
     @Autowired
-    private MyPageQueryRepository myPageQueryRepository;
+    private MyPageQueryRepository sut;
 
-
-    @Test
     @DisplayName("[happy] 정상적인 마이페이지 조회")
+    @Test
     void viewMyPageSuccess() {
         // given
         Long existingMemberId = 1L; // DB에 존재하는 멤버 ID
 
         // when
-        MyPage result = myPageQueryRepository.viewMyPage(existingMemberId);
+        MyPage result = sut.viewMyPage(existingMemberId);
 
         // then
         assertNotNull(result);
         assertEquals(existingMemberId, result.getMemberId());
     }
 
-    @Test
     @DisplayName("[bad] 존재하지 않는 사용자로 마이페이지 조회")
+    @Test
     void viewMyPageFail() {
         // given
-        Long nonExistingMemberId = -1L; // DB에 존재하지 않는 멤버 ID
+        Long nonExistingMemberId = 0L; // DB에 존재하지 않는 멤버 ID
 
         // when
-        MyPage result = myPageQueryRepository.viewMyPage(nonExistingMemberId);
+        MyPage result = sut.viewMyPage(nonExistingMemberId);
 
         // then
         assertNull(result);

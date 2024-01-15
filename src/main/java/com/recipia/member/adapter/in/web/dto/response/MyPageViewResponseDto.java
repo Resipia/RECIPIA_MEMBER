@@ -3,6 +3,9 @@ package com.recipia.member.adapter.in.web.dto.response;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 다른 유저가 보는 마이페이지 응답 객체
+ */
 @Getter
 @NoArgsConstructor
 public class MyPageViewResponseDto {

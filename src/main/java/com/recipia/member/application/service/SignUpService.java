@@ -1,6 +1,7 @@
 package com.recipia.member.application.service;
 
 import com.recipia.member.application.port.in.SignUpUseCase;
+import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.common.event.SignUpSpringEvent;
 import com.recipia.member.common.exception.ErrorCode;
@@ -20,6 +21,7 @@ public class SignUpService implements SignUpUseCase {
     private final SignUpPort signUpPort;
     private final ImageS3Service imageS3Service;
     private final ApplicationEventPublisher eventPublisher;
+    private final MemberPort memberPort;
 
     @Transactional
     @Override
@@ -37,8 +39,8 @@ public class SignUpService implements SignUpUseCase {
         // 파일이 null이면 저장하지 않는다.
         if(profileImage != null && !profileImage.isEmpty()) {
             // 프로필 파일 저장을 위한 엔티티 생성 (이때 s3에는 이미 이미지가 업로드 완료되고 저장된 경로의 url을 받은 엔티티를 리스트로 생성)
-            MemberFile memberFile = imageS3Service.createMemberFile(profileImage, 0, savedMemberId);
-            Long savedMemberFileId = signUpPort.saveMemberFile(memberFile);
+            MemberFile memberFile = imageS3Service.createMemberFile(profileImage, savedMemberId);
+            Long savedMemberFileId = memberPort.saveMemberFile(memberFile);
 
             if(savedMemberFileId < 0) {
                 throw new MemberApplicationException(ErrorCode.MEMBER_FILE_SAVE_ERROR);

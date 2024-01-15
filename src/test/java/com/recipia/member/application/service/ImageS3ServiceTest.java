@@ -57,10 +57,9 @@ class ImageS3ServiceTest extends TotalTestSupport {
                 "image", "test.jpg", "image/jpeg", "test image content".getBytes());
 
         Long memberId = 123L;
-        Integer fileOrder = 0;
 
         //when
-        MemberFile memberFile = sut.createMemberFile(mockImage, fileOrder, memberId);
+        MemberFile memberFile = sut.createMemberFile(mockImage, memberId);
 
         //then
         assertNotNull(memberFile);
@@ -69,6 +68,7 @@ class ImageS3ServiceTest extends TotalTestSupport {
         assertNotNull(memberFile.getObjectUrl());
         Integer mockImageSize = Integer.parseInt(String.valueOf(mockImage.getSize()));
         Assertions.assertThat(mockImageSize).isEqualTo(memberFile.getFileSize());
+        assertEquals(memberFile.getFileOrder(), 1);
     }
 
     @Test
@@ -79,7 +79,7 @@ class ImageS3ServiceTest extends TotalTestSupport {
                 "file", "test.txt", "text/plain", "This is a text file.".getBytes());
 
         //when & then
-        Assertions.assertThatThrownBy(() -> sut.createMemberFile(mockFile, 0, 1L))
+        Assertions.assertThatThrownBy(() -> sut.createMemberFile(mockFile, 1L))
                 .isInstanceOf(MemberApplicationException.class)
                 .hasMessageContaining("S3에 업로드 할 수 없는 파일 타입입니다.")
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_FILE_TYPE);
@@ -93,7 +93,7 @@ class ImageS3ServiceTest extends TotalTestSupport {
                 "image", "empty.jpg", "image/jpeg", new byte[100]);
 
         //when & then
-        Assertions.assertThatThrownBy(() -> sut.createMemberFile(mockImage, 0, null))
+        Assertions.assertThatThrownBy(() -> sut.createMemberFile(mockImage, null))
                 .isInstanceOf(MemberApplicationException.class)
                 .hasMessageContaining("유저를 찾을 수 없습니다.")
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
@@ -106,7 +106,7 @@ class ImageS3ServiceTest extends TotalTestSupport {
         Integer fileOrder = 0;
 
         //when & then
-        Assertions.assertThatThrownBy(() -> sut.createMemberFile(null, fileOrder, memberId))
+        Assertions.assertThatThrownBy(() -> sut.createMemberFile(null, memberId))
                 .isInstanceOf(MemberApplicationException.class)
                 .hasMessageContaining("업로드할 파일이 존재하지 않습니다.")
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.S3_UPLOAD_FILE_NOT_FOUND);
