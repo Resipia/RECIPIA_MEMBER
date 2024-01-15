@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * 마이페이지 컨트롤러
+ */
 @RequestMapping("/member/myPage")
 @RequiredArgsConstructor
 @RestController
@@ -26,7 +29,7 @@ public class MyPageController {
     private final SecurityUtils securityUtils;
 
     /**
-     * 마이페이지 조회 담당
+     * 다른 유저가 마이페이지 조회
      */
     @PostMapping("/view")
     public ResponseEntity<ResponseDto<MyPageViewResponseDto>> view() {
@@ -37,7 +40,7 @@ public class MyPageController {
     }
 
     /**
-     * 마이페이지 수정 담당
+     * 마이페이지 수정
      */
     @PostMapping("/update")
     public ResponseEntity<ResponseDto<Void>> update(@Valid @RequestBody UpdateMyPageRequestDto dto) {
