@@ -7,6 +7,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+/**
+ * 스프링 시큐리티에서 설정한 security context에서 원하는 데이터 추출 Utils 클래스
+ */
 @Component
 public class SecurityUtils {
 
