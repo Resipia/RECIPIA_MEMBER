@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 회원 관리 컨트롤러
+ */
 @RequestMapping("/member/management")
 @RequiredArgsConstructor
 @RestController
@@ -19,7 +22,7 @@ public class MemberManagementController {
     private final MemberManagementUseCase memberManagementUseCase;
 
     /**
-     * 이메일 중복체크
+     * 이메일 중복체크 요청
      */
     @PostMapping("/checkDupEmail")
     public ResponseEntity<ResponseDto<Boolean>> checkDuplicateEmail(@Valid @RequestBody EmailAvailableRequestDto requestDto) {

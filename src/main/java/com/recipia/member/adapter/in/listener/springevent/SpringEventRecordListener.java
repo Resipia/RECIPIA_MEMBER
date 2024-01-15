@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 
+/**
+ * 이벤트 저장소 관련 스프링 이벤트 리스너 클래스
+ */
 @RequiredArgsConstructor
 @Component
 public class SpringEventRecordListener {

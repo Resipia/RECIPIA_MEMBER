@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * access token 재발급을 요청하는 request dto
+ */
 @ToString
 @Getter
 @NoArgsConstructor
