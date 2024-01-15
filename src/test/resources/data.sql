@@ -38,5 +38,5 @@ INSERT INTO jwt(jwt_id, member_id, refresh_token, expired_dttm)
 VALUES (1, 1, 'some-refresh-token', DATEADD(MONTH, 6, CURRENT_DATE()));
 
 -- 멤버 파일 추가
--- INSERT INTO member_file (member_id, file_order, flpth, object_url, origin_file_nm, strd_file_nm, file_extsn, file_size, del_yn, create_dttm, update_dttm)
--- VALUES (1, 0, 'path', 'url', 'origin', 'stord', 'jpg', 30, 'N', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO member_file (member_id, file_order, flpth, object_url, origin_file_nm, strd_file_nm, file_extsn, file_size, del_yn, create_dttm, update_dttm)
+VALUES (1, 1, 'path', 'url', 'origin', 'stord', 'jpg', 30, 'N', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

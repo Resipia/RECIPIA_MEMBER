@@ -65,24 +65,22 @@ class MyPageControllerTest extends TotalTestSupport {
                 .andExpect(status().isOk());
     }
 
-//    @DisplayName("[happy] 마이페이지 수정 요청 성공")
-//    @Test
-//    void whenAuthenticatedUserRequestsMyPageUpdate_thenSuccess() throws Exception {
-//        // given
-//        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.of("update-nickname", "update-introduction");
-//        MyPage beforeServiceDomain = MyPage.of(1L, "update-nickname", "update-introduction");
-//        MyPage result = MyPage.of(1L, "url", "update-nickname", "update-introduction", 3L, 4L);
-//
-//        when(myPageConverter.updateRequestDtoToDomain(dto)).thenReturn(result);
-//        when(myPageUseCase.updateMyPage(beforeServiceDomain)).thenReturn(result);
-//
-//        // when & then
-//        mockMvc.perform(post("/member/myPage/update")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(asJsonString(dto)))
-//                .andExpect(status().isOk())
-//                .andDo(print());
-//    }
+    @DisplayName("[happy] 마이페이지 수정 요청 성공")
+    @Test
+    void whenAuthenticatedUserRequestsMyPageUpdate_thenSuccess() throws Exception {
+        // given
+        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.builder().nickname("hello").build();
+        MyPage myPage = MyPage.builder().memberId(1L).nickname(dto.getNickname()).build();
+
+        when(myPageConverter.updateRequestDtoToDomain(dto)).thenReturn(myPage);
+
+        // when & then
+        mockMvc.perform(post("/member/myPage/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(dto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 
 
     // JSON 문자열 변환을 위한 유틸리티 메서드

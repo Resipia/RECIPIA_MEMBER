@@ -4,6 +4,7 @@ import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.application.port.out.port.MyPagePort;
+import com.recipia.member.common.event.NicknameChangeSpringEvent;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
@@ -18,10 +19,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("[단위] 마이페이지 서비스 테스트")
@@ -39,15 +39,34 @@ class MyPageServiceTest {
     private ApplicationEventPublisher eventPublisher;
 
 
-    @DisplayName("[happy] 정상적인 마이페이지 조회")
+    @DisplayName("[happy] 프로필 이미지가 있는 유저의 마이페이지 조회")
     @Test
-    void viewMyPageSuccess() {
+    void viewMyPageWithProfileImageSuccess() {
         // given
         Long memberId = 1L;
-        MyPage beforePreSignedResponse = MyPage.of(1L, "file/path", "nickname", "introduction", 3L, 4L);
+        MyPage beforePreSignedResponse = MyPage.builder().memberId(memberId).imageFilePath("file/path").nickname("nickname").followerCount(3L).followingCount(54L).build();
         String expectedPreSignedUrl = "pre-signed-url";
-        when(myPagePort.viewMyPage(eq(memberId))).thenReturn(beforePreSignedResponse);
-        when(imageS3Service.generatePreSignedUrl(eq(beforePreSignedResponse.getProfileImageFilePath()), eq(60))).thenReturn("pre-signed-url");
+        when(myPagePort.viewMyPage(memberId)).thenReturn(beforePreSignedResponse);
+        when(imageS3Service.generatePreSignedUrl(beforePreSignedResponse.getImageFilePath(), 60)).thenReturn("pre-signed-url");
+
+        // when
+        MyPage result = sut.viewMyPage(memberId);
+
+        // then
+        assertNotNull(result);
+        assertEquals(memberId, result.getMemberId());
+        assertEquals(beforePreSignedResponse.getNickname(), result.getNickname());
+        assertEquals(expectedPreSignedUrl, result.getImagePreUrl());
+    }
+
+
+    @DisplayName("[happy] 프로필 이미지가 없는 유저의 마이페이지 조회")
+    @Test
+    void viewMyPageWithoutProfileImageSuccess() {
+        // given
+        Long memberId = 1L;
+        MyPage myPage = MyPage.of(memberId, null, "nickname", "introduction", 3L, 4L);
+        when(myPagePort.viewMyPage(eq(memberId))).thenReturn(myPage);
 
         // when
         MyPage result = sut.viewMyPage(memberId);
@@ -57,11 +76,13 @@ class MyPageServiceTest {
         assertEquals(memberId, result.getMemberId());
         assertEquals("nickname", result.getNickname());
         assertEquals("introduction", result.getIntroduction());
-        assertEquals(expectedPreSignedUrl, result.getProfileImageUrl());
+
+        // 이미지 파일이 없기때문에 imageS3Service.generatePreSignedUrl 메서드가 한번도 호출되지 않았음을 검증
+        verify(imageS3Service, never()).generatePreSignedUrl(anyString(), anyInt());
 
     }
 
-    @DisplayName("[bad] 마이페이지 조회 실패")
+    @DisplayName("[bad] 데이터베이스 오류로 마이페이지 조회 실패")
     @Test
     void viewMyPageFail() {
         // given
@@ -76,11 +97,11 @@ class MyPageServiceTest {
         assertEquals("데이터베이스 오류", exception.getMessage());
     }
 
-    @DisplayName("[happy] 프로필 이미지가 없는 상황에서 정상적인 마이페이지 수정 성공")
+    @DisplayName("[happy] 프로필 이미지가 없고, 삭제된 이미지도 없는 상황에서 기본정보만 수정을 요청한 정상적인 마이페이지 수정 성공")
     @Test
     void updateMyPageWithoutProfileImage() {
         // given
-        MyPage myPage = MyPage.of(1L, "nickname", "intro");
+        MyPage myPage = MyPage.builder().memberId(1L).nickname("nickname").introduction("intro").build();
         Member member = createMember();
         when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
         when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
@@ -90,10 +111,32 @@ class MyPageServiceTest {
 
         // then
         assertEquals(updatedCount, 1L);
+        verify(memberPort, never()).softDeleteProfileImage(any(MyPage.class));
+        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong());
+        verify(memberPort, never()).saveMemberFile(any(MemberFile.class));
+    }
+
+    @DisplayName("[happy] 프로필 이미지가 없고, 삭제된 이미지가 있는 상황에서 정상적인 마이페이지 수정 성공")
+    @Test
+    void updateMyPageWithDeleteProfileImage() {
+        // given
+        MyPage myPage = MyPage.builder().memberId(1L).nickname("nickname").introduction("intro").deleteFileOrder(1).build();
+        Member member = createMember();
+        when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
+        when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
+
+        // when
+        Long updatedCount = sut.updateMyPage(myPage, null);
+
+        // then
+        assertEquals(updatedCount, 1L);
+        verify(memberPort, times(1)).softDeleteProfileImage(any(MyPage.class));
+        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong());
+        verify(memberPort, never()).saveMemberFile(any(MemberFile.class));
     }
 
 
-    @DisplayName("[happy] 프로필 이미지가 있는 상황에서 정상적인 마이페이지 수정 성공")
+    @DisplayName("[happy] 프로필 이미지가 있고 삭제하는 이미지가 있는 상황에서 정상적인 마이페이지 수정 성공")
     @Test
     void updateMyPageWithProfileImage() {
         // given
@@ -105,7 +148,7 @@ class MyPageServiceTest {
 
         when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
         when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
-        when(imageS3Service.createMemberFile(mockImage, 0, myPage.getMemberId())).thenReturn(memberFile);
+        when(imageS3Service.createMemberFile(mockImage, myPage.getMemberId())).thenReturn(memberFile);
         when(memberPort.saveMemberFile(memberFile)).thenReturn(2L);
 
         // when
@@ -127,7 +170,7 @@ class MyPageServiceTest {
 
         when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
         when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
-        when(imageS3Service.createMemberFile(mockImage, 0, myPage.getMemberId())).thenReturn(memberFile);
+        when(imageS3Service.createMemberFile(mockImage, myPage.getMemberId())).thenReturn(memberFile);
         when(memberPort.saveMemberFile(memberFile)).thenReturn(0L);
 
         // when % then
@@ -136,6 +179,44 @@ class MyPageServiceTest {
         });
 
     }
+
+    @DisplayName("[happy] 닉네임이 수정되지 않았을 때 eventPublisher 호출 안 함")
+    @Test
+    void updateMyPageWithUnchangedNickname() {
+        // given
+        MyPage myPage = MyPage.builder().memberId(1L).nickname("OldNickname").introduction("intro").build();
+        Member member = createMemberWithNickname("OldNickname");
+        when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
+        when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
+
+        // when
+        sut.updateMyPage(myPage, null);
+
+        // then
+        verify(eventPublisher, never()).publishEvent(any(NicknameChangeSpringEvent.class));
+    }
+
+    @DisplayName("[happy] 닉네임 수정 시 eventPublisher 호출")
+    @Test
+    void updateMyPageWithChangedNickname() {
+        // given
+        MyPage myPage = MyPage.builder().memberId(1L).nickname("NewNickname").introduction("intro").build();
+        Member member = createMemberWithNickname("OldNickname");
+        when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
+        when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
+
+        // when
+        sut.updateMyPage(myPage, null);
+
+        // then
+        verify(eventPublisher, times(1)).publishEvent(any(NicknameChangeSpringEvent.class));
+    }
+
+
+    private Member createMemberWithNickname(String nickname) {
+        return Member.of(1L, "test@example.com", "password", "Full Name", nickname, MemberStatus.ACTIVE, "Introduction", "01012345678", "Address 1-1", "Address 1-2", RoleType.MEMBER);
+    }
+
 
 
     private Member createMember() {
