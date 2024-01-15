@@ -19,11 +19,20 @@ public class FollowAdapter implements FollowPort {
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * [READ] 내가 팔로우 하고 있는 사람인지 검증
+     * 팔로우 관계라면 true, 팔로우 관계가 없다면 false를 반환한다.
+     */
     public boolean existsFollowRelation(Follow follow) {
         Optional<FollowEntity> optionalFollowEntity = followRepository.findFollowByFollowerMember_IdAndFollowingMember_Id(follow.getFollowerMemberId(), follow.getFollowingMemberId());
         return optionalFollowEntity.isPresent();
     }
 
+    /**
+     * [CREATE] 팔로우 저장
+     * 팔로우를 저장하고 생성된 팔로우 pk값을 반환한다.
+     *
+     */
     @Override
     public Long follow(Follow follow) {
         MemberEntity follower = memberRepository.findMemberByIdAndStatus(follow.getFollowerMemberId(), MemberStatus.ACTIVE).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));

@@ -4,7 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
+/**
+ * 로그아웃 도메인 객체
+ */
 @Getter
 @NoArgsConstructor
 public class Logout {
@@ -12,6 +14,7 @@ public class Logout {
     private Long memberId;
     private String accessToken;
 
+    @Builder
     private Logout(Long memberId, String accessToken) {
         this.memberId = memberId;
         this.accessToken = accessToken;

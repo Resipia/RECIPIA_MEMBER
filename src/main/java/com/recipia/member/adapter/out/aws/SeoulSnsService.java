@@ -15,6 +15,9 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 서울 리전 SNS 발행 서비스
+ */
 @RequiredArgsConstructor
 @Slf4j
 @Service

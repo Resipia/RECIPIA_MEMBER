@@ -6,11 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+/**
+ * 멤버 도메인 객체
+ */
 @Setter
 @Getter
 @NoArgsConstructor

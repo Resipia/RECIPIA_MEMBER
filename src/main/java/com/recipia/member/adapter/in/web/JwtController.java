@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * JWT 컨트롤러
+ */
 @RequiredArgsConstructor
 @RequestMapping("/member/jwt")
 @RestController
@@ -21,6 +24,9 @@ public class JwtController {
     private final JwtUseCase jwtUseCase;
     private final JwtConverter jwtConverter;
 
+    /**
+     * access token 재발행 요청
+     */
     @PostMapping("/republish")
     public ResponseEntity<ResponseDto<JwtRepublishResponseDto>> republish (@Valid @RequestBody JwtRepublishRequestDto republishReqDto) {
         String accessToken = jwtUseCase.republishAccessToken(jwtConverter.requestDtoToDomain(republishReqDto));

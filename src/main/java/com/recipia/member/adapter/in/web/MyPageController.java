@@ -44,6 +44,7 @@ public class MyPageController {
      */
     @PostMapping("/update")
     public ResponseEntity<ResponseDto<Void>> update(@Valid @RequestBody UpdateMyPageRequestDto dto) {
+        // todo: 만약에 nickname 수정되면 access token 재발행해주고 다시 세팅해주기
         MultipartFile profileImage = dto.getProfileImage();
         myPageUseCase.updateMyPage(myPageConverter.updateRequestDtoToDomain(dto), profileImage);
         return ResponseEntity.ok(

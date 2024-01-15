@@ -13,6 +13,9 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Redis 서비스
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

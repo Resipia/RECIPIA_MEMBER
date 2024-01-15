@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
+/**
+ * 인증 코드 관련 스프링 이벤트 리스너
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -17,6 +20,9 @@ public class SpringEventVerifyCodeListener {
     private final RedisService redisService;
     private final Duration TIMEOUT = Duration.ofMinutes(5); // 5분
 
+    /**
+     * Redis에 휴대폰 번호와 인증코드 저장
+     */
     @EventListener
     public void eventVerifyCodeListener(SendVerifyCodeSpringEvent event) {
         String phoneNumber = event.phoneNumber();

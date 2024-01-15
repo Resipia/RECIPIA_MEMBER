@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 public interface JwtPort {
-    // refresh token 저장용
     void save(Jwt jwt);
-    // memberid, refresh token으로 Jwt 가져오기
     Jwt getJwt(Jwt jwt);
     void deleteRefreshToken(Long memberId);
 

@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * 회원가입 서비스 클래스
+ */
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class SignUpService implements SignUpUseCase {
@@ -23,20 +27,25 @@ public class SignUpService implements SignUpUseCase {
     private final ApplicationEventPublisher eventPublisher;
     private final MemberPort memberPort;
 
+    /**
+     * [CREATE] 회원을 저장한다.
+     * 저장된 회원의 pk값을 반환한다.
+     */
     @Transactional
     @Override
     public Long signUp(Member member, MultipartFile profileImage) {
-        // 비밀번호 형태 검증
+        // 1. 비밀번호 형태 검증
         if (!member.isValidPassword(member.getPassword())) {
             throw new MemberApplicationException(ErrorCode.BAD_REQUEST);
         }
 
-        // 비밀번호 암호화
+        // 2. 비밀번호 암호화
         member.passwordEncoder();
 
+        // 3. 회원 저장
         Long savedMemberId = signUpPort.signUpMember(member);
 
-        // 파일이 null이면 저장하지 않는다.
+        // 4. 프로필 이미지가 없으면 파일을 저장하지 않는다.
         if(profileImage != null && !profileImage.isEmpty()) {
             // 프로필 파일 저장을 위한 엔티티 생성 (이때 s3에는 이미 이미지가 업로드 완료되고 저장된 경로의 url을 받은 엔티티를 리스트로 생성)
             MemberFile memberFile = imageS3Service.createMemberFile(profileImage, savedMemberId);
@@ -47,7 +56,7 @@ public class SignUpService implements SignUpUseCase {
             }
         }
 
-        // 이벤트 발행: 레시피 서버에 회원가입된 유저 정보 저장
+        // 5. 회원가입 이벤트 발행: 레시피 서버에 회원가입된 유저 정보 저장하기 위함
         eventPublisher.publishEvent(SignUpSpringEvent.of(savedMemberId));
 
         return savedMemberId;

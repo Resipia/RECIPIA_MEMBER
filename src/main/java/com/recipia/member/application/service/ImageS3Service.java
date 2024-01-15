@@ -19,6 +19,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -123,7 +124,7 @@ public class ImageS3Service {
      * @return 생성된 Pre-Signed URL
      */
     public String generatePreSignedUrl(String filePath, int duration) {
-        java.util.Date expiration = new java.util.Date();
+        Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
         expTimeMillis += 1000 * 60 * duration; // 예: 60분
         expiration.setTime(expTimeMillis);

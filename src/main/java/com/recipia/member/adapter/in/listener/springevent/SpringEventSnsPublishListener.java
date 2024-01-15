@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+/**
+ * SNS 발행 관련 스프링 이벤트 리스너 클래스
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -24,6 +27,7 @@ public class SpringEventSnsPublishListener {
     private final Tracer tracer;
 
     /**
+     * SNS 메시지 생성 후 SNS 발행 메서드 호출 담당
      * 이벤트를 호출한 서비스 코드의 트랜잭션과 묶여있지 않고 트랜잭션이 commit된 후에 동작한다.
      */
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

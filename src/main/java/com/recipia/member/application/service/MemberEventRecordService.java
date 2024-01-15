@@ -8,10 +8,15 @@ import com.recipia.member.common.utils.CustomJsonBuilder;
 import com.recipia.member.common.utils.MemberStringUtils;
 import com.recipia.member.config.aws.SnsConfig;
 import com.recipia.member.domain.MemberEventRecord;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+
+/**
+ * 이벤트 저장소 서비스 클래스
+ */
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class MemberEventRecordService implements MemberEventRecordUseCase {
@@ -22,7 +27,7 @@ public class MemberEventRecordService implements MemberEventRecordUseCase {
     private final Tracer tracer;
 
     /**
-     * 가장 최근에 발행 성공한 이벤트를 published = true로 업데이트
+     * [UPDATE] 가장 최근에 발행 성공한 이벤트를 published = true로 업데이트한다.
      */
     @Transactional
     @Override
@@ -31,7 +36,7 @@ public class MemberEventRecordService implements MemberEventRecordUseCase {
     }
 
     /**
-     * 새로운 이벤트를 발행하기 전에 기존에 누락되었던 이벤트 전부 published = true로 업데이트하고,
+     * [UPDATE/CREATE] 새로운 이벤트를 발행하기 전에 기존에 누락되었던 이벤트 전부 published = true로 업데이트하고,
      * 새로운 이벤트 저장
      */
     @Transactional

@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+/**
+ * JWT 서비스 클래스
+ */
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -26,9 +29,10 @@ public class JwtService implements JwtUseCase {
     private final JwtPort jwtPort;
 
     /**
-     * refresh token db에 저장
+     * [CREATE] refresh token db에 저장
      */
     @Transactional
+    @Override
     public void insertRefreshTokenToDB(String email, Pair<String, LocalDateTime> jwtPair) {
         Member member = memberPort.findMemberByEmail(email).orElseThrow(() -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND));
         Jwt jwt = Jwt.of(member.getId(), jwtPair.getFirst(), jwtPair.getSecond());
@@ -37,7 +41,7 @@ public class JwtService implements JwtUseCase {
     }
 
     /**
-     * memberId, refresh token으로 access token 재발행
+     * [READ] memberId, refresh token으로 access token 재발행
      */
     @Override
     public String republishAccessToken(Jwt jwt) {
@@ -50,11 +54,12 @@ public class JwtService implements JwtUseCase {
             throw new MemberApplicationException(ErrorCode.EXPIRED_REFRESH_TOKEN);
         }
 
+        // TokenMemberInfoDto에 넣어줄 회원 정보 가져오기
         Member member = memberPort.findMemberByIdAndStatus(jwt.getMemberId(), MemberStatus.ACTIVE);
 
         TokenMemberInfoDto tokenMemberInfoDto = TokenMemberInfoDto.of(member.getId(), member.getEmail(), null, member.getNickname(), member.getStatus(), member.getRoleType());
-        String accessToken = TokenUtils.generateAccessToken(tokenMemberInfoDto);
 
-        return accessToken;
+        // access token 생성 후 반환
+        return TokenUtils.generateAccessToken(tokenMemberInfoDto);
     }
 }

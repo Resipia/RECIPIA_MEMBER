@@ -4,7 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
+/**
+ * 본인 인증 도메인 객체
+ */
 @Getter
 @NoArgsConstructor
 public class Authentication {
@@ -13,6 +15,7 @@ public class Authentication {
     private String email;
     private String verifyCode;
 
+    @Builder
     private Authentication(String phoneNumber, String email, String verifyCode) {
         this.phoneNumber = phoneNumber;
         this.email = email;

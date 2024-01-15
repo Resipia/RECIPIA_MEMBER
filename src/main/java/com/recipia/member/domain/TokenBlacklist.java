@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * 토큰 블랙리스트 도메인 객체
+ */
 @Getter
 @NoArgsConstructor
 public class TokenBlacklist {

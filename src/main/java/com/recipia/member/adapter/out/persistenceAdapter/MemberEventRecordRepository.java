@@ -4,7 +4,6 @@ import com.recipia.member.adapter.out.persistence.MemberEventRecordEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface MemberEventRecordRepository extends JpaRepository<MemberEventRecordEntity, Long> {
 

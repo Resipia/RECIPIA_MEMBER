@@ -1,6 +1,5 @@
 package com.recipia.member.domain;
 
-import com.recipia.member.adapter.out.persistence.MemberEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

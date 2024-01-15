@@ -1,6 +1,5 @@
 package com.recipia.member.common.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

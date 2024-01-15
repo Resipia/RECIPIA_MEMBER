@@ -5,6 +5,9 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * 회원가입을 요청할때 데이터를 담는 request dto
+ */
 @ToString
 @Getter
 @Setter

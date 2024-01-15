@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * 회원 가입 컨트롤러
+ */
 @RequiredArgsConstructor
 @RequestMapping("/member")
 @RestController
@@ -21,6 +24,9 @@ public class SignUpController {
     private final SignUpUseCase signUpUseCase;
     private final MemberConverter memberConverter;
 
+    /**
+     * 회원 가입 요청
+     */
     @PostMapping("/signUp")
     public ResponseEntity<ResponseDto<Long>> signUp(@Valid @ModelAttribute SignUpRequestDto requestDto) {
         MultipartFile profileImage = requestDto.getProfileImage();
