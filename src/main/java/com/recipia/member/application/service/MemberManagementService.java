@@ -1,13 +1,16 @@
 package com.recipia.member.application.service;
 
 import com.recipia.member.application.port.in.MemberManagementUseCase;
+import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
+import com.recipia.member.domain.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +23,7 @@ import java.util.regex.Pattern;
 public class MemberManagementService implements MemberManagementUseCase {
 
     private final SignUpPort signUpPort;
+    private final MemberPort memberPort;
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
@@ -48,6 +52,25 @@ public class MemberManagementService implements MemberManagementUseCase {
     @Override
     public boolean isTelNoAvailable(String telNo) {
         return signUpPort.isTelNoAvailable(telNo);
+    }
+
+    /**
+     * [CREATE] 회원 신고를 접수한다.
+     * 저장에 성공하면 생성된 신고 id를 반환한다.
+     */
+    @Transactional
+    @Override
+    public Long reportMember(Report report) {
+        // 신고를 하는 회원과 신고를 당하는 회원 둘다 존재하는 회원인지 검증
+        List<Long> memberIdList = List.of(report.getReportingMemberId(), report.getReportedMemberId());
+        boolean allMemberActive = memberPort.isAllMemberActive(memberIdList);
+
+        // 둘 중 한명이라도 ACTIVE한 회원이 아니라면 에러 발생
+        if (!allMemberActive) {
+            throw new MemberApplicationException(ErrorCode.NOT_ACTIVE_USER);
+        }
+
+        return memberPort.saveReport(report);
     }
 
 

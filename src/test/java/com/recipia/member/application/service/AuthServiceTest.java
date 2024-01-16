@@ -3,6 +3,7 @@ package com.recipia.member.application.service;
 import com.recipia.member.adapter.out.aws.TokyoSnsService;
 import com.recipia.member.application.port.out.port.JwtPort;
 import com.recipia.member.application.port.out.port.MemberPort;
+import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.domain.Authentication;
 import com.recipia.member.domain.Logout;
 import com.recipia.member.domain.TokenBlacklist;
@@ -37,7 +38,7 @@ class AuthServiceTest {
     @Mock
     private ApplicationEventPublisher eventPublisher;
     @Mock
-    private MemberManagementService memberManagementService;
+    private SignUpPort signUpPort;
     @Mock
     private JwtConverter jwtConverter;
     @Mock
@@ -52,7 +53,7 @@ class AuthServiceTest {
     void publishSMSToPhoneNumberSuccess() {
         //given
         Authentication authentication = createAuthenticationWoCode();
-        when(memberManagementService.isTelNoAvailable(authentication.getPhoneNumber())).thenReturn(true);
+        when(signUpPort.isTelNoAvailable(authentication.getPhoneNumber())).thenReturn(true);
         //when
         sut.verifyPhoneNumber(authentication);
 

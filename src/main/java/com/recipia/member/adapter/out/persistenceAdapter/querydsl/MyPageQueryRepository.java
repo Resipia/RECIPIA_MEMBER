@@ -55,12 +55,14 @@ public class MyPageQueryRepository {
         return jpaQueryFactory
                 .select(Projections.fields(MyPage.class,
                         memberEntity.id.as("memberId"),
-                        ExpressionUtils.as(filePathSubQuery, "imageFilePath"),
+//                        ExpressionUtils.as(filePathSubQuery, "imageFilePath"),
+                        memberEntity.memberFileEntity.storedFilePath.as("profileImageFilePath"),
                         memberEntity.nickname.as("nickname"),
                         memberEntity.introduction.as("introduction"),
                         ExpressionUtils.as(followingCountSubQuery, "followingCount"),
                         ExpressionUtils.as(followerCountSubQuery, "followerCount")))
                 .from(memberEntity)
+                .leftJoin(memberEntity.memberFileEntity) // 외부 조인 사용
                 .where(memberEntity.id.eq(memberId))
                 .fetchOne();
     }

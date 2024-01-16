@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -155,4 +156,25 @@ class MemberAdapterTest extends TotalTestSupport {
         assertEquals(maxFileOrder, 0);
     }
 
+    @DisplayName("[happy] 회원 상태가 전부 ACTIVE인 회원 id 리스트를 주입받았을때 true를 반환한다.")
+    @Test
+    void isAllMemberActiveSuccess() {
+        // given
+        List<Long> memberIdList = List.of(1L, 3L);
+        // when
+        boolean isAllMemberActive = sut.isAllMemberActive(memberIdList);
+        // then
+        assertTrue(isAllMemberActive);
+    }
+
+    @DisplayName("[happy] 회원 상태가 한명은 ACTIVE, 한명은 DORMANT인 리스트를 주입받았을때 false를 반환한다.")
+    @Test
+    void isOneMemberActiveSuccess() {
+        // given
+        List<Long> memberIdList = List.of(1L, 2L);
+        // when
+        boolean isAllMemberActive = sut.isAllMemberActive(memberIdList);
+        // then
+        assertFalse(isAllMemberActive);
+    }
 }

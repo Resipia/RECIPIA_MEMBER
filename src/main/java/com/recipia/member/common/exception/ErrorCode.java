@@ -36,6 +36,7 @@ public enum ErrorCode {
 
     // 회원 관리 관련 에러
     ALREADY_FOLLOWING(400, "ALREADY_FOLLOWING", "이미 팔로우 하고 있는 회원입니다."),
+    NOT_ACTIVE_USER(400, "NOT_ACTIVE_USER", "활성화 상태인 회원이 아닙니다."),
 
     // S3 관련 에러
     S3_UPLOAD_ERROR(500, "S3_UPLOAD_ERROR", "AWS S3 서비스 에러"),

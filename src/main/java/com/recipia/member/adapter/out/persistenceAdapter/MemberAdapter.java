@@ -2,6 +2,7 @@ package com.recipia.member.adapter.out.persistenceAdapter;
 
 import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.MemberFileEntity;
+import com.recipia.member.adapter.out.persistence.ReportEntity;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistenceAdapter.querydsl.MemberQueryRepository;
 import com.recipia.member.application.port.out.port.MemberPort;
@@ -10,10 +11,13 @@ import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
 import com.recipia.member.domain.MyPage;
+import com.recipia.member.domain.Report;
 import com.recipia.member.domain.converter.MemberConverter;
+import com.recipia.member.domain.converter.ReportConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -27,6 +31,8 @@ public class MemberAdapter implements MemberPort {
     private final MemberConverter converter;
     private final MemberQueryRepository memberQueryRepository;
     private final MemberFileRepository memberFileRepository;
+    private final ReportConverter reportConverter;
+    private final ReportRepository reportRepository;
 
     /**
      * [READ] member id로 조회한 멤버 도메인을 반환한다.
@@ -105,6 +111,26 @@ public class MemberAdapter implements MemberPort {
     @Override
     public Integer findMaxFileOrder(Long memberId) {
         return memberFileRepository.findMaxFileOrderByMemberEntity_Id(memberId).orElse(0);
+    }
+
+    /**
+     * [READ] memberIdList로 들어온 회원이 전부 ACTIVE 상태인지 검증한다.
+     * 회원이 전부 ACTIVE 상태면 true, 한명이라도 ACTIVE 상태가 아니라면 false를 반환한다.
+     */
+    @Override
+    public boolean isAllMemberActive(List<Long> memberIdList) {
+        Long memberCount = memberQueryRepository.findAllMemberByIdAndStatus(memberIdList);
+        return memberIdList.size() == memberCount;
+    }
+
+    /**
+     * [CREATE] 회원 신고를 저장한다.
+     * 저장에 성공하면 생성된 report id를 반환한다.
+     */
+    @Override
+    public Long saveReport(Report report) {
+        ReportEntity reportEntity = reportConverter.domainToEntity(report);
+        return reportRepository.save(reportEntity).getId();
     }
 
 

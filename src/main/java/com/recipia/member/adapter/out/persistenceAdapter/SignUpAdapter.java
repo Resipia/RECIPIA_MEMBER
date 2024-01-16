@@ -32,8 +32,9 @@ public class SignUpAdapter implements SignUpPort {
      */
     @Override
     public boolean isTelNoAvailable(String telNo) {
-        Optional<MemberEntity> member = memberRepository.findMemberByTelNo(telNo);
-        return member.isEmpty(); // 휴대폰 번호가 DB에 존재하지 않으면 true 반환
+        // 휴대폰 번호를 기반으로 DB에서 회원 존재 여부를 확인
+        // 존재하지 않으면 true, 존재하면 false 반환
+        return !memberRepository.existsByTelNo(telNo);
     }
 
     /**
