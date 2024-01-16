@@ -4,7 +4,9 @@ import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
 import com.recipia.member.domain.MyPage;
+import com.recipia.member.domain.Report;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberPort {
@@ -17,4 +19,6 @@ public interface MemberPort {
     Long saveMemberFile(MemberFile memberFile);
     Long softDeleteProfileImage(MyPage myPage);
     Integer findMaxFileOrder(Long memberId);
+    boolean isAllMemberActive(List<Long> memberIdList);
+    Long saveReport(Report report);
 }

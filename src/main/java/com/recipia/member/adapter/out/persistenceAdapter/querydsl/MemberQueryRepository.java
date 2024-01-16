@@ -6,6 +6,8 @@ import com.recipia.member.domain.MyPage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 import static com.recipia.member.adapter.out.persistence.QMemberEntity.memberEntity;
 import static com.recipia.member.adapter.out.persistence.QMemberFileEntity.memberFileEntity;
 
@@ -35,5 +37,16 @@ public class MemberQueryRepository {
                 .set(memberFileEntity.delYn, "Y")
                 .where(memberFileEntity.memberEntity.id.eq(myPage.getMemberId()), memberFileEntity.fileOrder.eq(myPage.getDeleteFileOrder()))
                 .execute();
+    }
+
+    /**
+     * [READ] memberIdList에 해당하는 회원중에서 status가 ACTIVE인 회원의 갯수를 반환한다.
+     */
+    public Long findAllMemberByIdAndStatus(List<Long> memberIdList) {
+        return jpaQueryFactory
+                .select(memberEntity.id.count())
+                .from(memberEntity)
+                .where(memberEntity.id.in(memberIdList), memberEntity.status.eq(MemberStatus.ACTIVE))
+                .fetchOne();
     }
 }
