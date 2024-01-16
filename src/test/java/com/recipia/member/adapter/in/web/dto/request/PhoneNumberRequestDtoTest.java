@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("[단위] 휴대폰 번호 문자 전송 요청 dto 테스트")
 class PhoneNumberRequestDtoTest {
 
-
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @DisplayName("[happy] 올바른 전화번호 입력 시 성공한다.")

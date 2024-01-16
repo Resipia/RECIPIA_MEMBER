@@ -1,6 +1,10 @@
 package com.recipia.member.application.service;
 
+import com.recipia.member.adapter.out.persistence.constant.ReportStatus;
+import com.recipia.member.adapter.out.persistence.constant.ReportType;
 import com.recipia.member.adapter.out.persistenceAdapter.SignUpAdapter;
+import com.recipia.member.application.port.out.port.MemberPort;
+import com.recipia.member.domain.Report;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,8 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -18,7 +26,8 @@ class MemberManagementServiceTest {
 
     @InjectMocks
     private MemberManagementService sut;
-
+    @Mock
+    private MemberPort memberPort;
     @Mock
     private SignUpAdapter signUpAdapterMock;
 
@@ -77,6 +86,23 @@ class MemberManagementServiceTest {
 
         //then
         assertThat(isTelNoAvailable).isFalse();
+    }
+
+    @DisplayName("[happy] 신고를 하는 회원과 신고를 당하는 회원 모두 ACTIVE 상태일때 신고 접수가 성공한다.")
+    @Test
+    void reportSaveSuccess() {
+        // given
+        Long reportedMemberId = 3L;     // 신고 당하는 회원
+        Long reportingMemberId = 1L;    // 신고하는 회원
+        Report report = Report.of(reportedMemberId, reportingMemberId, ReportType.SPAM, "", ReportStatus.RECEIVED);
+        when(memberPort.isAllMemberActive(eq(List.of(reportingMemberId, reportedMemberId)))).thenReturn(true);
+        when(sut.reportMember(report)).thenReturn(1L);
+
+        // when
+        Long savedReportId = sut.reportMember(report);
+        // then
+        assertThat(savedReportId).isNotNull();
+        assertThat(savedReportId).isGreaterThan(0L);
 
     }
 

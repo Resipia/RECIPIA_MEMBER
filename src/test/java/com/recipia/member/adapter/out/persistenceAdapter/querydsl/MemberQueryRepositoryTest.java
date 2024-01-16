@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Transactional
@@ -44,4 +46,14 @@ class MemberQueryRepositoryTest extends TotalTestSupport {
         assertEquals("Y", updatedEntity.getDelYn());
     }
 
+    @DisplayName("[happy] 회원 상태가 ACTIVE인 회원 두명을 받았을때 2를 반환한다.")
+    @Test
+    void findAllMemberByIdAndStatusSuccess() {
+        // given
+        List<Long> memberIdList = List.of(1L, 3L);
+        // when
+        Long memberCount = sut.findAllMemberByIdAndStatus(memberIdList);
+        // then
+        assertEquals(memberIdList.size(), memberCount);
+    }
 }
