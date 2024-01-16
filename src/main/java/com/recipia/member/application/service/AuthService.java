@@ -4,6 +4,7 @@ import com.recipia.member.adapter.out.aws.TokyoSnsService;
 import com.recipia.member.application.port.in.AuthUseCase;
 import com.recipia.member.application.port.out.port.JwtPort;
 import com.recipia.member.application.port.out.port.MemberPort;
+import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.common.event.SendVerifyCodeSpringEvent;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
@@ -29,19 +30,19 @@ public class AuthService implements AuthUseCase {
     private final TokyoSnsService tokyoSnsService;
     private final ApplicationEventPublisher eventPublisher;
     private final RedisService redisService;
-    private final MemberManagementService memberManagementService;
     private final JwtPort jwtPort;
     private final JwtConverter jwtConverter;
     private final MemberPort memberPort;
+    private final SignUpPort signUpPort;
 
     /**
-     * 전화번호로 인증 코드 전송 메서드 호출
+     * [READ] 전화번호로 인증 코드 전송 메서드 호출
      */
     @Override
     public void verifyPhoneNumber(Authentication authentication) {
 
         // db에 이미 존재하는 전화번호인지 확인
-        boolean isAvailableTelNo = memberManagementService.isTelNoAvailable(authentication.getPhoneNumber());
+        boolean isAvailableTelNo = signUpPort.isTelNoAvailable(authentication.getPhoneNumber());
 
         if (!isAvailableTelNo) {
             throw new MemberApplicationException(ErrorCode.TEL_NO_ALREADY_EXISTS);
