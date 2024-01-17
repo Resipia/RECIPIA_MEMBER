@@ -62,4 +62,13 @@ public class JwtService implements JwtUseCase {
         // access token 생성 후 반환
         return TokenUtils.generateAccessToken(tokenMemberInfoDto);
     }
+
+    /**
+     * [READ] memberId로 저장된 데이터가 있는지 검증
+     * 기존에 로그인된 회원(데이터 존재)이면 true, 로그인 되어있지 않은 회원(데이터 없음)이면 false 반환
+     */
+    @Override
+    public boolean isLoggedIn(Long memberId) {
+        return jwtPort.isLoggedIn(memberId);
+    }
 }

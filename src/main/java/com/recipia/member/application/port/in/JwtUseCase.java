@@ -8,4 +8,5 @@ import java.time.LocalDateTime;
 public interface JwtUseCase {
     void insertRefreshTokenToDB(String email, Pair<String, LocalDateTime> jwtPair);
     String republishAccessToken(Jwt jwt);
+    boolean isLoggedIn(Long memberId);
 }
