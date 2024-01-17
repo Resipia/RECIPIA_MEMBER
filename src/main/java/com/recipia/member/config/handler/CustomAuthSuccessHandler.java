@@ -3,10 +3,12 @@ package com.recipia.member.config.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
+import com.recipia.member.application.port.in.AuthUseCase;
 import com.recipia.member.application.port.in.JwtUseCase;
 import com.recipia.member.config.dto.SecurityUserDetailsDto;
 import com.recipia.member.config.dto.TokenMemberInfoDto;
 import com.recipia.member.config.jwt.TokenUtils;
+import com.recipia.member.domain.Logout;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,6 +36,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     private final JwtUseCase jwtUseCase;
+    private final AuthUseCase authUseCase;
 
     /**
      * 인증 성공 후 처리하는 메서드.
@@ -49,15 +52,23 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         Pair<String, LocalDateTime> refreshTokenPair = TokenUtils.generateRefreshToken(tokenMemberInfoDto);
 
         // Refresh Token DB에 저장
-        // fixme: 계속 로그인하면 데이터 누적으로 저장되는 이슈
+        // 기존에 로그인 되어있는 회원인지 검장
+        boolean isLoggedIn = jwtUseCase.isLoggedIn(tokenMemberInfoDto.id());
+        // 로그인된 회원이라면 로그아웃 처리
+        if (isLoggedIn) {
+            Logout logout = Logout.of(tokenMemberInfoDto.id(), accessToken);
+            authUseCase.logout(logout);
+        }
+        // 로그인 처리 진행
         jwtUseCase.insertRefreshTokenToDB(tokenMemberInfoDto.email(), refreshTokenPair);
 
         // ResponseDto 객체 생성
-        Map<String, String> tokenMap = new HashMap<>();
+        Map<String, Object> tokenMap = new HashMap<>();
+        tokenMap.put("memberId", tokenMemberInfoDto.id());
         tokenMap.put("accessToken", accessToken);
         tokenMap.put("refreshToken", refreshTokenPair.getFirst());
 
-        ResponseDto<Map<String, String>> responseDto = ResponseDto.success(tokenMap);
+        ResponseDto<Map<String, Object>> responseDto = ResponseDto.success(tokenMap);
 
         // 응답 설정
         response.setCharacterEncoding("UTF-8");

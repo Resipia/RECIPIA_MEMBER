@@ -18,6 +18,7 @@ public class TokenBlacklistEntity extends CreateDateTimeForEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "blacklist_id")
     private Long id;
 
     @Column(name = "token", nullable = false)
