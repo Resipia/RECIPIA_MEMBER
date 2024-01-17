@@ -53,11 +53,12 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         jwtUseCase.insertRefreshTokenToDB(tokenMemberInfoDto.email(), refreshTokenPair);
 
         // ResponseDto 객체 생성
-        Map<String, String> tokenMap = new HashMap<>();
+        Map<String, Object> tokenMap = new HashMap<>();
+        tokenMap.put("memberId", tokenMemberInfoDto.id());
         tokenMap.put("accessToken", accessToken);
         tokenMap.put("refreshToken", refreshTokenPair.getFirst());
 
-        ResponseDto<Map<String, String>> responseDto = ResponseDto.success(tokenMap);
+        ResponseDto<Map<String, Object>> responseDto = ResponseDto.success(tokenMap);
 
         // 응답 설정
         response.setCharacterEncoding("UTF-8");
