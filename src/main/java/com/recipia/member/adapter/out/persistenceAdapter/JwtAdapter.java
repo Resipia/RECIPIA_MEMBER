@@ -65,4 +65,13 @@ public class JwtAdapter implements JwtPort {
         return optionalTokenBlacklistEntity.map(jwtConverter::entityToDomain).orElse(null);
     }
 
+    /**
+     * [READ] memberId로 데이터 검색
+     * 기존에 저장된 데이터가 있으면 true, 없으면 false 반환
+     */
+    @Override
+    public boolean isLoggedIn(Long memberId) {
+        return jwtRepository.existsByMemberId(memberId);
+    }
+
 }
