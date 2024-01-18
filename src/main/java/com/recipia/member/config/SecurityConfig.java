@@ -93,7 +93,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/resources/**"),
 //                                new AntPathRequestMatcher("/member/**"),
                                 new AntPathRequestMatcher("/oauth/kakao/callback"),     // kakao 로그인 요청 엔드포인트
-//                                new AntPathRequestMatcher("/member/jwt/republish"),   // access token 재발급 요청때는 접근을 허용
+                                new AntPathRequestMatcher("/member/jwt/republish"),   // access token 재발급 요청때는 접근을 허용
                                 new AntPathRequestMatcher("/feign/member/*"),   // feign 으로 들어온 접근을 허용
                                 new AntPathRequestMatcher("/health"),           // ALB에서 상태 검사용으로 들어온 '/health' 경로에 대한 접근을 허용
                                 new AntPathRequestMatcher("/actuator/*"),       // 프로메데우트 확인용
@@ -105,11 +105,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(customAuthenticationFilter, JwtAuthorizationFilter.class)
-                .oauth2Login(oAuth -> oAuth                     // OAuth2 로그인 설정
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oAuth2UserService)
-                        )
-                )
+//                .oauth2Login(oAuth -> oAuth                     // OAuth2 로그인 설정
+//                        .userInfoEndpoint(userInfo -> userInfo
+//                                .userService(oAuth2UserService)
+//                        )
+//                )
                 .build();
     }
 
