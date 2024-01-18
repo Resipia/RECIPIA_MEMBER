@@ -32,14 +32,21 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
+        log.debug("Authorization header: {}", token);
 
         token = TokenUtils.extractAccessToken(token);
 
         if (token != null) {
+            log.debug("Extracted JWT token: {}", token);
+
             if (validateToken(token)) {
                 UsernamePasswordAuthenticationToken authenticationToken = extractUserDetails(token);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            } else {
+                log.debug("Invalid JWT token: {}", token);
             }
+        } else {
+            log.debug("No JWT token found in request headers");
         }
         filterChain.doFilter(request, response);
     }

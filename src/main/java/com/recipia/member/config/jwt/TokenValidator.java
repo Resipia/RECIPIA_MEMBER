@@ -4,10 +4,14 @@ import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.domain.Member;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class TokenValidator {
@@ -29,6 +33,14 @@ public class TokenValidator {
             Member member = memberPort.findMemberByEmailAndStatus(email, MemberStatus.ACTIVE).orElse(null);
             return member != null;
         } catch (JwtException jwtException) {
+            log.debug("JWT validation error: {}", jwtException.getMessage());
+            if (jwtException instanceof ExpiredJwtException) {
+                log.debug("Expired JWT token: {}", token);
+            } else if (jwtException instanceof MalformedJwtException) {
+                log.debug("Malformed JWT token: {}", token);
+            } else {
+                log.debug("Other JWT error: {}", jwtException.getClass().getSimpleName());
+            }
             return false;
         }
     }

@@ -1,6 +1,7 @@
 package com.recipia.member.config;
 
-import com.recipia.member.application.service.JwtService;
+import com.recipia.member.application.port.in.AuthUseCase;
+import com.recipia.member.application.port.in.JwtUseCase;
 import com.recipia.member.config.filter.CustomAuthenticationFilter;
 import com.recipia.member.config.filter.JwtAuthorizationFilter;
 import com.recipia.member.config.handler.CustomAuthFailureHandler;
@@ -43,7 +44,8 @@ import java.util.function.Supplier;
 @Configuration
 public class SecurityConfig {
 
-    private final JwtService jwtService;
+    private final JwtUseCase jwtUseCase;
+    private final AuthUseCase authUseCase;
     private final TokenValidator tokenValidator;
 
     /**
@@ -89,7 +91,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 new AntPathRequestMatcher("/resources/**"),
-                                new AntPathRequestMatcher("/member/**"),
+//                                new AntPathRequestMatcher("/member/**"),
                                 new AntPathRequestMatcher("/oauth/kakao/callback"),     // kakao 로그인 요청 엔드포인트
 //                                new AntPathRequestMatcher("/member/jwt/republish"),   // access token 재발급 요청때는 접근을 허용
                                 new AntPathRequestMatcher("/feign/member/*"),   // feign 으로 들어온 접근을 허용
@@ -181,7 +183,7 @@ public class SecurityConfig {
      */
     @Bean
     public CustomAuthSuccessHandler customLoginSuccessHandler() {
-        return new CustomAuthSuccessHandler(jwtService);
+        return new CustomAuthSuccessHandler(jwtUseCase, authUseCase);
     }
 
     /**
