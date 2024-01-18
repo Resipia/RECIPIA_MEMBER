@@ -1,9 +1,9 @@
 logging:
   level:
-    com.recipia.member: debug
-    org.springframework.web.servlet: debug
-    org.hibernate.orm.jdbc.bind: debug
-    org.springframework.cloud.sleuth: debug
+    com.recipia.member: info
+    org.springframework.web.servlet: info
+    org.hibernate.orm.jdbc.bind: info
+    org.springframework.cloud.sleuth: info
 
 spring:
   cloud:
