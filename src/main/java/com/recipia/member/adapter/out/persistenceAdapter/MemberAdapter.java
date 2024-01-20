@@ -133,5 +133,17 @@ public class MemberAdapter implements MemberPort {
         return reportRepository.save(reportEntity).getId();
     }
 
+    /**
+     * [READ] 회원 이메일을 반환한다.
+     * 존재하는 회원을 받으면 email을 반환하고, 없는 회원이면 에러를 발생시킨다.
+     */
+    @Override
+    public String findEmail(Member domain) {
+        MemberEntity memberEntity = memberRepository.findMemberByFullNameAndTelNo(domain.getFullName(), domain.getTelNo()).orElseThrow(
+                () -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND)
+        );
+        return memberEntity.getEmail();
+    }
+
 
 }

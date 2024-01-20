@@ -21,4 +21,6 @@ public interface MemberPort {
     Integer findMaxFileOrder(Long memberId);
     boolean isAllMemberActive(List<Long> memberIdList);
     Long saveReport(Report report);
+
+    String findEmail(Member domain);
 }
