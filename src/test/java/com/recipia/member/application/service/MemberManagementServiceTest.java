@@ -4,21 +4,24 @@ import com.recipia.member.adapter.out.persistence.constant.ReportStatus;
 import com.recipia.member.adapter.out.persistence.constant.ReportType;
 import com.recipia.member.adapter.out.persistenceAdapter.SignUpAdapter;
 import com.recipia.member.application.port.out.port.MemberPort;
+import com.recipia.member.common.utils.TempPasswordUtil;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.Report;
+import com.recipia.member.domain.TempPassword;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +34,13 @@ class MemberManagementServiceTest {
     private MemberPort memberPort;
     @Mock
     private SignUpAdapter signUpAdapterMock;
+    @Mock
+    private TempPasswordUtil tempPasswordUtil;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    @Mock
+    private MailService mailService;
+
 
     @DisplayName("[happy] DB에 없는 이메일이 들어왔을때 true를 리턴한다.")
     @Test
@@ -117,6 +127,42 @@ class MemberManagementServiceTest {
         String result = sut.findEmail(member);
         // then
         assertEquals(result, "hong1@example.com");
+    }
+
+    @DisplayName("[happy] db에 존재하는 회원의 이메일을 받으면 메일 전송 서비스가 호출된다.")
+    @Test
+    void sendTempPasswordTest() {
+        // given
+        String email = "hong1@example.com";
+        String createdTempPassword = "tempPassword";
+        TempPassword domain = TempPassword.of(email);
+        when(memberPort.existsByEmailNotInDeactive(email)).thenReturn(true);
+        when(tempPasswordUtil.generateTempPassword()).thenReturn(createdTempPassword);
+
+        // when
+        sut.sendTempPassword(domain);
+
+        // then
+        verify(mailService).sendTemporaryPassword(eq(email), eq(createdTempPassword));
+        verify(passwordEncoder).encode(anyString()); // 모든 문자열 인자에 대해 스터빙
+    }
+
+    @DisplayName("[happy] db에 존재하는 회원의 이메일을 받으면 비밀번호 수정 메서드가 호출된다.")
+    @Test
+    void updateEncryptedTempPassword() {
+        // given
+        String email = "hong1@example.com";
+        String createdTempPassword = "tempPassword";
+        TempPassword domain = TempPassword.of(email);
+        when(memberPort.existsByEmailNotInDeactive(email)).thenReturn(true);
+        when(tempPasswordUtil.generateTempPassword()).thenReturn(createdTempPassword);
+        when(passwordEncoder.encode(anyString())).thenReturn("encryptedPassword");
+
+        // when
+        sut.sendTempPassword(domain);
+
+        // then
+        verify(memberPort).updatePassword(email, "encryptedPassword");
     }
 
 }

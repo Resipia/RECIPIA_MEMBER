@@ -4,6 +4,7 @@ import com.recipia.member.adapter.out.persistence.MemberFileEntity;
 import com.recipia.member.adapter.out.persistenceAdapter.MemberFileRepository;
 import com.recipia.member.config.TotalTestSupport;
 import com.recipia.member.domain.MyPage;
+import com.recipia.member.domain.TempPassword;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,17 @@ class MemberQueryRepositoryTest extends TotalTestSupport {
         Long memberCount = sut.findAllMemberByIdAndStatus(memberIdList);
         // then
         assertEquals(memberIdList.size(), memberCount);
+    }
+
+    @DisplayName("[happy] db에 존재하는 회원의 이메일로 비밀번호를 업데이트한다.")
+    @Test
+    void updatePasswordSuccess() {
+        // given
+        String email = "hong1@example.com";
+        String encryptedTempPassword = "encryptedTemp";
+        // when
+        Long updatedCount = sut.updatePassword(email, encryptedTempPassword);
+        // then
+        assertEquals(updatedCount, 1L);
     }
 }

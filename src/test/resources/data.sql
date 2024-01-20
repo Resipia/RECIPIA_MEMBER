@@ -19,7 +19,7 @@ VALUES ('password1', '홍길동', 'hong1@example.com', 'hong1', 'ACTIVE', '안�
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ADMIN'),
        ('password4', '박지민', 'user@example.com', 'park4', 'ACTIVE', '반가워요', '01045678901', '대구시 중구', '1011번지',
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER'),
-       ('password5', '정수민', 'jung5@example.com', 'jung5', 'ACTIVE', '안녕하세요!', '01056789012', '인천시 남동구', '1213번지',
+       ('password5', '정수민', 'jung5@example.com', 'jung5', 'DEACTIVATED', '안녕하세요!', '01056789012', '인천시 남동구', '1213번지',
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER');
 
 -- member_event_record 테이블에 가짜 데이터 삽입

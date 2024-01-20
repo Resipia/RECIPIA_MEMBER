@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.adapter.in.web.dto.request.EmailAvailableRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.FindEmailRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.ReportRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.TempPasswordRequestDto;
 import com.recipia.member.adapter.out.persistence.constant.ReportStatus;
 import com.recipia.member.adapter.out.persistence.constant.ReportType;
 import com.recipia.member.application.port.in.MemberManagementUseCase;
@@ -92,6 +93,20 @@ class MemberManagementControllerTest extends TotalTestSupport {
         FindEmailRequestDto dto = FindEmailRequestDto.of("fullName", "01000001111");
         //when & then
         mockMvc.perform(post("/member/management/find/email")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(dto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @DisplayName("[happy] TempPasswordRequestDto의 필수 필드값이 전부 채워진채로 요청이 들어오면 해당 회원의 이메일을 반환한다.")
+    @Test
+    void shouldSuccessWhenRequestDtoIsValid() throws Exception {
+        //given
+        TempPasswordRequestDto dto = TempPasswordRequestDto.of("hong1@example.com");
+
+        //when & then
+        mockMvc.perform(post("/member/management/tempPassword")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(dto)))
                 .andExpect(status().isOk())

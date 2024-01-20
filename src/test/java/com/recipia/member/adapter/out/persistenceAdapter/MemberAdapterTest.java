@@ -1,5 +1,6 @@
 package com.recipia.member.adapter.out.persistenceAdapter;
 
+import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.MemberFileEntity;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.common.exception.MemberApplicationException;
@@ -24,6 +25,8 @@ class MemberAdapterTest extends TotalTestSupport {
     private MemberAdapter sut;
     @Autowired
     private MemberFileRepository memberFileRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @DisplayName("[happy] 정상적으로 회원 정보를 ID로 찾는 경우")
     @Test
@@ -187,5 +190,55 @@ class MemberAdapterTest extends TotalTestSupport {
         String email = sut.findEmail(member);
         // then
         assertEquals(email, "hong1@example.com");
+    }
+
+    @DisplayName("[happy] db에 존재하는 이메일을 받으면 true를 반환한다.")
+    @Test
+    void existEmail() {
+        // given
+        String email = "hong1@example.com";
+        // when
+        boolean isExist = sut.existsByEmailNotInDeactive(email);
+        // then
+        assertTrue(isExist);
+    }
+
+    @DisplayName("[happy] db에 존재하지 않는 이메일을 받으면 false를 반환한다.")
+    @Test
+    void nonExistEmail() {
+        // given
+        String email = "1212@example.com";
+        // when
+        boolean isExist = sut.existsByEmailNotInDeactive(email);
+        // then
+        assertFalse(isExist);
+    }
+
+
+    @DisplayName("[happy] 탈퇴 계정의 이메일을 받으면 false를 반환한다.")
+    @Test
+    void deactiveMemberEmail() {
+        // given
+        String email = "jung5@example.com";
+        // when
+        boolean isExist = sut.existsByEmailNotInDeactive(email);
+        // then
+        assertFalse(isExist);
+    }
+
+    @DisplayName("[happy] db에 존재하는 이메일이 들어왔을때 비밀번호를 수정한다.")
+    @Test
+    void updatePasswordSuccess() {
+        // given
+        String email = "hong1@example.com";
+        String encryptedTempPassword = "encryptedTemp";
+
+        // when
+        Long updatedCount = sut.updatePassword(email, encryptedTempPassword);
+        // then
+        assertEquals(updatedCount, 1L);
+        MemberEntity memberEntity = memberRepository.findMemberByEmailAndStatus(email, MemberStatus.ACTIVE).orElseThrow();
+        assertEquals(memberEntity.getPassword(), encryptedTempPassword);
+
     }
 }
