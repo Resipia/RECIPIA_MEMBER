@@ -4,6 +4,7 @@ import com.recipia.member.adapter.out.persistence.constant.ReportStatus;
 import com.recipia.member.adapter.out.persistence.constant.ReportType;
 import com.recipia.member.adapter.out.persistenceAdapter.SignUpAdapter;
 import com.recipia.member.application.port.out.port.MemberPort;
+import com.recipia.member.domain.Member;
 import com.recipia.member.domain.Report;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -104,6 +105,18 @@ class MemberManagementServiceTest {
         assertThat(savedReportId).isNotNull();
         assertThat(savedReportId).isGreaterThan(0L);
 
+    }
+
+    @DisplayName("[happy] db에 존재하는 회원의 이메일은 반환받는다.")
+    @Test
+    void findEmailSuccess() {
+        // given
+        Member member = Member.builder().fullName("홍길동").telNo("01012345678").build();
+        when(sut.findEmail(member)).thenReturn("hong1@example.com");
+        // when
+        String result = sut.findEmail(member);
+        // then
+        assertEquals(result, "hong1@example.com");
     }
 
 }

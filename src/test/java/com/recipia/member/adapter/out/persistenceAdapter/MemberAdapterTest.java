@@ -177,4 +177,15 @@ class MemberAdapterTest extends TotalTestSupport {
         // then
         assertFalse(isAllMemberActive);
     }
+
+    @DisplayName("[happy] db에 존재하는 회원의 이름, 전화번호로 이메일을 반환받는다.")
+    @Test
+    void findEmailSuccess() {
+        // given
+        Member member = Member.builder().fullName("홍길동").telNo("01012345678").build();
+        // when
+        String email = sut.findEmail(member);
+        // then
+        assertEquals(email, "hong1@example.com");
+    }
 }
