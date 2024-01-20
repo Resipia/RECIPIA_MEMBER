@@ -5,9 +5,12 @@ import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
+import com.recipia.member.common.utils.TempPasswordUtil;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.Report;
+import com.recipia.member.domain.TempPassword;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,10 @@ public class MemberManagementService implements MemberManagementUseCase {
 
     private final SignUpPort signUpPort;
     private final MemberPort memberPort;
+    private final MailService mailService;
+    private final PasswordEncoder passwordEncoder;
+    private final TempPasswordUtil tempPasswordUtil;
+
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
@@ -83,5 +90,36 @@ public class MemberManagementService implements MemberManagementUseCase {
         return memberPort.findEmail(domain);
     }
 
+    /**
+     * [CREATE] 임시 비밀번호를 이메일로 전송 후, 임시 비밀번호 저장한다.
+     * email로 회원을 검색해서 존재하면 임시 비밀번호를 해당 이메일로 전송한다.
+     * 해당 회원이 존재하지 않으면 에러를 발생시킨다.
+     * (여기서 회원 상태검사를 하지 않는 이유는 휴면 상태인 회원의 이메일도 검사해야하기 때문이다.)
+     *
+     * 이메일 전송에 성공했으면 회원 비밀번호를 임시로 발급된 비밀번호로 업데이트해준다.
+     */
+    @Transactional
+    @Override
+    public void sendTempPassword(TempPassword tempPassword) {
+        String email = tempPassword.getEmail();
 
+        // 탈퇴계정이 아닌 회원중에서 존재하는 이메일인지 검증
+        boolean isMemberExist = memberPort.existsByEmailNotInDeactive(email);
+
+        // 존재하는 이메일이 아니면 에러 발생
+        if (!isMemberExist) {
+            throw new MemberApplicationException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        String createdTempPassword = tempPasswordUtil.generateTempPassword();
+        String encryptedPassword = passwordEncoder.encode(createdTempPassword);
+
+        // 회원 이메일로 임시로 발급된 비밀번호 전송
+        mailService.sendTemporaryPassword(email, createdTempPassword);
+
+        // 회원 비밀번호를 임시로 발급된 비밀번호를 암호화 한 데이터로 업데이트
+        memberPort.updatePassword(email, encryptedPassword);
+
+        // todo: 업데이트하면 다른곳에서 로그아웃 처리
+    }
 }
