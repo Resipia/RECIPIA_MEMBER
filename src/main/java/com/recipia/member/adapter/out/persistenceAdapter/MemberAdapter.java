@@ -8,14 +8,12 @@ import com.recipia.member.adapter.out.persistenceAdapter.querydsl.MemberQueryRep
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
-import com.recipia.member.domain.Member;
-import com.recipia.member.domain.MemberFile;
-import com.recipia.member.domain.MyPage;
-import com.recipia.member.domain.Report;
+import com.recipia.member.domain.*;
 import com.recipia.member.domain.converter.MemberConverter;
 import com.recipia.member.domain.converter.ReportConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -143,6 +141,25 @@ public class MemberAdapter implements MemberPort {
                 () -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND)
         );
         return memberEntity.getEmail();
+    }
+
+    /**
+     * [READ] 탈퇴 회원이 아닌 회원중에서 이메일이 존재하는지 검증한다.
+     * 회원이 존재하면 true, 없으면 false를 반환한다.
+     */
+    @Override
+    public boolean existsByEmailNotInDeactive(String email) {
+        return memberRepository.existsByEmailAndStatusNot(email, MemberStatus.DEACTIVATED);
+    }
+
+    /**
+     * [UPDATE] 임시로 발급된 비밀번호로 회원 비밀번호 업데이트한다.
+     * 업데이트된 row의 갯수를 반환한다.
+     */
+    @Transactional
+    @Override
+    public Long updatePassword(String email, String encryptedTempPassword) {
+        return memberQueryRepository.updatePassword(email, encryptedTempPassword);
     }
 
 
