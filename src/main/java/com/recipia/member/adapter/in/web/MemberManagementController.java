@@ -3,10 +3,12 @@ package com.recipia.member.adapter.in.web;
 import com.recipia.member.adapter.in.web.dto.request.EmailAvailableRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.FindEmailRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.ReportRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.TempPasswordRequestDto;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
 import com.recipia.member.application.port.in.MemberManagementUseCase;
 import com.recipia.member.domain.converter.MemberConverter;
 import com.recipia.member.domain.converter.ReportConverter;
+import com.recipia.member.domain.converter.TempPasswordConverter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ public class MemberManagementController {
     private final MemberManagementUseCase memberManagementUseCase;
     private final ReportConverter reportConverter;
     private final MemberConverter memberConverter;
+    private final TempPasswordConverter tempPasswordConverter;
 
     /**
      * 이메일 중복체크 요청
@@ -57,6 +60,18 @@ public class MemberManagementController {
         String email = memberManagementUseCase.findEmail(memberConverter.findEmailDtoToDomain(dto));
         return ResponseEntity.ok(
                 ResponseDto.success(email)
+        );
+    }
+
+
+    /**
+     * 임시 비밀번호 재발급
+     */
+    @PostMapping("/tempPassword")
+    public ResponseEntity<ResponseDto<Void>> sendTempPassword(@Valid @RequestBody TempPasswordRequestDto dto) {
+        memberManagementUseCase.sendTempPassword(tempPasswordConverter.dtoToDomain(dto));
+        return ResponseEntity.ok(
+                ResponseDto.success()
         );
     }
 
