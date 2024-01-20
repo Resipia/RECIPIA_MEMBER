@@ -2,6 +2,7 @@ package com.recipia.member.domain;
 
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +32,7 @@ public class Member {
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_PASSWORD_LENGTH = 20;
 
+    @Builder
     private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage) {
         this.id = id;
         this.email = email;

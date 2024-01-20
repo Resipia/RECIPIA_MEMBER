@@ -5,6 +5,7 @@ import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
+import com.recipia.member.domain.Member;
 import com.recipia.member.domain.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -71,6 +72,15 @@ public class MemberManagementService implements MemberManagementUseCase {
         }
 
         return memberPort.saveReport(report);
+    }
+
+    /**
+     * [READ] 회원의 이메일을 반환한다.
+     * member full name, telNo로 멤버의 이메일을 반환한다. 없다면 에러를 발생시킨다.
+     */
+    @Override
+    public String findEmail(Member domain) {
+        return memberPort.findEmail(domain);
     }
 
 
