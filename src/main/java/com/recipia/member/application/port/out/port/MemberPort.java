@@ -1,10 +1,7 @@
 package com.recipia.member.application.port.out.port;
 
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
-import com.recipia.member.domain.Member;
-import com.recipia.member.domain.MemberFile;
-import com.recipia.member.domain.MyPage;
-import com.recipia.member.domain.Report;
+import com.recipia.member.domain.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +18,8 @@ public interface MemberPort {
     Integer findMaxFileOrder(Long memberId);
     boolean isAllMemberActive(List<Long> memberIdList);
     Long saveReport(Report report);
+
+    String findEmail(Member domain);
+    boolean existsByEmailNotInDeactive(String email);
+    Long updatePassword(String email, String encryptedTempPassword);
 }

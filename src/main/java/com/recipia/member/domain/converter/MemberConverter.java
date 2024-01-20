@@ -1,5 +1,6 @@
 package com.recipia.member.domain.converter;
 
+import com.recipia.member.adapter.in.web.dto.request.FindEmailRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.MemberFileEntity;
@@ -72,6 +73,10 @@ public class MemberConverter {
                 domain.getFileSize(),
                 domain.getDelYn()
         );
+    }
+
+    public Member findEmailDtoToDomain(FindEmailRequestDto dto) {
+        return Member.builder().fullName(dto.getFullName()).telNo(dto.getTelNo()).build();
     }
 
 
