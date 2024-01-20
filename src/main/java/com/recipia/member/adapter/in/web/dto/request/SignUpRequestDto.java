@@ -1,6 +1,7 @@
 package com.recipia.member.adapter.in.web.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,7 @@ public class SignUpRequestDto {
 
     @NotBlank
     @Size(max = 25)
+    @Pattern(regexp = "\\d+")       // 문자열 안에서 숫자만 입력 가능
     private String telNo;           // 전화번호
 
     private String address1;        // 주소1

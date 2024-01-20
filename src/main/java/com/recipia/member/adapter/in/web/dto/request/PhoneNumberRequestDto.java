@@ -15,7 +15,7 @@ import lombok.ToString;
 public class PhoneNumberRequestDto {
 
     @NotBlank
-    @Pattern(regexp = "\\d+")
+    @Pattern(regexp = "\\d+")       // 문자열 안에서 숫자만 입력 가능
     private String phoneNumber;
 
     private PhoneNumberRequestDto(String phoneNumber) {

@@ -1,9 +1,11 @@
 package com.recipia.member.adapter.in.web;
 
 import com.recipia.member.adapter.in.web.dto.request.EmailAvailableRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.FindEmailRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.ReportRequestDto;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
 import com.recipia.member.application.port.in.MemberManagementUseCase;
+import com.recipia.member.domain.converter.MemberConverter;
 import com.recipia.member.domain.converter.ReportConverter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class MemberManagementController {
 
     private final MemberManagementUseCase memberManagementUseCase;
     private final ReportConverter reportConverter;
+    private final MemberConverter memberConverter;
 
     /**
      * 이메일 중복체크 요청
@@ -43,6 +46,17 @@ public class MemberManagementController {
         Long savedReportId = memberManagementUseCase.reportMember(reportConverter.dtoToDomain(dto));
         return ResponseEntity.ok(
                 ResponseDto.success()
+        );
+    }
+
+    /**
+     * 이메일 찾기
+     */
+    @PostMapping("/find/email")
+    public ResponseEntity<ResponseDto<String>> findEmail(@Valid @RequestBody FindEmailRequestDto dto) {
+        String email = memberManagementUseCase.findEmail(memberConverter.findEmailDtoToDomain(dto));
+        return ResponseEntity.ok(
+                ResponseDto.success(email)
         );
     }
 
