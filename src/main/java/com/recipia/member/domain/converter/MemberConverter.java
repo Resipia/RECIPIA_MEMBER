@@ -35,7 +35,9 @@ public class MemberConverter {
                 entity.getTelNo(),
                 entity.getAddress1(),
                 entity.getAddress2(),
-                entity.getRoleType()
+                entity.getRoleType(),
+                null,
+                null
         );
     }
 
@@ -82,7 +84,7 @@ public class MemberConverter {
 
     public Member requestDtoToDomain(SignUpRequestDto req) {
         return Member.of(
-                null, req.getEmail(), req.getPassword(), req.getFullName(), req.getNickname(), MemberStatus.ACTIVE, req.getIntroduction(), req.getTelNo(), req.getAddress1(), req.getAddress2(), RoleType.MEMBER);
+                null, req.getEmail(), req.getPassword(), req.getFullName(), req.getNickname(), MemberStatus.ACTIVE, req.getIntroduction(), req.getTelNo(), req.getAddress1(), req.getAddress2(), RoleType.MEMBER, req.getIsPersonalInfoConsent(), req.getIsDataRetentionConsent());
     }
 
 
