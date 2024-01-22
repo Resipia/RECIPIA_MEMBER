@@ -42,6 +42,11 @@ public class SignUpRequestDto {
 
     private MultipartFile profileImage; // 프로필 이미지
 
+//    @NotBlank
+//    private String isPersonalInfoConsent;    // 개인정보 수집 및 이용 동의
+//    @NotBlank
+//    private String isDataRetentionConsent;    // 개인정보 보관 및 파기 동의
+
     @Builder
     private SignUpRequestDto(String email, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, MultipartFile profileImage) {
         this.email = email;
