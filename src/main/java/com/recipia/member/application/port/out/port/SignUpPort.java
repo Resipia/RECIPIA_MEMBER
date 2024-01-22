@@ -4,4 +4,6 @@ import com.recipia.member.domain.Member;
 
 public interface SignUpPort {
     Long signUpMember(Member member);
+
+    Long saveConsent(Long savedMemberId, Member member);
 }
