@@ -24,7 +24,9 @@ public class MyPageConverter {
                 myPage.getNickname(),
                 myPage.getIntroduction(),
                 myPage.getFollowingCount(),
-                myPage.getFollowerCount()
+                myPage.getFollowerCount(),
+                myPage.getBirth(),
+                myPage.getGender()
         );
     }
 
@@ -33,7 +35,9 @@ public class MyPageConverter {
                 securityUtils.getCurrentMemberId(),
                 dto.getNickname(),
                 dto.getIntroduction(),
-                dto.getDeleteFileOrder()
+                dto.getDeleteFileOrder(),
+                dto.getBirth(),
+                dto.getGender()
         );
     }
 

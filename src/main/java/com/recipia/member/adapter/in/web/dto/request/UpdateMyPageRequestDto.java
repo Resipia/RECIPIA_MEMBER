@@ -25,23 +25,28 @@ public class UpdateMyPageRequestDto {
     private MultipartFile profileImage; // 프로필 이미지
     private Integer deleteFileOrder;       // 삭제할 file order
 
+    private String birth;
+    private String gender;
+
     @Builder
-    private UpdateMyPageRequestDto(String nickname, String introduction, MultipartFile profileImage, Integer deleteFileOrder) {
+    private UpdateMyPageRequestDto(String nickname, String introduction, MultipartFile profileImage, Integer deleteFileOrder, String birth, String gender) {
         this.nickname = nickname;
         this.introduction = introduction;
         this.profileImage = profileImage;
         this.deleteFileOrder = deleteFileOrder;
+        this.birth = birth;
+        this.gender = gender;
     }
 
-    public static UpdateMyPageRequestDto of(String nickname, String introduction, MultipartFile profileImage, Integer deleteFileOrder) {
-        return new UpdateMyPageRequestDto(nickname, introduction, profileImage, deleteFileOrder);
+    public static UpdateMyPageRequestDto of(String nickname, String introduction, MultipartFile profileImage, Integer deleteFileOrder, String birth, String gender) {
+        return new UpdateMyPageRequestDto(nickname, introduction, profileImage, deleteFileOrder, birth, gender);
     }
 
-    public static UpdateMyPageRequestDto of(String nickname, String introduction, Integer deleteFileOrder) {
-        return new UpdateMyPageRequestDto(nickname, introduction, null, deleteFileOrder);
+    public static UpdateMyPageRequestDto of(String nickname, String introduction, Integer deleteFileOrder, String birth, String gender) {
+        return new UpdateMyPageRequestDto(nickname, introduction, null, deleteFileOrder, birth, gender);
     }
 
-    public static UpdateMyPageRequestDto of(String nickname, String introduction) {
-        return new UpdateMyPageRequestDto(nickname, introduction, null, null);
+    public static UpdateMyPageRequestDto of(String nickname, String introduction, String birth, String gender) {
+        return new UpdateMyPageRequestDto(nickname, introduction, null, null, null, null);
     }
 }

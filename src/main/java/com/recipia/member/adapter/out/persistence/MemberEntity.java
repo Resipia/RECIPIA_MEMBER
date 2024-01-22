@@ -43,6 +43,12 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     @Column(name = "introduction")
     private String introduction;    // 한줄소개
 
+    @Column(name = "birth")
+    private String birth;           // 생년월일
+
+    @Column(name = "gender")
+    private String gender;          // 성별
+
     @Column(name = "tel_no", nullable = false)
     private String telNo;           // 전화번호
 
@@ -61,7 +67,7 @@ public class MemberEntity extends UpdateDateTimeForEntity {
 
 
     // private 생성자
-    private MemberEntity(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFileEntity memberFileEntity) {
+    private MemberEntity(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFileEntity memberFileEntity, String birth, String gender) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -74,21 +80,23 @@ public class MemberEntity extends UpdateDateTimeForEntity {
         this.address2 = address2;
         this.roleType = roleType;
         this.memberFileEntity = memberFileEntity;
+        this.birth = birth;
+        this.gender = gender;
     }
 
     // 새 엔티티 생성용 팩토리 메소드
-    public static MemberEntity of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
-        return new MemberEntity(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
+    public static MemberEntity of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, String birth, String gender) {
+        return new MemberEntity(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null, birth, gender);
     }
 
     // 기존 엔티티 로드용 팩토리 메소드
-    public static MemberEntity of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
-        return new MemberEntity(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
+    public static MemberEntity of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, String birth, String gender) {
+        return new MemberEntity(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null, birth, gender);
     }
 
     // 다른 엔티티 fk용으로 객체 참조할때 사용하는 팩토리 메서드
     public static MemberEntity of(Long id) {
-        return new MemberEntity(id, null, null, null, null, null, null, null, null, null, null, null);
+        return new MemberEntity(id, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
     @Override
