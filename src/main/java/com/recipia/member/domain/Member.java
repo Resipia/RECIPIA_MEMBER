@@ -29,12 +29,14 @@ public class Member {
     private MemberFile profileImage; // 프로필 이미지
     private String personalInfoConsent;     // 개인정보 수집 및 이용 동의
     private String dataRetentionConsent;     // 개인정보 보관 및 파기 동의
+    private String birth;                   // 생년월일
+    private String gender;                  // 성별
 
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_PASSWORD_LENGTH = 20;
 
     @Builder
-    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage, String isPersonalInfoConsent, String isDataRetentionConsent) {
+    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage, String isPersonalInfoConsent, String isDataRetentionConsent, String birth, String gender) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -49,28 +51,30 @@ public class Member {
         this.profileImage = profileImage;
         this.personalInfoConsent = isPersonalInfoConsent;
         this.dataRetentionConsent = isDataRetentionConsent;
+        this.birth = birth;
+        this.gender = gender;
     }
 
     /**
      * 파일 이미지 없을때 생성하는 컨버터
      */
-    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, String isPersonalInfoConsent, String isDataRetentionConsent) {
-        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null, isPersonalInfoConsent, isDataRetentionConsent);
+    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, String isPersonalInfoConsent, String isDataRetentionConsent, String birth, String gender) {
+        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null, isPersonalInfoConsent, isDataRetentionConsent, birth, gender);
     }
 
-    public static Member of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, String isPersonalInfoConsent, String isDataRetentionConsent) {
-        return new Member(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null, isPersonalInfoConsent, isDataRetentionConsent);
+    public static Member of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, String isPersonalInfoConsent, String isDataRetentionConsent, String birth, String gender) {
+        return new Member(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null, isPersonalInfoConsent, isDataRetentionConsent, birth, gender);
     }
 
     /**
      * 파일 이미지 있을때 생성하는 컨버터
      */
-    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage, String isPersonalInfoConsent, String isDataRetentionConsent) {
-        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, profileImage, isPersonalInfoConsent, isDataRetentionConsent);
+    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage, String isPersonalInfoConsent, String isDataRetentionConsent, String birth, String gender) {
+        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, profileImage, isPersonalInfoConsent, isDataRetentionConsent, birth, gender);
     }
 
     public static Member of(Long id) {
-        return new Member(id, null, null, null, null, null, null, null, null, null, null, null, "Y", "Y");
+        return new Member(id, null, null, null, null, null, null, null, null, null, null, null, "Y", "Y", null, null);
     }
 
     /**

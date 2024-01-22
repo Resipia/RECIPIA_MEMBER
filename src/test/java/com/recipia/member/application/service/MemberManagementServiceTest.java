@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -141,6 +142,10 @@ class MemberManagementServiceTest {
         when(memberPort.existsByEmailNotInDeactive(email)).thenReturn(true);
         when(tempPasswordUtil.generateTempPassword()).thenReturn(createdTempPassword);
 
+        // CompletableFuture를 반환하도록 스터빙
+        when(mailService.sendTemporaryPassword(eq(email), eq(createdTempPassword)))
+                .thenReturn(CompletableFuture.completedFuture(true));
+
         // when
         sut.sendTempPassword(domain);
 
@@ -159,6 +164,11 @@ class MemberManagementServiceTest {
         when(memberPort.existsByEmailNotInDeactive(email)).thenReturn(true);
         when(tempPasswordUtil.generateTempPassword()).thenReturn(createdTempPassword);
         when(passwordEncoder.encode(anyString())).thenReturn("encryptedPassword");
+
+        // CompletableFuture를 반환하도록 스터빙
+        when(mailService.sendTemporaryPassword(eq(email), eq(createdTempPassword)))
+                .thenReturn(CompletableFuture.completedFuture(true));
+
 
         // when
         sut.sendTempPassword(domain);

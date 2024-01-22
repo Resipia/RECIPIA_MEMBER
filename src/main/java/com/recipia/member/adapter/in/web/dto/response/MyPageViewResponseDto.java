@@ -16,17 +16,21 @@ public class MyPageViewResponseDto {
     private String introduction;    // 한줄소개
     private Long followingCount; // 팔로잉 수
     private Long followerCount;  // 팔로워 수
+    private String birth;           // 생년월일
+    private String gender;          // 성별
 
-    private MyPageViewResponseDto(Long memberId, String profileImageUrl,  String nickname, String introduction, Long followingCount, Long followerCount) {
+    private MyPageViewResponseDto(Long memberId, String profileImageUrl,  String nickname, String introduction, Long followingCount, Long followerCount, String birth, String gender) {
         this.memberId = memberId;
         this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
         this.introduction = introduction;
         this.followingCount = followingCount;
         this.followerCount = followerCount;
+        this.birth = birth;
+        this.gender = gender;
     }
 
-    public static MyPageViewResponseDto of(Long memberId, String profileImageUrl, String nickname, String introduction, Long followingCount, Long followerCount) {
-        return new MyPageViewResponseDto(memberId, profileImageUrl, nickname, introduction, followingCount, followerCount);
+    public static MyPageViewResponseDto of(Long memberId, String profileImageUrl, String nickname, String introduction, Long followingCount, Long followerCount, String birth, String gender) {
+        return new MyPageViewResponseDto(memberId, profileImageUrl, nickname, introduction, followingCount, followerCount, birth, gender);
     }
 }

@@ -54,7 +54,7 @@ class MyPageControllerTest extends TotalTestSupport {
         // given
         Long memberId = 1L;
         MyPage myPage = MyPage.of(memberId);
-        MyPageViewResponseDto dto = MyPageViewResponseDto.of(1L, "url", "nick", "intro", 3L, 4L);
+        MyPageViewResponseDto dto = MyPageViewResponseDto.of(1L, "url", "nick", "intro", 3L, 4L, "2020-02-02", "M");
         when(securityUtils.getCurrentMemberId()).thenReturn(memberId);
         when(myPageUseCase.viewMyPage(memberId)).thenReturn(myPage);
         when(myPageConverter.domainToResponseDto(myPage)).thenReturn(dto);

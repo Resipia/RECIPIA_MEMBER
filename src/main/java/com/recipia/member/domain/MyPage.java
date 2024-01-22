@@ -21,9 +21,11 @@ public class MyPage {
     private Long followingCount;            // 팔로잉 수
     private Long followerCount;             // 팔로워 수
     private Integer deleteFileOrder;        // 삭제할 file order
+    private String birth;                   // 생년월일
+    private String gender;                  // 성별
 
     @Builder
-    public MyPage(Long memberId, String imageFilePath, String imagePreUrl, String nickname, String introduction, Long followingCount, Long followerCount, Integer deleteFileOrder) {
+    public MyPage(Long memberId, String imageFilePath, String imagePreUrl, String nickname, String introduction, Long followingCount, Long followerCount, Integer deleteFileOrder, String birth, String gender) {
         this.memberId = memberId;
         this.imageFilePath = imageFilePath;
         this.imagePreUrl = imagePreUrl;
@@ -32,13 +34,15 @@ public class MyPage {
         this.followingCount = followingCount;
         this.followerCount = followerCount;
         this.deleteFileOrder = deleteFileOrder;
+        this.birth = birth;
+        this.gender = gender;
     }
 
     /**
      * 마이페이지 조회 응답 test용
      */
-    public static MyPage of(Long memberId, String profileImageUrl, String nickname, String introduction, Long followingCount, Long followerCount) {
-        return new MyPage(memberId, null, profileImageUrl, nickname, introduction, followingCount, followerCount, null);
+    public static MyPage of(Long memberId, String profileImageUrl, String nickname, String introduction, Long followingCount, Long followerCount, String birth, String gender) {
+        return new MyPage(memberId, null, profileImageUrl, nickname, introduction, followingCount, followerCount, null, birth, gender);
     }
 
     /**
@@ -47,20 +51,20 @@ public class MyPage {
      * @param memberId 마이페이지 조회 요청 memberId
      */
     public static MyPage of(Long memberId) {
-        return new MyPage(memberId, null, null, null, null, null, null, null);
+        return new MyPage(memberId, null, null, null, null, null, null, null, null, null);
     }
 
     /**
      * 마이페이지 수정 요청 test용 - 삭제 이미지 X
      */
-    public static MyPage of(Long memberId, String nickname, String introduction, Integer deleteFileOrder) {
-        return new MyPage(memberId, null, null, nickname, introduction, null, null, deleteFileOrder);
+    public static MyPage of(Long memberId, String nickname, String introduction, Integer deleteFileOrder, String birth, String gender) {
+        return new MyPage(memberId, null, null, nickname, introduction, null, null, deleteFileOrder, birth, gender);
     }
 
     /**
      * 마이페이지 수정 요청 test용 - 삭제 이미지 O
      */
     public static MyPage of(Long memberId, String nickname, String introduction) {
-        return new MyPage(memberId, null, null, nickname, introduction, null, null, null);
+        return new MyPage(memberId, null, null, nickname, introduction, null, null, null, null, null);
     }
 }

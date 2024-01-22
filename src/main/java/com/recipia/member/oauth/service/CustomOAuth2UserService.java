@@ -84,7 +84,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     null,
                     null,
                     "Y",
-                    "Y"
+                    "Y",
+                    null,
+                    null
             );
 
             Member member = memberConverter.requestDtoToDomain(signUpRequestDto);

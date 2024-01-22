@@ -69,7 +69,7 @@ class JwtServiceTest {
 
     private Member createMember() {
         return Member.of(6L, "test1@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 1", "Nickname1", MemberStatus.ACTIVE, "Introduction 1", "01012345678",
-                "Address 1-1", "Address 1-2", RoleType.MEMBER, "Y", "Y");
+                "Address 1-1", "Address 1-2", RoleType.MEMBER, "Y", "Y", "2020-02-02", "M");
     }
 
 }
