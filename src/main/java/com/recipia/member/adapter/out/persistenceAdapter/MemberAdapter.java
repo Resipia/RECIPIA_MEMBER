@@ -137,7 +137,6 @@ public class MemberAdapter implements MemberPort {
      */
     @Override
     public String findEmail(Member domain) {
-        // todo: 검색할때 탈퇴회원 아닌것만 조회 조건 추가
         MemberEntity memberEntity = memberRepository.findMemberByFullNameAndTelNo(domain.getFullName(), domain.getTelNo()).orElseThrow(
                 () -> new MemberApplicationException(ErrorCode.USER_NOT_FOUND)
         );

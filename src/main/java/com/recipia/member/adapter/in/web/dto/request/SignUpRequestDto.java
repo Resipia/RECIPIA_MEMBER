@@ -30,6 +30,8 @@ public class SignUpRequestDto {
     @NotBlank
     @Size(max = 20)
     private String nickname;        // 닉네임
+
+    @Size(max = 300)
     private String introduction;    // 한줄소개
 
     @NotBlank

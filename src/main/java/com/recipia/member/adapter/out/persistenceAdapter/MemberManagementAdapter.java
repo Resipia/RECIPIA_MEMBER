@@ -1,12 +1,9 @@
 package com.recipia.member.adapter.out.persistenceAdapter;
 
-import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.application.port.out.port.MemberManagementPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -21,8 +18,7 @@ public class MemberManagementAdapter implements MemberManagementPort {
      */
     @Override
     public boolean isEmailAvailable(String email) {
-        Optional<MemberEntity> member = memberRepository.findMemberByEmail(email);
-        return member.isEmpty(); // 이메일이 DB에 존재하지 않으면 true 반환
+        return !memberRepository.existsByEmailAndStatusNot(email, MemberStatus.DEACTIVATED);
     }
 
     /**
