@@ -42,7 +42,7 @@ class SignUpServiceTest {
     void signUpTestWithoutProfileImage() {
         // given
         // 멤버 객체 생성 및 유효한 정보 설정
-        Member member = Member.of("email@naver.com", "Passworddf12!", "fullname", "nickname", MemberStatus.ACTIVE, "intro", "1010", "add1", "add2", RoleType.MEMBER, "Y", "Y");
+        Member member = Member.of("email@naver.com", "Passworddf12!", "fullname", "nickname", MemberStatus.ACTIVE, "intro", "1010", "add1", "add2", RoleType.MEMBER, "Y", "Y", "2020-02-02", "M");
 
         // Mock 객체의 행동 정의
         when(signUpPort.signUpMember(any(Member.class))).thenReturn(1L);          // 성공적인 회원 가입 가정

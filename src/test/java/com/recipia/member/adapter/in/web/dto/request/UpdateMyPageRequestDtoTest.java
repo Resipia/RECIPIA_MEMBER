@@ -21,7 +21,7 @@ class UpdateMyPageRequestDtoTest {
     @Test
     void requestValidateSuccess() {
         // given
-        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.of("update-nickname", "update-introduce");
+        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.of("update-nickname", "update-introduce", "2020-02-02", "M");
 
         // when
         // ConstraintViolation은 유효성 검사에서 발견된 제약 조건 위반을 나타내는 클래스다.
@@ -36,7 +36,7 @@ class UpdateMyPageRequestDtoTest {
     @Test
     void requestValidateFail() {
         // given
-        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.of("", "update-introduce");
+        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.of("", "update-introduce", "2020-02-02", "M");
 
         // when
         // ConstraintViolation은 유효성 검사에서 발견된 제약 조건 위반을 나타내는 클래스다.
