@@ -1,10 +1,7 @@
 package com.recipia.member.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.recipia.member.adapter.in.web.dto.request.EmailAvailableRequestDto;
-import com.recipia.member.adapter.in.web.dto.request.FindEmailRequestDto;
-import com.recipia.member.adapter.in.web.dto.request.ReportRequestDto;
-import com.recipia.member.adapter.in.web.dto.request.TempPasswordRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.*;
 import com.recipia.member.adapter.out.persistence.constant.ReportStatus;
 import com.recipia.member.adapter.out.persistence.constant.ReportType;
 import com.recipia.member.application.port.in.MemberManagementUseCase;
@@ -53,22 +50,6 @@ class MemberManagementControllerTest extends TotalTestSupport {
                 .andDo(print());
     }
 
-//    @DisplayName("[happy] 올바른 EmailAvailableRequestDto로 요청 시 isEmailAvailable 호출")
-//    @Test
-//    void checkValidEmailWithValidRequest() throws Exception {
-//        //given
-//        EmailAvailableRequestDto dto = EmailAvailableRequestDto.of("email@naver.com");
-//        when(memberManagementUseCase.isEmailAvailable(dto.getEmail())).thenReturn(true);
-//        //when
-//        mockMvc.perform(post("/member/management/checkDupEmail")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(asJsonString(dto)))
-//                .andExpect(status().isOk())
-//                .andDo(print());
-//        //then
-//        verify(memberManagementUseCase).isEmailAvailable(dto.getEmail());
-//    }
-
     @DisplayName("[happy] 올바른 ReportRequestDto로 요청 시 reportMember 호출")
     @Test
     void requestReportWithValidRequest() throws Exception {
@@ -107,6 +88,19 @@ class MemberManagementControllerTest extends TotalTestSupport {
 
         //when & then
         mockMvc.perform(post("/member/management/tempPassword")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(dto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @DisplayName("[happy] NicknameAvailableRequestDto의 필수 필드값이 전부 채워진채로 요청이 들어오면 해당 닉네임의 중복 여부를 반환한다.")
+    @Test
+    void nicknameAvailable() throws Exception {
+        // given
+        NicknameAvailableRequestDto dto = NicknameAvailableRequestDto.of("hello");
+        //when & then
+        mockMvc.perform(post("/member/management/checkDupNickname")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(dto)))
                 .andExpect(status().isOk())
