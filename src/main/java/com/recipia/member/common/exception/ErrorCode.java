@@ -55,6 +55,7 @@ public enum ErrorCode {
     RECIPE_SERVICE_ERROR(500, 8002, "RECIPE 서비스 에러"),
     WRIGGLE_SERVICE_ERROR(500, 8003, "WRIGGLE 서비스 에러"),
     CHAT_SERVICE_ERROR(500, 8004, "CHAT 서비스 에러"),
+    MAIL_SEND_FAILED(500, 8005, "메일 전송 실패"),
 
     // 9. 공통 에러
     IO_ERROR(404, 9001, "INPUT/OUTPUT ERROR"),

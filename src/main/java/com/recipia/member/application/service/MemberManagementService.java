@@ -116,14 +116,20 @@ public class MemberManagementService implements MemberManagementUseCase {
         String createdTempPassword = tempPasswordUtil.generateTempPassword();
         String encryptedPassword = passwordEncoder.encode(createdTempPassword);
 
-        // 회원 이메일로 임시로 발급된 비밀번호 전송
-        mailService.sendTemporaryPassword(email, createdTempPassword);
+        // 회원 이메일로 임시로 발급된 비밀번호 전송 (비동기로 진행)
+        mailService.sendTemporaryPassword(email, createdTempPassword)
+                .thenAcceptAsync(result -> {
+                    if (result) {   // 메일 전송 성공 시
+                        // 회원 비밀번호를 임시로 발급된 비밀번호를 암호화 한 데이터로 업데이트
+                        memberPort.updatePassword(email, encryptedPassword);
+                        // 임시 비밀번호로 업데이트 완료했으면 계정 로그아웃 처리 (JWT 삭제까지만 진행)
+                        jwtPort.deleteRefreshTokenByEmail(email);
+                    } else {
+                        // 메일 전송 실패 시, 적절한 예외 처리
+                        throw new MemberApplicationException(ErrorCode.MAIL_SEND_FAILED);
+                    }
+                });
 
-        // 회원 비밀번호를 임시로 발급된 비밀번호를 암호화 한 데이터로 업데이트
-        memberPort.updatePassword(email, encryptedPassword);
-
-        // 임시 비밀번호로 업데이트 완료했으면 계정 로그아웃 처리 (JWT 삭제까지만 진행)
-        jwtPort.deleteRefreshTokenByEmail(email);
     }
 
     /**
