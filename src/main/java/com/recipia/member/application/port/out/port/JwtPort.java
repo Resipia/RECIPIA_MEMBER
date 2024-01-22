@@ -10,4 +10,6 @@ public interface JwtPort {
     void insertTokenBlacklist(TokenBlacklist tokenBlacklist);
     TokenBlacklist getTokenBlacklist(TokenBlacklist tokenBlacklist);
     boolean isLoggedIn(Long memberId);
+
+    void deleteRefreshTokenByEmail(String email);
 }

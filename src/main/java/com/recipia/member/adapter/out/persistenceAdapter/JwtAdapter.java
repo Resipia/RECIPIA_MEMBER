@@ -2,6 +2,7 @@ package com.recipia.member.adapter.out.persistenceAdapter;
 
 import com.recipia.member.adapter.out.persistence.JwtEntity;
 import com.recipia.member.adapter.out.persistence.TokenBlacklistEntity;
+import com.recipia.member.adapter.out.persistenceAdapter.querydsl.JwtQueryRepository;
 import com.recipia.member.application.port.out.port.JwtPort;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
@@ -20,6 +21,7 @@ public class JwtAdapter implements JwtPort {
     private final JwtRepository jwtRepository;
     private final JwtConverter jwtConverter;
     private final TokenBlacklistRepository tokenBlacklistRepository;
+    private final JwtQueryRepository jwtQueryRepository;
 
     /**
      * [CREATE] JWT refresh token 저장
@@ -72,6 +74,14 @@ public class JwtAdapter implements JwtPort {
     @Override
     public boolean isLoggedIn(Long memberId) {
         return jwtRepository.existsByMemberId(memberId);
+    }
+
+    /**
+     * [DELETE] email로 회원을 찾아서 그 회원의 JWT를 삭제한다.
+     */
+    @Override
+    public void deleteRefreshTokenByEmail(String email) {
+        jwtQueryRepository.deleteByMemberEmail(email);
     }
 
 }
