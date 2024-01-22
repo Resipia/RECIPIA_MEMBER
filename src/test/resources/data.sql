@@ -22,8 +22,15 @@ VALUES ('password1', '홍길동', 'hong1@example.com', 'hong1', 'ACTIVE', '안�
        ('password5', '정수민', 'jung5@example.com', 'jung5', 'DEACTIVATED', '안녕하세요!', '01056789012', '인천시 남동구', '1213번지',
         CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'MEMBER');
 
--- member_event_record 테이블에 가짜 데이터 삽입
+-- consent 테이블
+INSERT INTO CONSENT (member_id, personal_info_consent, data_retention_consent, create_dttm)
+VALUES (1, 'Y', 'Y', CURRENT_TIMESTAMP),
+       (2, 'Y', 'Y', CURRENT_TIMESTAMP),
+       (3, 'Y', 'Y', CURRENT_TIMESTAMP),
+       (4, 'Y', 'Y', CURRENT_TIMESTAMP),
+       (5, 'Y', 'Y', CURRENT_TIMESTAMP);
 
+-- member_event_record 테이블에 가짜 데이터 삽입
 INSERT INTO member_event_record (member_id, sns_topic, event_type, attribute, trace_id, create_dttm, published,
                                  published_at)
 VALUES (1, 'topic1', 'eventType1', 'attribute1', 'traceId1', CURRENT_TIMESTAMP, false, NULL),

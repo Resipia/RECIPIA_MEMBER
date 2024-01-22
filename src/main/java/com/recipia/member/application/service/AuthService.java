@@ -3,6 +3,7 @@ package com.recipia.member.application.service;
 import com.recipia.member.adapter.out.aws.TokyoSnsService;
 import com.recipia.member.application.port.in.AuthUseCase;
 import com.recipia.member.application.port.out.port.JwtPort;
+import com.recipia.member.application.port.out.port.MemberManagementPort;
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.common.event.SendVerifyCodeSpringEvent;
@@ -34,6 +35,7 @@ public class AuthService implements AuthUseCase {
     private final JwtConverter jwtConverter;
     private final MemberPort memberPort;
     private final SignUpPort signUpPort;
+    private final MemberManagementPort memberManagementPort;
 
     /**
      * [READ] 전화번호로 인증 코드 전송 메서드 호출
@@ -42,7 +44,7 @@ public class AuthService implements AuthUseCase {
     public void verifyPhoneNumber(Authentication authentication) {
 
         // db에 이미 존재하는 전화번호인지 확인
-        boolean isAvailableTelNo = signUpPort.isTelNoAvailable(authentication.getPhoneNumber());
+        boolean isAvailableTelNo = memberManagementPort.isTelNoAvailable(authentication.getPhoneNumber());
 
         if (!isAvailableTelNo) {
             throw new MemberApplicationException(ErrorCode.TEL_NO_ALREADY_EXISTS);

@@ -10,6 +10,7 @@ import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,8 @@ public class SignUpService implements SignUpUseCase {
     private final ImageS3Service imageS3Service;
     private final ApplicationEventPublisher eventPublisher;
     private final MemberPort memberPort;
+    private final PasswordEncoder passwordEncoder;
+
 
     /**
      * [CREATE] 회원을 저장한다.
@@ -40,12 +43,15 @@ public class SignUpService implements SignUpUseCase {
         }
 
         // 2. 비밀번호 암호화
-        member.passwordEncoder();
+        member.updatePwToEncoded(passwordEncoder.encode(member.getPassword()));
 
         // 3. 회원 저장
         Long savedMemberId = signUpPort.signUpMember(member);
 
-        // 4. 프로필 이미지가 없으면 파일을 저장하지 않는다.
+        // 4. 회원 동의사항 저장
+        Long savedConsentId = signUpPort.saveConsent(savedMemberId, member);
+
+        // 5. 프로필 이미지가 없으면 파일을 저장하지 않는다.
         if(profileImage != null && !profileImage.isEmpty()) {
             // 프로필 파일 저장을 위한 엔티티 생성 (이때 s3에는 이미 이미지가 업로드 완료되고 저장된 경로의 url을 받은 엔티티를 리스트로 생성)
             MemberFile memberFile = imageS3Service.createMemberFile(profileImage, savedMemberId);
@@ -56,7 +62,7 @@ public class SignUpService implements SignUpUseCase {
             }
         }
 
-        // 5. 회원가입 이벤트 발행: 레시피 서버에 회원가입된 유저 정보 저장하기 위함
+        // 6. 회원가입 이벤트 발행: 레시피 서버에 회원가입된 유저 정보 저장하기 위함
         eventPublisher.publishEvent(SignUpSpringEvent.of(savedMemberId));
 
         return savedMemberId;

@@ -5,6 +5,7 @@ import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.application.port.in.SignUpUseCase;
 import com.recipia.member.config.TotalTestSupport;
 import com.recipia.member.domain.Member;
+import com.recipia.member.domain.converter.MemberConverter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ class SignUpControllerTest extends TotalTestSupport {
 
     @MockBean
     private SignUpUseCase signUpUseCase;
+    @MockBean
+    private MemberConverter memberConverter;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @DisplayName("[happy] 필수 입력값이 전부 충족된 dto가 들어왔을때 회원가입 정상 작동한다")
@@ -40,7 +43,7 @@ class SignUpControllerTest extends TotalTestSupport {
         MockMultipartFile mockFile = new MockMultipartFile("file", "filename.txt", "text/plain", "some xml".getBytes());
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.of(
                 "user@example.com", "password123P!", "John Doe", "johndoe",
-                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101"
+                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101", "Y", "Y"
         );
         Member member = Member.of(1L);
         when(signUpUseCase.signUp(member, mockFile)).thenReturn(1L);
@@ -61,7 +64,7 @@ class SignUpControllerTest extends TotalTestSupport {
         MultipartFile mockFile = mock(MultipartFile.class);
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.of(
                 " ", "password123P!", "", "johndoe",
-                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101"
+                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101", "Y", "Y"
         );
         Member member = Member.of(1L);
         when(signUpUseCase.signUp(member, mockFile)).thenReturn(1L);
@@ -84,7 +87,7 @@ class SignUpControllerTest extends TotalTestSupport {
         //given
         SignUpRequestDto invalidRequest = SignUpRequestDto.of(
                 null, "password123", null, "johndoe",
-                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101"
+                "Hello, I'm John", "01012345678", "123 Main St", "Apt 101", "Y", "Y"
         );
 
 

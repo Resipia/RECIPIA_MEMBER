@@ -1,9 +1,6 @@
 package com.recipia.member.adapter.in.web;
 
-import com.recipia.member.adapter.in.web.dto.request.EmailAvailableRequestDto;
-import com.recipia.member.adapter.in.web.dto.request.FindEmailRequestDto;
-import com.recipia.member.adapter.in.web.dto.request.ReportRequestDto;
-import com.recipia.member.adapter.in.web.dto.request.TempPasswordRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.*;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
 import com.recipia.member.application.port.in.MemberManagementUseCase;
 import com.recipia.member.domain.converter.MemberConverter;
@@ -63,7 +60,6 @@ public class MemberManagementController {
         );
     }
 
-
     /**
      * 임시 비밀번호 재발급
      */
@@ -75,4 +71,15 @@ public class MemberManagementController {
         );
     }
 
+    /**
+     * 닉네임 중복체크
+     */
+    @PostMapping("/checkDupNickname")
+    public ResponseEntity<ResponseDto<Boolean>> checkDupNickname(@Valid @RequestBody NicknameAvailableRequestDto dto) {
+        boolean isNicknameAvailable = memberManagementUseCase.isNicknameAvailable(dto.getNickname());
+        return ResponseEntity.ok(
+                ResponseDto.success(isNicknameAvailable)
+        );
+
+    }
 }

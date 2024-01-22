@@ -42,8 +42,14 @@ public class SignUpRequestDto {
 
     private MultipartFile profileImage; // 프로필 이미지
 
+    @NotBlank
+    private String isPersonalInfoConsent;    // 개인정보 수집 및 이용 동의
+
+    @NotBlank
+    private String isDataRetentionConsent;    // 개인정보 보관 및 파기 동의
+
     @Builder
-    private SignUpRequestDto(String email, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, MultipartFile profileImage) {
+    private SignUpRequestDto(String email, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, MultipartFile profileImage, String isPersonalInfoConsent, String isDataRetentionConsent) {
         this.email = email;
         this.password = password;
         this.fullName = fullName;
@@ -53,22 +59,24 @@ public class SignUpRequestDto {
         this.address1 = address1;
         this.address2 = address2;
         this.profileImage = profileImage;
+        this.isPersonalInfoConsent = isPersonalInfoConsent;
+        this.isDataRetentionConsent = isDataRetentionConsent;
     }
 
-    public static SignUpRequestDto of(String email, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, MultipartFile profileImage) {
-        return new SignUpRequestDto(email, password, fullName, nickname, introduction, telNo, address1, address2, profileImage);
+    public static SignUpRequestDto of(String email, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, MultipartFile profileImage, String isPersonalInfoConsent, String isDataRetentionConsent) {
+        return new SignUpRequestDto(email, password, fullName, nickname, introduction, telNo, address1, address2, profileImage, isPersonalInfoConsent, isDataRetentionConsent);
     }
 
-    public static SignUpRequestDto of(String email, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2) {
-        return new SignUpRequestDto(email, password, fullName, nickname, introduction, telNo, address1, address2, null);
+    public static SignUpRequestDto of(String email, String password, String fullName, String nickname, String introduction, String telNo, String address1, String address2, String isPersonalInfoConsent, String isDataRetentionConsent) {
+        return new SignUpRequestDto(email, password, fullName, nickname, introduction, telNo, address1, address2, null, isPersonalInfoConsent, isDataRetentionConsent);
     }
 
-    public static SignUpRequestDto of(String email, String password, String nickname, String introduction, MultipartFile profileImage) {
-        return new SignUpRequestDto(email, password, null, nickname, introduction, null, null, null, profileImage);
+    public static SignUpRequestDto of(String email, String password, String nickname, String introduction, MultipartFile profileImage, String isPersonalInfoConsent, String isDataRetentionConsent) {
+        return new SignUpRequestDto(email, password, null, nickname, introduction, null, null, null, profileImage, isPersonalInfoConsent, isDataRetentionConsent);
     }
 
-    public static SignUpRequestDto of(String email, String password, String nickname, String introduction) {
-        return new SignUpRequestDto(email, password, null, nickname, introduction, null, null, null, null);
+    public static SignUpRequestDto of(String email, String password, String nickname, String introduction, String isPersonalInfoConsent, String isDataRetentionConsent) {
+        return new SignUpRequestDto(email, password, null, nickname, introduction, null, null, null, null, isPersonalInfoConsent, isDataRetentionConsent);
     }
 
 }
