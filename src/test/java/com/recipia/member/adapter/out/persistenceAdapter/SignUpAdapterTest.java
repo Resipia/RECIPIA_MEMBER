@@ -28,8 +28,22 @@ class SignUpAdapterTest extends TotalTestSupport {
         assertThat(createdMemberId).isNotNull();
     }
 
+    @DisplayName("[happy] 회원의 동의사항 저장에 성공한다.")
+    @Test
+    void saveConsentSuccess() {
+        // given
+        Long memberId = 1L;
+        Member member = createMemberNonExist();
+        // when
+        Long savedConsentId = sut.saveConsent(memberId, member);
+        // then
+        assertThat(savedConsentId).isNotNull();
+        assertThat(savedConsentId).isGreaterThan(0L);
+
+    }
+
     private Member createMemberNonExist() {
         return Member.of(null, "test6@example.com", "$2a$10$ntfXSI6blB139A7azjeS9ep4todVsHMyd95.y1AF6i2mUe.9WBmte", "Full Name 6", "Nickname6", MemberStatus.ACTIVE, "Introduction 6", "01003930303",
-                "Address 6-6", "Address 6-2", RoleType.MEMBER);
+                "Address 6-6", "Address 6-2", RoleType.MEMBER, "Y", "Y");
     }
 }
