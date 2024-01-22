@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * 멤버 도메인 객체
@@ -28,12 +27,14 @@ public class Member {
     private String address2;        // 주소2
     private RoleType roleType;      // 계정 권한
     private MemberFile profileImage; // 프로필 이미지
+    private String personalInfoConsent;     // 개인정보 수집 및 이용 동의
+    private String dataRetentionConsent;     // 개인정보 보관 및 파기 동의
 
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_PASSWORD_LENGTH = 20;
 
     @Builder
-    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage) {
+    private Member(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage, String isPersonalInfoConsent, String isDataRetentionConsent) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -46,28 +47,30 @@ public class Member {
         this.address2 = address2;
         this.roleType = roleType;
         this.profileImage = profileImage;
+        this.personalInfoConsent = isPersonalInfoConsent;
+        this.dataRetentionConsent = isDataRetentionConsent;
     }
 
     /**
      * 파일 이미지 없을때 생성하는 컨버터
      */
-    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
-        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
+    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, String isPersonalInfoConsent, String isDataRetentionConsent) {
+        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null, isPersonalInfoConsent, isDataRetentionConsent);
     }
 
-    public static Member of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType) {
-        return new Member(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null);
+    public static Member of(String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, String isPersonalInfoConsent, String isDataRetentionConsent) {
+        return new Member(null, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, null, isPersonalInfoConsent, isDataRetentionConsent);
     }
 
     /**
      * 파일 이미지 있을때 생성하는 컨버터
      */
-    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage) {
-        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, profileImage);
+    public static Member of(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFile profileImage, String isPersonalInfoConsent, String isDataRetentionConsent) {
+        return new Member(id, email, password, fullName, nickname, status, introduction, telNo, address1, address2, roleType, profileImage, isPersonalInfoConsent, isDataRetentionConsent);
     }
 
     public static Member of(Long id) {
-        return new Member(id, null, null, null, null, null, null, null, null, null, null, null);
+        return new Member(id, null, null, null, null, null, null, null, null, null, null, null, "Y", "Y");
     }
 
     /**
@@ -100,13 +103,10 @@ public class Member {
     }
 
     /**
-     * 비밀번호를 암호화하는 인스턴스 메소드
+     * 암호화된 비밀번호로 업데이트해주는 메서드
      */
-    public void passwordEncoder() {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        this.password = encoder.encode(this.password);
+    public void updatePwToEncoded(String encodedPassword) {
+        this.password = encodedPassword;
     }
-
-
 }
 

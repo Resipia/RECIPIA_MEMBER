@@ -1,5 +1,6 @@
 package com.recipia.member.adapter.out.persistenceAdapter;
 
+import com.recipia.member.adapter.out.persistence.ConsentEntity;
 import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.domain.Member;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class SignUpAdapter implements SignUpPort {
 
     private final MemberRepository memberRepository;
+    private final ConsentRepository consentRepository;
     private final MemberConverter converter;
 
     /**
@@ -25,4 +27,13 @@ public class SignUpAdapter implements SignUpPort {
         return memberEntity.getId();
     }
 
+    /**
+     * [CREATE] 멤버 동의 사항 저장
+     * 저장에 성공하면 생성된 consent pk를 반환한다.
+     */
+    @Override
+    public Long saveConsent(Long savedMemberId, Member member) {
+        ConsentEntity consentEntity = ConsentEntity.of(MemberEntity.of(savedMemberId), member.getPersonalInfoConsent(), member.getDataRetentionConsent());
+        return consentRepository.save(consentEntity).getId();
+    }
 }
