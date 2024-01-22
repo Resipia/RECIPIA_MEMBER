@@ -2,13 +2,13 @@ package com.recipia.member.application.service;
 
 import com.recipia.member.adapter.out.aws.TokyoSnsService;
 import com.recipia.member.application.port.out.port.JwtPort;
+import com.recipia.member.application.port.out.port.MemberManagementPort;
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.domain.Authentication;
 import com.recipia.member.domain.Logout;
 import com.recipia.member.domain.TokenBlacklist;
 import com.recipia.member.domain.converter.JwtConverter;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,8 @@ import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
@@ -38,13 +39,13 @@ class AuthServiceTest {
     @Mock
     private ApplicationEventPublisher eventPublisher;
     @Mock
-    private SignUpPort signUpPort;
-    @Mock
     private JwtConverter jwtConverter;
     @Mock
     private JwtPort jwtPort;
     @Mock
     private MemberPort memberPort;
+    @Mock
+    private MemberManagementPort memberManagementPort;
 
 
 
@@ -53,7 +54,7 @@ class AuthServiceTest {
     void publishSMSToPhoneNumberSuccess() {
         //given
         Authentication authentication = createAuthenticationWoCode();
-        when(signUpPort.isTelNoAvailable(authentication.getPhoneNumber())).thenReturn(true);
+        when(memberManagementPort.isTelNoAvailable(authentication.getPhoneNumber())).thenReturn(true);
         //when
         sut.verifyPhoneNumber(authentication);
 

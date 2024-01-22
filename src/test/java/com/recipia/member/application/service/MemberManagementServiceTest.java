@@ -2,7 +2,7 @@ package com.recipia.member.application.service;
 
 import com.recipia.member.adapter.out.persistence.constant.ReportStatus;
 import com.recipia.member.adapter.out.persistence.constant.ReportType;
-import com.recipia.member.adapter.out.persistenceAdapter.SignUpAdapter;
+import com.recipia.member.adapter.out.persistenceAdapter.MemberManagementAdapter;
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.common.utils.TempPasswordUtil;
 import com.recipia.member.domain.Member;
@@ -19,8 +19,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,7 +35,7 @@ class MemberManagementServiceTest {
     @Mock
     private MemberPort memberPort;
     @Mock
-    private SignUpAdapter signUpAdapterMock;
+    private MemberManagementAdapter memberManagementAdapter;
     @Mock
     private TempPasswordUtil tempPasswordUtil;
     @Mock
@@ -49,7 +51,7 @@ class MemberManagementServiceTest {
         String email = "test1@gmail.com";
 
         //when
-        when(signUpAdapterMock.isEmailAvailable(email)).thenReturn(true);
+        when(memberManagementAdapter.isEmailAvailable(email)).thenReturn(true);
         boolean isEmailAvailable = sut.isEmailAvailable(email);
 
         //then
@@ -64,7 +66,7 @@ class MemberManagementServiceTest {
         String email = "test1@example.com";
 
         //when
-        when(signUpAdapterMock.isEmailAvailable(email)).thenReturn(false);
+        when(memberManagementAdapter.isEmailAvailable(email)).thenReturn(false);
         boolean isEmailAvailable = sut.isEmailAvailable(email);
         //then
         assertThat(isEmailAvailable).isFalse();
@@ -77,7 +79,7 @@ class MemberManagementServiceTest {
         String telNo = "101-1111-1111";
 
         //when
-        when(signUpAdapterMock.isTelNoAvailable(telNo)).thenReturn(true);
+        when(memberManagementAdapter.isTelNoAvailable(telNo)).thenReturn(true);
         boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
 
         //then
@@ -92,7 +94,7 @@ class MemberManagementServiceTest {
         String telNo = "01012345678";
 
         //when
-        when(signUpAdapterMock.isTelNoAvailable(telNo)).thenReturn(false);
+        when(memberManagementAdapter.isTelNoAvailable(telNo)).thenReturn(false);
         boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
 
         //then
@@ -163,6 +165,18 @@ class MemberManagementServiceTest {
 
         // then
         verify(memberPort).updatePassword(email, "encryptedPassword");
+    }
+
+    @DisplayName("[happy] db에 없는 닉네임을 요청받으면 true를 반환한다.")
+    @Test
+    void isNicknameAvailableTrue() {
+        // given
+        String nickname = "hello";
+        when(sut.isNicknameAvailable(nickname)).thenReturn(true);
+        // when
+        boolean isNicknameAvailable = sut.isNicknameAvailable(nickname);
+        // then
+        assertTrue(isNicknameAvailable);
     }
 
 }

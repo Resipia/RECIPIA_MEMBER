@@ -10,4 +10,5 @@ public interface MemberManagementUseCase {
     Long reportMember(Report report);
     String findEmail(Member member);
     void sendTempPassword(TempPassword tempPassword);
+    boolean isNicknameAvailable(String nickname);
 }

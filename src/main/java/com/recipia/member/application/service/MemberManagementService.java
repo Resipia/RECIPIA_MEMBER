@@ -1,8 +1,8 @@
 package com.recipia.member.application.service;
 
 import com.recipia.member.application.port.in.MemberManagementUseCase;
+import com.recipia.member.application.port.out.port.MemberManagementPort;
 import com.recipia.member.application.port.out.port.MemberPort;
-import com.recipia.member.application.port.out.port.SignUpPort;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.common.utils.TempPasswordUtil;
@@ -26,11 +26,11 @@ import java.util.regex.Pattern;
 @Service
 public class MemberManagementService implements MemberManagementUseCase {
 
-    private final SignUpPort signUpPort;
     private final MemberPort memberPort;
     private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
     private final TempPasswordUtil tempPasswordUtil;
+    private final MemberManagementPort memberManagementPort;
 
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
@@ -47,7 +47,7 @@ public class MemberManagementService implements MemberManagementUseCase {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         if (matcher.matches()) {
             // 유효한 형식이면 DB에서 검색
-            return signUpPort.isEmailAvailable(email);
+            return memberManagementPort.isEmailAvailable(email);
         } else {
             throw new MemberApplicationException(ErrorCode.INVALID_EMAIL_FORMAT);
         }
@@ -59,7 +59,7 @@ public class MemberManagementService implements MemberManagementUseCase {
      */
     @Override
     public boolean isTelNoAvailable(String telNo) {
-        return signUpPort.isTelNoAvailable(telNo);
+        return memberManagementPort.isTelNoAvailable(telNo);
     }
 
     /**
@@ -121,5 +121,14 @@ public class MemberManagementService implements MemberManagementUseCase {
         memberPort.updatePassword(email, encryptedPassword);
 
         // todo: 업데이트하면 다른곳에서 로그아웃 처리
+    }
+
+    /**
+     * [READ] nickname 중복체크
+     * DB에 없는 nickname이면 true, DB에 이미 있는 nickname이면 false 반환
+     */
+    @Override
+    public boolean isNicknameAvailable(String nickname) {
+        return memberManagementPort.isNicknameAvailable(nickname);
     }
 }
