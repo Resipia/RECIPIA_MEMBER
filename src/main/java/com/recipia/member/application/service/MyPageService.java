@@ -1,6 +1,6 @@
 package com.recipia.member.application.service;
 
-import com.recipia.member.adapter.in.web.dto.response.FollowingListResponseDto;
+import com.recipia.member.adapter.in.web.dto.response.FollowListResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.PagingResponseDto;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.application.port.in.MyPageUseCase;
@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 /**
  * 마이페이지 서비스 클래스
@@ -108,11 +108,11 @@ public class MyPageService implements MyPageUseCase {
     }
 
     /**
-     * [READ] targetMemberId가 팔로우하는 회원의 목록 가져오기
+     * [READ] targetMemberId가 팔로우하거나 targetMemberId를 팔로잉하는 회원의 목록 가져오기
      * 페이징을 위한 Pageable 객체를 여기서 조립해서 사용한다.
      */
     @Override
-    public PagingResponseDto<FollowingListResponseDto> getFollowingList(Long targetMemberId, int page, int size) {
+    public PagingResponseDto<FollowListResponseDto> getFollowList(Long targetMemberId, String type, int page, int size) {
         // 1. 정렬조건을 정한 뒤 Pageable 객체 생성
         Pageable pageable = PageRequest.of(page, size);
 
@@ -120,15 +120,18 @@ public class MyPageService implements MyPageUseCase {
         Long memberId = securityUtils.getCurrentMemberId();
 
         // 3. 데이터를 받아온다.
-        Page<FollowingListResponseDto> followingList = myPagePort.getFollowingList(targetMemberId, memberId, pageable);
+        Page<FollowListResponseDto> followingList = myPagePort.getFollowList(targetMemberId, memberId, type, pageable);
 
         // 4. 받아온 데이터를 꺼내서 응답 dto에 값을 세팅해준다.
-        List<FollowingListResponseDto> content = followingList.getContent();
+        List<FollowListResponseDto> content = followingList.getContent();
 
         // 5. 이미지 경로를 이용해서 pre-signed-url을 생성하고 세팅해준 값으로 새로운 List를 만든다.
-        List<FollowingListResponseDto> updatedContent = content.stream().map(following -> {
-            String preUrl = imageS3Service.generatePreSignedUrl(following.getImageFullPath(), 60);
-            return FollowingListResponseDto.of(following.getMemberId(), preUrl, following.getNickname(), following.getFollowId(), following.isMe());
+        List<FollowListResponseDto> updatedContent = content.stream().map(following -> {
+            String preUrl = Optional.ofNullable(following.getImageFullPath())
+                    .filter(path -> !path.isEmpty())
+                    .map(path -> imageS3Service.generatePreSignedUrl(path, 60))
+                    .orElse(null);
+            return FollowListResponseDto.of(following.getMemberId(), preUrl, following.getNickname(), following.getFollowId(), following.isMe());
         }).toList();
 
         Long totalCount = followingList.getTotalElements();
