@@ -116,7 +116,7 @@ class MemberAdapterTest extends TotalTestSupport {
     @Test
     void saveMemberFileSuccess() {
         // given
-        MemberFile memberFile = MemberFile.of(Member.of(2L), 0, "path", "object-url", "origin", "stored", "jpg", 10, "N");
+        MemberFile memberFile = MemberFile.of(Member.of(4L), 0, "path", "object-url", "origin", "stored", "jpg", 10, "N");
 
         // when
         Long savedMemberFileId = sut.saveMemberFile(memberFile);
@@ -152,7 +152,7 @@ class MemberAdapterTest extends TotalTestSupport {
     @Test
     void findMaxFileOrderByNonExistingMemberFileSuccess() {
         // given
-        Long memberId = 2L;
+        Long memberId = 4L;
         // when
         Integer maxFileOrder = sut.findMaxFileOrder(memberId);
         // then

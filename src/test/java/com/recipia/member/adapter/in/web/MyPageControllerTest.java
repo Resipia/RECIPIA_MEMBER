@@ -2,7 +2,7 @@ package com.recipia.member.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.adapter.in.web.dto.request.UpdateMyPageRequestDto;
-import com.recipia.member.adapter.in.web.dto.response.FollowingListResponseDto;
+import com.recipia.member.adapter.in.web.dto.response.FollowListResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.MyPageViewResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.PagingResponseDto;
 import com.recipia.member.application.port.in.MyPageUseCase;
@@ -22,8 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -92,16 +91,17 @@ class MyPageControllerTest extends TotalTestSupport {
     @Test
     void getFollowingListSuccess() throws Exception {
         // given
-        FollowingListResponseDto dto = FollowingListResponseDto.of(1L, "pre", "nickname", null, false);
-        PagingResponseDto<FollowingListResponseDto> pagingResponseDto = PagingResponseDto.of(List.of(dto), 100L);
+        FollowListResponseDto dto = FollowListResponseDto.of(1L, "pre", "nickname", null, false);
+        PagingResponseDto<FollowListResponseDto> pagingResponseDto = PagingResponseDto.of(List.of(dto), 100L);
         // when
-        when(myPageUseCase.getFollowingList(anyLong(), anyInt(), anyInt())).thenReturn(pagingResponseDto);
+        when(myPageUseCase.getFollowList(anyLong(), anyString(),anyInt(), anyInt())).thenReturn(pagingResponseDto);
 
         // then
         mockMvc.perform(get("/member/myPage/followList")
                         .param("page", "0")
                         .param("size", "10")
                         .param("targetMemberId", "1")
+                        .param("type", "follow")
                 ).andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").exists())
                 .andExpect(jsonPath("$.totalCount").value(pagingResponseDto.getTotalCount()));

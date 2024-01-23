@@ -1,6 +1,6 @@
 package com.recipia.member.adapter.out.persistenceAdapter.querydsl;
 
-import com.recipia.member.adapter.in.web.dto.response.FollowingListResponseDto;
+import com.recipia.member.adapter.in.web.dto.response.FollowListResponseDto;
 import com.recipia.member.config.TotalTestSupport;
 import com.recipia.member.domain.MyPage;
 import org.assertj.core.api.Assertions;
@@ -53,10 +53,11 @@ class MyPageQueryRepositoryTest extends TotalTestSupport {
         // given
         Long targetMemberId = 1L;
         Long memberId = 2L;
+        String type = "follow";
         Pageable pageable = PageRequest.of(0, 5);
 
         // when
-        Page<FollowingListResponseDto> result = sut.getFollowingList(targetMemberId, memberId, pageable);
+        Page<FollowListResponseDto> result = sut.getFollowingList(targetMemberId, memberId, type, pageable);
         // then
         assertThat(result).isNotNull();
         Assertions.assertThat(result.getContent()).isNotEmpty();

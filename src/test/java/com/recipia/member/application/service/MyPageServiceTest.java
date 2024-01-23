@@ -1,6 +1,6 @@
 package com.recipia.member.application.service;
 
-import com.recipia.member.adapter.in.web.dto.response.FollowingListResponseDto;
+import com.recipia.member.adapter.in.web.dto.response.FollowListResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.PagingResponseDto;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -232,12 +231,13 @@ class MyPageServiceTest {
         int size = 10;
         Long targetMemberId = 1L;
         Long loggedMemberId = 2L;
-        List<FollowingListResponseDto> followingList = List.of(FollowingListResponseDto.of(1L, "pre", "nickname", null, false));
-        Page<FollowingListResponseDto> mockPage = new PageImpl<>(followingList);
+        String type = "follow";
+        List<FollowListResponseDto> followingList = List.of(FollowListResponseDto.of(1L, "pre", "nickname", null, false));
+        Page<FollowListResponseDto> mockPage = new PageImpl<>(followingList);
         when(securityUtils.getCurrentMemberId()).thenReturn(loggedMemberId);
-        when(myPagePort.getFollowingList(anyLong(), anyLong(), any(Pageable.class))).thenReturn(mockPage);
+        when(myPagePort.getFollowList(anyLong(), anyLong(), anyString(), any(Pageable.class))).thenReturn(mockPage);
         // when
-        PagingResponseDto<FollowingListResponseDto> result = sut.getFollowingList(targetMemberId, page, size);
+        PagingResponseDto<FollowListResponseDto> result = sut.getFollowList(targetMemberId, type, page, size);
         // then
         assertThat(result.getContent()).hasSize(1);
         assertThat(result.getTotalCount()).isEqualTo(1);
