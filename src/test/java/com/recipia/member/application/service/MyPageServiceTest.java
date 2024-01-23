@@ -1,11 +1,14 @@
 package com.recipia.member.application.service;
 
+import com.recipia.member.adapter.in.web.dto.response.FollowingListResponseDto;
+import com.recipia.member.adapter.in.web.dto.response.PagingResponseDto;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.application.port.out.port.MyPagePort;
 import com.recipia.member.common.event.NicknameChangeSpringEvent;
 import com.recipia.member.common.exception.MemberApplicationException;
+import com.recipia.member.common.utils.SecurityUtils;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
 import com.recipia.member.domain.MyPage;
@@ -16,9 +19,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.as;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -37,6 +47,8 @@ class MyPageServiceTest {
     private ImageS3Service imageS3Service;
     @Mock
     private ApplicationEventPublisher eventPublisher;
+    @Mock
+    private SecurityUtils securityUtils;
 
 
     @DisplayName("[happy] 프로필 이미지가 있는 유저의 마이페이지 조회")
@@ -212,11 +224,28 @@ class MyPageServiceTest {
         verify(eventPublisher, times(1)).publishEvent(any(NicknameChangeSpringEvent.class));
     }
 
+    @DisplayName("[happy] 기본 페이징으로 팔로우 목록을 정상적으로 가져온다.")
+    @Test
+    void getFollowingListSuccess() {
+        // given
+        int page = 0;
+        int size = 10;
+        Long targetMemberId = 1L;
+        Long loggedMemberId = 2L;
+        List<FollowingListResponseDto> followingList = List.of(FollowingListResponseDto.of(1L, "pre", "nickname", null, false));
+        Page<FollowingListResponseDto> mockPage = new PageImpl<>(followingList);
+        when(securityUtils.getCurrentMemberId()).thenReturn(loggedMemberId);
+        when(myPagePort.getFollowingList(anyLong(), anyLong(), any(Pageable.class))).thenReturn(mockPage);
+        // when
+        PagingResponseDto<FollowingListResponseDto> result = sut.getFollowingList(targetMemberId, page, size);
+        // then
+        assertThat(result.getContent()).hasSize(1);
+        assertThat(result.getTotalCount()).isEqualTo(1);
+    }
 
     private Member createMemberWithNickname(String nickname) {
         return Member.of(1L, "test@example.com", "password", "Full Name", nickname, MemberStatus.ACTIVE, "Introduction", "01012345678", "Address 1-1", "Address 1-2", RoleType.MEMBER, "Y", "Y", "2020-02-02", "M");
     }
-
 
 
     private Member createMember() {

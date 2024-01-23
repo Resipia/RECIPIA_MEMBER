@@ -46,4 +46,19 @@ VALUES (1, 1, 'some-refresh-token', DATEADD(MONTH, 6, CURRENT_DATE()));
 
 -- 멤버 파일 추가
 INSERT INTO member_file (member_id, file_order, flpth, object_url, origin_file_nm, strd_file_nm, file_extsn, file_size, del_yn, create_dttm, update_dttm)
-VALUES (1, 1, 'path', 'url', 'origin', 'stord', 'jpg', 30, 'N', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+VALUES (1, 1, 'path', 'url', 'origin', 'stord', 'jpg', 30, 'N', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (2, 1, 'path', 'url', 'origin', 'stord', 'jpg', 30, 'N', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (3, 1, 'path', 'url', 'origin', 'stord', 'jpg', 30, 'N', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- 팔로우 데이터 추가
+INSERT INTO follow (follower_member_id, following_member_id, create_dttm)
+VALUES (1, 2, CURRENT_TIMESTAMP),
+       (1, 3, CURRENT_TIMESTAMP),
+       (1, 4, CURRENT_TIMESTAMP),
+       (2, 1, CURRENT_TIMESTAMP),
+       (2, 3, CURRENT_TIMESTAMP),
+       (2, 5, CURRENT_TIMESTAMP),
+       (3, 1, CURRENT_TIMESTAMP),
+       (3, 4, CURRENT_TIMESTAMP),
+       (4, 2, CURRENT_TIMESTAMP),
+       (5, 1, CURRENT_TIMESTAMP);
