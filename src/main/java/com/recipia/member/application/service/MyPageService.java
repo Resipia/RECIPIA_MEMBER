@@ -47,11 +47,22 @@ public class MyPageService implements MyPageUseCase {
      * 위 단계가 끝나면 마이 페이지 데이터를 반환한다.
      */
     @Override
-    public MyPage viewMyPage(Long memberId) {
-        // 1. 멤버의 기본정보 가져오기
-        MyPage myPage = myPagePort.viewMyPage(memberId);
+    public MyPage viewMyPage(Long targetMemberId) {
+        // 로그인한 회원 정보 가져오기
+        Long memberId = securityUtils.getCurrentMemberId();
 
-        // 2. 프로필 이미지 경로 확인 및 처리
+        // 로그인 한 회원과 targetMemberId의 회원 상태가 활성화 상태인 회원인지 거증
+        boolean isExistMember = memberPort.isAllMemberActive(List.of(memberId, targetMemberId));
+
+        // 마이페이지를 조회하려는 회원이 활성화된 상태가 아니라면 오류 발생
+        if (!isExistMember) {
+            throw new MemberApplicationException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        // 멤버의 기본정보 가져오기
+        MyPage myPage = myPagePort.viewMyPage(memberId, targetMemberId);
+
+        // 프로필 이미지 경로 확인 및 처리
         String filePath = myPage.getImageFilePath();
         if (filePath != null && !filePath.isEmpty()) {
             String preSignedUrl = imageS3Service.generatePreSignedUrl(filePath, 60);
