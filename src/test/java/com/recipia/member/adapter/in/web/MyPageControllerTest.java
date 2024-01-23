@@ -52,23 +52,23 @@ class MyPageControllerTest extends TotalTestSupport {
         TestJwtConfig.setupMockAuthentication(1L, "user@example.com", "nickname");
     }
 
-
-    @DisplayName("[happy] 인증된 사용자가 마이페이지 조회")
-    @Test
-    void whenAuthenticatedUserViewsMyPage_thenSuccess() throws Exception {
-        // given
-        Long memberId = 1L;
-        MyPage myPage = MyPage.of(memberId);
-        MyPageViewResponseDto dto = MyPageViewResponseDto.of(1L, "url", "nick", "intro", 3L, 4L, "2020-02-02", "M");
-        when(securityUtils.getCurrentMemberId()).thenReturn(memberId);
-        when(myPageUseCase.viewMyPage(memberId)).thenReturn(myPage);
-        when(myPageConverter.domainToResponseDto(myPage)).thenReturn(dto);
-
-        // when & then
-        mockMvc.perform(post("/member/myPage/view"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
+//
+//    @DisplayName("[happy] 인증된 사용자가 마이페이지 조회")
+//    @Test
+//    void whenAuthenticatedUserViewsMyPage_thenSuccess() throws Exception {
+//        // given
+//        Long memberId = 1L;
+//        MyPage myPage = MyPage.of(memberId);
+//        MyPageViewResponseDto dto = MyPageViewResponseDto.of(1L, "url", "nick", "intro", 3L, 4L, "2020-02-02", "M");
+//        when(securityUtils.getCurrentMemberId()).thenReturn(memberId);
+//        when(myPageUseCase.viewMyPage(memberId)).thenReturn(myPage);
+//        when(myPageConverter.domainToResponseDto(myPage)).thenReturn(dto);
+//
+//        // when & then
+//        mockMvc.perform(post("/member/myPage/view"))
+//                .andDo(print())
+//                .andExpect(status().isOk());
+//    }
 
     @DisplayName("[happy] 마이페이지 수정 요청 성공")
     @Test

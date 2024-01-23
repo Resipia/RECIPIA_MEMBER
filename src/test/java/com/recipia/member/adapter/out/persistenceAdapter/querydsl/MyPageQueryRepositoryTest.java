@@ -61,7 +61,32 @@ class MyPageQueryRepositoryTest extends TotalTestSupport {
         // then
         assertThat(result).isNotNull();
         Assertions.assertThat(result.getContent()).isNotEmpty();
+    }
 
+    @DisplayName("[happy] 내가 팔로우 하고있는 회원의 마이페이지 조회 성공")
+    @Test
+    void viewFollowOtherMyPageSuccess() {
+        // given
+        Long memberId = 1L;
+        Long targetMemberId = 2L;
+        // when
+        MyPage result = sut.viewOtherMyPage(memberId, targetMemberId);
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getFollowId()).isNotNull();
+    }
+
+    @DisplayName("[happy] 내가 팔로우 하지 않은 회원의 마이페이지 조회 성공")
+    @Test
+    void viewNotFollowOtherMyPageSuccess() {
+        // given
+        Long memberId = 1L;
+        Long targetMemberId = 5L;
+        // when
+        MyPage result = sut.viewOtherMyPage(memberId, targetMemberId);
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.getFollowId()).isNull();
     }
 
 }
