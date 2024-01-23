@@ -24,13 +24,13 @@ public class FollowController {
     private final FollowConverter followConverter;
 
     /**
-     * 팔로우 요청
+     * 팔로우/언팔로우 요청
      */
-    @PostMapping("/request")
-    public ResponseEntity<ResponseDto<Long>> requestFollow (@Valid @RequestBody FollowRequestDto dto) {
-        Long savedFollowId = followUseCase.followRequest(followConverter.requestDtoToDomain(dto));
+    @PostMapping("/totalFollow")
+    public ResponseEntity<ResponseDto<Long>> requestFollowUnfollow (@Valid @RequestBody FollowRequestDto dto) {
+        Long successId = followUseCase.followRequest(followConverter.requestDtoToDomain(dto));
         return ResponseEntity.ok(
-                ResponseDto.success(savedFollowId)
+                ResponseDto.success(successId)
         );
     }
 

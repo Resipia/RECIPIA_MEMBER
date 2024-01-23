@@ -13,15 +13,15 @@ import lombok.ToString;
 @NoArgsConstructor
 public class FollowRequestDto {
 
-    // 팔로우 대상 회원의 pk
+    // 팔로우, 언팔로우 대상 회원의 pk
     @NotNull
-    private Long followingMemberId;
+    private Long targetMemberId;
 
-    private FollowRequestDto(Long followingMemberId) {
-        this.followingMemberId = followingMemberId;
+    private FollowRequestDto(Long targetMemberId) {
+        this.targetMemberId = targetMemberId;
     }
 
-    public static FollowRequestDto of(Long followingMemberId) {
-        return new FollowRequestDto(followingMemberId);
+    public static FollowRequestDto of(Long targetMemberId) {
+        return new FollowRequestDto(targetMemberId);
     }
 }
