@@ -58,13 +58,12 @@ class MyPageServiceTest {
         Long targetMemberId = 2L;
         MyPage beforePreSignedResponse = MyPage.builder().memberId(memberId).imageFilePath("file/path").nickname("nickname").followerCount(3L).followingCount(54L).build();
         String expectedPreSignedUrl = "pre-signed-url";
-        when(securityUtils.getCurrentMemberId()).thenReturn(memberId);
         when(memberPort.isAllMemberActive(anyList())).thenReturn(true);
         when(myPagePort.viewMyPage(memberId, targetMemberId)).thenReturn(beforePreSignedResponse);
         when(imageS3Service.generatePreSignedUrl(beforePreSignedResponse.getImageFilePath(), 60)).thenReturn("pre-signed-url");
 
         // when
-        MyPage result = sut.viewMyPage(targetMemberId);
+        MyPage result = sut.viewMyPage(memberId, targetMemberId);
 
         // then
         assertNotNull(result);
@@ -81,12 +80,11 @@ class MyPageServiceTest {
         Long memberId = 1L;
         Long targetMemberId = 2L;
         MyPage myPage = MyPage.of(memberId, null, "nickname", "introduction", 3L, 4L, "2020-02-02", "M");
-        when(securityUtils.getCurrentMemberId()).thenReturn(memberId);
         when(memberPort.isAllMemberActive(anyList())).thenReturn(true);
         when(myPagePort.viewMyPage(memberId, targetMemberId)).thenReturn(myPage);
 
         // when
-        MyPage result = sut.viewMyPage(targetMemberId);
+        MyPage result = sut.viewMyPage(memberId, targetMemberId);
 
         // then
         assertNotNull(result);
@@ -104,13 +102,13 @@ class MyPageServiceTest {
     void viewMyPageFail() {
         // given
         Long memberId = 1L;
-        when(securityUtils.getCurrentMemberId()).thenReturn(memberId);
+        Long targetMemberId = 2L;
         when(memberPort.isAllMemberActive(anyList())).thenReturn(true);
         when(myPagePort.viewMyPage(anyLong(), anyLong())).thenThrow(new RuntimeException("데이터베이스 오류"));
 
         // when
         Exception exception = assertThrows(RuntimeException.class,
-                () -> sut.viewMyPage(memberId));
+                () -> sut.viewMyPage(memberId, targetMemberId));
 
         // then
         assertEquals("데이터베이스 오류", exception.getMessage());

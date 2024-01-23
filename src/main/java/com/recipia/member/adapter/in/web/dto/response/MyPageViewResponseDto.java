@@ -19,8 +19,9 @@ public class MyPageViewResponseDto {
     private String birth;           // 생년월일
     private String gender;          // 성별
     private Long followId;          // 로그인한 회원가 팔로우 하고있는 회원이면 데이터가 들어있고 팔로우 하고있지 않은 회원이면 null
+    private boolean isMe;           // 응답한 마이페이지가 나의 마이페이지라면 true, 다른 회원의 마이페이지라면 false
 
-    private MyPageViewResponseDto(Long memberId, String profileImageUrl,  String nickname, String introduction, Long followingCount, Long followerCount, String birth, String gender, Long followId) {
+    private MyPageViewResponseDto(Long memberId, String profileImageUrl,  String nickname, String introduction, Long followingCount, Long followerCount, String birth, String gender, Long followId, boolean isMe) {
         this.memberId = memberId;
         this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
@@ -30,9 +31,10 @@ public class MyPageViewResponseDto {
         this.birth = birth;
         this.gender = gender;
         this.followId = followId;
+        this.isMe = isMe;
     }
 
-    public static MyPageViewResponseDto of(Long memberId, String profileImageUrl, String nickname, String introduction, Long followingCount, Long followerCount, String birth, String gender, Long followId) {
-        return new MyPageViewResponseDto(memberId, profileImageUrl, nickname, introduction, followingCount, followerCount, birth, gender, followId);
+    public static MyPageViewResponseDto of(Long memberId, String profileImageUrl, String nickname, String introduction, Long followingCount, Long followerCount, String birth, String gender, Long followId, boolean isMe) {
+        return new MyPageViewResponseDto(memberId, profileImageUrl, nickname, introduction, followingCount, followerCount, birth, gender, followId, isMe);
     }
 }
