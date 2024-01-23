@@ -53,7 +53,7 @@ class MyPageQueryRepositoryTest extends TotalTestSupport {
         // given
         Long targetMemberId = 1L;
         Long memberId = 2L;
-        String type = "follow";
+        String type = "following";
         Pageable pageable = PageRequest.of(0, 5);
 
         // when

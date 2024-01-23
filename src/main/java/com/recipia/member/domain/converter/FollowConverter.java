@@ -18,6 +18,6 @@ public class FollowConverter {
 
     public Follow requestDtoToDomain(FollowRequestDto dto) {
         Long currentMemberId = securityUtils.getCurrentMemberId();
-        return Follow.of(currentMemberId, dto.getFollowingMemberId());
+        return Follow.of(currentMemberId, dto.getTargetMemberId());
     }
 }
