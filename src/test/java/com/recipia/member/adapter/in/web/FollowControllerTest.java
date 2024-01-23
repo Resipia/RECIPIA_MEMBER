@@ -40,7 +40,7 @@ class FollowControllerTest extends TotalTestSupport {
         // given
         FollowRequestDto dto = FollowRequestDto.of(3L);
         // when & then
-        mockMvc.perform(post("/member/follow/request")
+        mockMvc.perform(post("/member/follow/totalFollow")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(dto)))
                 .andExpect(status().isOk())
@@ -54,14 +54,14 @@ class FollowControllerTest extends TotalTestSupport {
         // given
         FollowRequestDto dto = FollowRequestDto.of(null);
         //when & then
-        mockMvc.perform(post("/member/follow/request")
+        mockMvc.perform(post("/member/follow/totalFollow")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(dto)))
                 .andExpect(status().isBadRequest())
                 .andDo(print())
                 .andExpect(result -> {
                     String responseString = result.getResponse().getContentAsString();
-                    assertThat(responseString).contains("followingMemberId");
+                    assertThat(responseString).contains("targetMemberId");
                 })
                 .andExpect(result -> {
                     Throwable thrown = result.getResolvedException();

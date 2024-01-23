@@ -167,6 +167,7 @@ class MemberManagementServiceTest {
         when(memberPort.existsByEmailNotInDeactive(email)).thenReturn(true);
         when(tempPasswordUtil.generateTempPassword()).thenReturn(createdTempPassword);
         when(passwordEncoder.encode(anyString())).thenReturn("encryptedPassword");
+        when(memberPort.updatePassword(email, "encryptedPassword")).thenReturn(1L);
 
         // CompletableFuture를 반환하도록 스터빙
         when(mailService.sendTemporaryPassword(eq(email), eq(createdTempPassword)))
