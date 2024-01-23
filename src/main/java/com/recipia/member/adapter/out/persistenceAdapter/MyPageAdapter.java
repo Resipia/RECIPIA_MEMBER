@@ -1,6 +1,6 @@
 package com.recipia.member.adapter.out.persistenceAdapter;
 
-import com.recipia.member.adapter.in.web.dto.response.FollowingListResponseDto;
+import com.recipia.member.adapter.in.web.dto.response.FollowListResponseDto;
 import com.recipia.member.adapter.out.persistenceAdapter.querydsl.MyPageQueryRepository;
 import com.recipia.member.application.port.out.port.MyPagePort;
 import com.recipia.member.domain.MyPage;
@@ -34,10 +34,10 @@ public class MyPageAdapter implements MyPagePort {
     }
 
     /**
-     * [READ] 팔로잉 목록 가져오기
+     * [READ] 팔로잉/팔로워 목록 가져오기
      */
     @Override
-    public Page<FollowingListResponseDto> getFollowingList(Long targetMemberId, Long loggedMemberId, Pageable pageable) {
-        return myPageQueryRepository.getFollowingList(targetMemberId, loggedMemberId, pageable);
+    public Page<FollowListResponseDto> getFollowList(Long targetMemberId, Long loggedMemberId, String type, Pageable pageable) {
+        return myPageQueryRepository.getFollowingList(targetMemberId, loggedMemberId, type, pageable);
     }
 }

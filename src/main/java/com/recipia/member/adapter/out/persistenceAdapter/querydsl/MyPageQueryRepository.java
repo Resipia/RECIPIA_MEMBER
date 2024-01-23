@@ -2,13 +2,12 @@ package com.recipia.member.adapter.out.persistenceAdapter.querydsl;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.recipia.member.adapter.in.web.dto.response.FollowingListResponseDto;
+import com.recipia.member.adapter.in.web.dto.response.FollowListResponseDto;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.domain.MyPage;
 import lombok.RequiredArgsConstructor;
@@ -84,9 +83,9 @@ public class MyPageQueryRepository {
     }
 
     /**
-     * [READ] targetMemberId가 팔로우하고있는 회원의 목록 가져오기
+     * [READ] targetMemberId가 팔로우하거나 targetMemberId를 팔로우하고있는 회원의 목록 가져오기
      */
-    public Page<FollowingListResponseDto> getFollowingList(Long targetMemberId, Long loggedMemberId, Pageable pageable) {
+    public Page<FollowListResponseDto> getFollowingList(Long targetMemberId, Long loggedMemberId, String type, Pageable pageable) {
 
         // 프로필 이미지 파일 경로 가져오는 서브쿼리
         // 여기서 memberFileEntity.memberEntity.id는 메인 쿼리의 memberEntity.id와 연결되어야 한다.
@@ -102,27 +101,43 @@ public class MyPageQueryRepository {
                 .where(followEntity.followerMember.id.eq(loggedMemberId)
                         .and(followEntity.followingMember.id.eq(memberEntity.id)));
 
-
-        JPAQuery<FollowingListResponseDto> query = jpaQueryFactory
-                .select(Projections.fields(FollowingListResponseDto.class,
+        // 메인 쿼리
+        JPAQuery<FollowListResponseDto> query = jpaQueryFactory
+                .select(Projections.fields(FollowListResponseDto.class,
                         memberEntity.id.as("memberId"),
                         memberEntity.nickname.as("nickname"),
                         ExpressionUtils.as(filePathSubQuery, "imageFullPath"),
                         ExpressionUtils.as(followIdSubQuery, "followId"),
                         memberEntity.id.eq(loggedMemberId).as("isMe")
                 ))
-                .from(followEntity)
-                .join(followEntity.followingMember, memberEntity)
-                .where(followEntity.followerMember.id.eq(targetMemberId), followEntity.followerMember.status.in(MemberStatus.ACTIVE))
+                .from(followEntity);
+
+
+        // type에 따른 조건 분기
+        if ("follow".equals(type)) {
+            query.join(followEntity.followingMember, memberEntity)
+                    .where(followEntity.followerMember.id.eq(targetMemberId));
+        } else if ("follower".equals(type)) {
+            query.join(followEntity.followerMember, memberEntity)
+                    .where(followEntity.followingMember.id.eq(targetMemberId));
+        }
+
+        // 공통 조건 및 페이징 처리
+        query.where(followEntity.followerMember.status.in(MemberStatus.ACTIVE))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
 
-        List<FollowingListResponseDto> results = query.fetch();
+
+        List<FollowListResponseDto> results = query.fetch();
 
         Long totalCount = Optional.ofNullable(jpaQueryFactory
                         .select(followEntity.id.count())
                         .from(followEntity)
-                        .where(followEntity.followingMember.id.eq(targetMemberId), followEntity.followerMember.status.in(MemberStatus.ACTIVE))
+                        // type에 따른 카운트 조건 분기
+                        .where("follow".equals(type) ?
+                                        followEntity.followerMember.id.eq(targetMemberId) :
+                                        followEntity.followingMember.id.eq(targetMemberId),
+                                followEntity.followerMember.status.in(MemberStatus.ACTIVE))
                         .fetchOne())
                 .orElse(0L);
 
