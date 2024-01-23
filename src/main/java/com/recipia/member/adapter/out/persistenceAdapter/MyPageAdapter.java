@@ -1,9 +1,12 @@
 package com.recipia.member.adapter.out.persistenceAdapter;
 
+import com.recipia.member.adapter.in.web.dto.response.FollowingListResponseDto;
 import com.recipia.member.adapter.out.persistenceAdapter.querydsl.MyPageQueryRepository;
 import com.recipia.member.application.port.out.port.MyPagePort;
 import com.recipia.member.domain.MyPage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -28,5 +31,13 @@ public class MyPageAdapter implements MyPagePort {
     @Override
     public Long updateMyPage(MyPage requestMyPage) {
         return myPageQueryRepository.updateMyPage(requestMyPage);
+    }
+
+    /**
+     * [READ] 팔로잉 목록 가져오기
+     */
+    @Override
+    public Page<FollowingListResponseDto> getFollowingList(Long targetMemberId, Long loggedMemberId, Pageable pageable) {
+        return myPageQueryRepository.getFollowingList(targetMemberId, loggedMemberId, pageable);
     }
 }
