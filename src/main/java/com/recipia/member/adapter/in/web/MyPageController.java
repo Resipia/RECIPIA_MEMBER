@@ -1,12 +1,12 @@
 package com.recipia.member.adapter.in.web;
 
 import com.recipia.member.adapter.in.web.dto.request.UpdateMyPageRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.ViewMyPageRequestDto;
 import com.recipia.member.adapter.in.web.dto.response.FollowListResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.MyPageViewResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.PagingResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
 import com.recipia.member.application.port.in.MyPageUseCase;
-import com.recipia.member.common.utils.SecurityUtils;
 import com.recipia.member.domain.MyPage;
 import com.recipia.member.domain.converter.MyPageConverter;
 import jakarta.validation.Valid;
@@ -25,14 +25,13 @@ public class MyPageController {
 
     private final MyPageUseCase myPageUseCase;
     private final MyPageConverter myPageConverter;
-    private final SecurityUtils securityUtils;
 
     /**
-     * 다른 유저가 마이페이지 조회
+     * 내가보는 나의 마이페이지 조회
      */
     @PostMapping("/view")
-    public ResponseEntity<ResponseDto<MyPageViewResponseDto>> view() {
-        MyPage myPage = myPageUseCase.viewMyPage(securityUtils.getCurrentMemberId());
+    public ResponseEntity<ResponseDto<MyPageViewResponseDto>> view(@Valid @RequestBody ViewMyPageRequestDto dto) {
+        MyPage myPage = myPageUseCase.viewMyPage(dto.getTargetMemberId());
         return ResponseEntity.ok(
                 ResponseDto.success(myPageConverter.domainToResponseDto(myPage))
         );

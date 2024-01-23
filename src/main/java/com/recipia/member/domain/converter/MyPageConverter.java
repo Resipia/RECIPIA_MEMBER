@@ -26,7 +26,8 @@ public class MyPageConverter {
                 myPage.getFollowingCount(),
                 myPage.getFollowerCount(),
                 myPage.getBirth(),
-                myPage.getGender()
+                myPage.getGender(),
+                myPage.getFollowId()
         );
     }
 
