@@ -143,4 +143,51 @@ public class MyPageQueryRepository {
 
         return new PageImpl<>(results, pageable, totalCount);
     }
+
+    /**
+     * [READ] targetMemberId에 해당하는 마이페이지 정보를 조회한다.
+     */
+    public MyPage viewOtherMyPage(Long memberId, Long targetMemberId) {
+
+
+        // 파일 경로 가져오는 서브쿼리
+        JPQLQuery<String> filePathSubQuery = JPAExpressions
+                .select(memberFileEntity.storedFilePath)
+                .from(memberFileEntity)
+                .where(memberFileEntity.memberEntity.id.eq(targetMemberId));
+
+        // 팔로잉 수 가져오는 서브쿼리
+        JPQLQuery<Long> followingCountSubQuery = JPAExpressions
+                .select(Expressions.numberTemplate(Long.class, "coalesce({0}, 0)", followEntity.count()))
+                .from(followEntity)
+                .where(followEntity.followerMember.id.eq(targetMemberId), followEntity.followerMember.status.in(MemberStatus.ACTIVE));
+
+        // 팔로워 수 가져오는 서브쿼리
+        JPQLQuery<Long> followerCountSubQuery = JPAExpressions
+                .select(Expressions.numberTemplate(Long.class, "coalesce({0}, 0)", followEntity.count()))
+                .from(followEntity)
+                .where(followEntity.followingMember.id.eq(targetMemberId), followEntity.followingMember.status.in(MemberStatus.ACTIVE));
+
+        // 내가 팔로우 하고있는 회원인지 가져오는 서브쿼리
+        JPQLQuery<Long> followIdSubQuery = JPAExpressions
+                .select(followEntity.id)
+                .from(followEntity)
+                .where(followEntity.followerMember.id.eq(memberId), followEntity.followingMember.id.eq(targetMemberId));
+
+        return jpaQueryFactory
+                .select(Projections.fields(MyPage.class,
+                        memberEntity.id.as("memberId"),
+                        memberEntity.birth.as("birth"),
+                        memberEntity.gender.as("gender"),
+                        ExpressionUtils.as(filePathSubQuery, "imageFilePath"),
+                        memberEntity.nickname.as("nickname"),
+                        memberEntity.introduction.as("introduction"),
+                        ExpressionUtils.as(followingCountSubQuery, "followingCount"),
+                        ExpressionUtils.as(followIdSubQuery, "followId"),
+                        ExpressionUtils.as(followerCountSubQuery, "followerCount")))
+                .from(memberEntity)
+                .leftJoin(memberEntity.memberFileEntity) // 외부 조인 사용
+                .where(memberEntity.id.eq(targetMemberId))
+                .fetchOne();
+    }
 }
