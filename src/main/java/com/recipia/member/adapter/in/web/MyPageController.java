@@ -1,7 +1,7 @@
 package com.recipia.member.adapter.in.web;
 
 import com.recipia.member.adapter.in.web.dto.request.UpdateMyPageRequestDto;
-import com.recipia.member.adapter.in.web.dto.response.FollowingListResponseDto;
+import com.recipia.member.adapter.in.web.dto.response.FollowListResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.MyPageViewResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.PagingResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
@@ -51,15 +51,16 @@ public class MyPageController {
     }
 
     /**
-     * [READ] 팔로우 목록 조회
+     * [READ] type이 follow일땐 팔로잉 목록 조회, type이 follower일땐 팔로워 목록 조회
      */
     @GetMapping("/followList")
-    public ResponseEntity<PagingResponseDto<FollowingListResponseDto>> getFollowingList(
+    public ResponseEntity<PagingResponseDto<FollowListResponseDto>> getFollowingList(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @RequestParam(value = "targetMemberId") Long targetMemberId
+            @RequestParam(value = "targetMemberId") Long targetMemberId,
+            @RequestParam(value = "type") String type                       // 팔로잉 목록인지, 팔로워 목록인지 구별
     ) {
-        PagingResponseDto<FollowingListResponseDto> result = myPageUseCase.getFollowingList(targetMemberId, page, size);
+        PagingResponseDto<FollowListResponseDto> result = myPageUseCase.getFollowList(targetMemberId, type, page, size);
         return ResponseEntity.ok(result);
     }
 }
