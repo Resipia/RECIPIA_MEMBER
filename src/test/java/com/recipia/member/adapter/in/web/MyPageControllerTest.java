@@ -2,7 +2,9 @@ package com.recipia.member.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipia.member.adapter.in.web.dto.request.UpdateMyPageRequestDto;
+import com.recipia.member.adapter.in.web.dto.response.FollowListResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.MyPageViewResponseDto;
+import com.recipia.member.adapter.in.web.dto.response.PagingResponseDto;
 import com.recipia.member.application.port.in.MyPageUseCase;
 import com.recipia.member.common.utils.SecurityUtils;
 import com.recipia.member.config.TestJwtConfig;
@@ -18,11 +20,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -82,6 +87,25 @@ class MyPageControllerTest extends TotalTestSupport {
                 .andDo(print());
     }
 
+    @DisplayName("[happy] targetMemberId에 해당하는 회원의 팔로우 목록을 요청했을때 정상적으로 페이징된 데이터를 반환한다.")
+    @Test
+    void getFollowingListSuccess() throws Exception {
+        // given
+        FollowListResponseDto dto = FollowListResponseDto.of(1L, "pre", "nickname", null, false);
+        PagingResponseDto<FollowListResponseDto> pagingResponseDto = PagingResponseDto.of(List.of(dto), 100L);
+        // when
+        when(myPageUseCase.getFollowList(anyLong(), anyString(),anyInt(), anyInt())).thenReturn(pagingResponseDto);
+
+        // then
+        mockMvc.perform(get("/member/myPage/followList")
+                        .param("page", "0")
+                        .param("size", "10")
+                        .param("targetMemberId", "1")
+                        .param("type", "follow")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").exists())
+                .andExpect(jsonPath("$.totalCount").value(pagingResponseDto.getTotalCount()));
+    }
 
     // JSON 문자열 변환을 위한 유틸리티 메서드
     private String asJsonString(final Object obj) {

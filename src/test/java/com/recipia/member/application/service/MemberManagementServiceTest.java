@@ -3,6 +3,7 @@ package com.recipia.member.application.service;
 import com.recipia.member.adapter.out.persistence.constant.ReportStatus;
 import com.recipia.member.adapter.out.persistence.constant.ReportType;
 import com.recipia.member.adapter.out.persistenceAdapter.MemberManagementAdapter;
+import com.recipia.member.application.port.out.port.JwtPort;
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.common.utils.TempPasswordUtil;
 import com.recipia.member.domain.Member;
@@ -43,6 +44,8 @@ class MemberManagementServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private MailService mailService;
+    @Mock
+    private JwtPort jwtPort;
 
 
     @DisplayName("[happy] DB에 없는 이메일이 들어왔을때 true를 리턴한다.")
@@ -169,6 +172,7 @@ class MemberManagementServiceTest {
         when(mailService.sendTemporaryPassword(eq(email), eq(createdTempPassword)))
                 .thenReturn(CompletableFuture.completedFuture(true));
 
+        when(memberPort.updatePassword(email, "encryptedPassword")).thenReturn(1L);
 
         // when
         sut.sendTempPassword(domain);
