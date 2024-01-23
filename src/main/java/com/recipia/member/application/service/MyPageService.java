@@ -47,16 +47,15 @@ public class MyPageService implements MyPageUseCase {
      * 위 단계가 끝나면 마이 페이지 데이터를 반환한다.
      */
     @Override
-    public MyPage viewMyPage(Long targetMemberId) {
-        // 로그인한 회원 정보 가져오기
-        Long memberId = securityUtils.getCurrentMemberId();
+    public MyPage viewMyPage(Long memberId, Long targetMemberId) {
 
-        // 로그인 한 회원과 targetMemberId의 회원 상태가 활성화 상태인 회원인지 거증
-        boolean isExistMember = memberPort.isAllMemberActive(List.of(memberId, targetMemberId));
-
-        // 마이페이지를 조회하려는 회원이 활성화된 상태가 아니라면 오류 발생
-        if (!isExistMember) {
-            throw new MemberApplicationException(ErrorCode.USER_NOT_FOUND);
+        if (!memberId.equals(targetMemberId)) {
+            // targetMemberId의 회원 상태가 활성화 상태인 회원인지 거증
+            boolean isExistMember = memberPort.isAllMemberActive(List.of(targetMemberId));
+            // 만약 조회하려는 회원의 상태가 활성화 상태가 아니라면 에러 발생
+            if (!isExistMember) {
+                throw new MemberApplicationException(ErrorCode.USER_NOT_FOUND);
+            }
         }
 
         // 멤버의 기본정보 가져오기
@@ -95,7 +94,7 @@ public class MyPageService implements MyPageUseCase {
         Long updatedCount = myPagePort.updateMyPage(myPage);
 
         // 4. 삭제된 프로필 이미지 파일이 있다면 soft delete 처리한다.
-        if(myPage.getDeleteFileOrder() != null) {
+        if (myPage.getDeleteFileOrder() != null) {
             memberPort.softDeleteProfileImage(myPage);
         }
 
@@ -105,7 +104,7 @@ public class MyPageService implements MyPageUseCase {
             MemberFile memberFile = imageS3Service.createMemberFile(profileImage, memberId);
             Long savedMemberFileId = memberPort.saveMemberFile(memberFile);
 
-            if(savedMemberFileId < 1) {
+            if (savedMemberFileId < 1) {
                 throw new MemberApplicationException(ErrorCode.MEMBER_FILE_SAVE_ERROR);
             }
         }
