@@ -58,7 +58,7 @@ public class MyPageController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "targetMemberId") Long targetMemberId,
-            @RequestParam(value = "type") String type                       // 팔로잉 목록인지, 팔로워 목록인지 구별
+            @RequestParam(value = "type") String type                       // 팔로잉 목록(following)인지, 팔로워 목록(follower)인지 구별
     ) {
         PagingResponseDto<FollowListResponseDto> result = myPageUseCase.getFollowList(targetMemberId, type, page, size);
         return ResponseEntity.ok(result);

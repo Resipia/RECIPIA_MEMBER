@@ -114,7 +114,7 @@ public class MyPageQueryRepository {
 
 
         // type에 따른 조건 분기
-        if ("follow".equals(type)) {
+        if ("following".equals(type)) {
             query.join(followEntity.followingMember, memberEntity)
                     .where(followEntity.followerMember.id.eq(targetMemberId));
         } else if ("follower".equals(type)) {
@@ -134,7 +134,7 @@ public class MyPageQueryRepository {
                         .select(followEntity.id.count())
                         .from(followEntity)
                         // type에 따른 카운트 조건 분기
-                        .where("follow".equals(type) ?
+                        .where("following".equals(type) ?
                                         followEntity.followerMember.id.eq(targetMemberId) :
                                         followEntity.followingMember.id.eq(targetMemberId),
                                 followEntity.followerMember.status.in(MemberStatus.ACTIVE))
