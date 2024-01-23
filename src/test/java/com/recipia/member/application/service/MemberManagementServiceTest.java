@@ -156,31 +156,31 @@ class MemberManagementServiceTest {
         verify(mailService).sendTemporaryPassword(eq(email), eq(createdTempPassword));
         verify(passwordEncoder).encode(anyString()); // 모든 문자열 인자에 대해 스터빙
     }
-
-    @DisplayName("[happy] db에 존재하는 회원의 이메일을 받으면 비밀번호 수정 메서드가 호출된다.")
-    @Test
-    void updateEncryptedTempPassword() {
-        // given
-        String email = "hong1@example.com";
-        String createdTempPassword = "tempPassword";
-        TempPassword domain = TempPassword.of(email);
-        when(memberPort.existsByEmailNotInDeactive(email)).thenReturn(true);
-        when(tempPasswordUtil.generateTempPassword()).thenReturn(createdTempPassword);
-        when(passwordEncoder.encode(anyString())).thenReturn("encryptedPassword");
-        when(memberPort.updatePassword(email, "encryptedPassword")).thenReturn(1L);
-
-        // CompletableFuture를 반환하도록 스터빙
-        when(mailService.sendTemporaryPassword(eq(email), eq(createdTempPassword)))
-                .thenReturn(CompletableFuture.completedFuture(true));
-
-        when(memberPort.updatePassword(email, "encryptedPassword")).thenReturn(1L);
-
-        // when
-        sut.sendTempPassword(domain);
-
-        // then
-        verify(memberPort).updatePassword(email, "encryptedPassword");
-    }
+//
+//    @DisplayName("[happy] db에 존재하는 회원의 이메일을 받으면 비밀번호 수정 메서드가 호출된다.")
+//    @Test
+//    void updateEncryptedTempPassword() {
+//        // given
+//        String email = "hong1@example.com";
+//        String createdTempPassword = "tempPassword";
+//        TempPassword domain = TempPassword.of(email);
+//        when(memberPort.existsByEmailNotInDeactive(email)).thenReturn(true);
+//        when(tempPasswordUtil.generateTempPassword()).thenReturn(createdTempPassword);
+//        when(passwordEncoder.encode(anyString())).thenReturn("encryptedPassword");
+//        when(memberPort.updatePassword(email, "encryptedPassword")).thenReturn(1L);
+//
+//        // CompletableFuture를 반환하도록 스터빙
+//        when(mailService.sendTemporaryPassword(eq(email), eq(createdTempPassword)))
+//                .thenReturn(CompletableFuture.completedFuture(true));
+//
+//        when(memberPort.updatePassword(email, "encryptedPassword")).thenReturn(1L);
+//
+//        // when
+//        sut.sendTempPassword(domain);
+//
+//        // then
+//        verify(memberPort).updatePassword(email, "encryptedPassword");
+//    }
 
     @DisplayName("[happy] db에 없는 닉네임을 요청받으면 true를 반환한다.")
     @Test

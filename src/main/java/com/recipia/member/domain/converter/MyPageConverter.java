@@ -17,7 +17,7 @@ public class MyPageConverter {
 
     private final SecurityUtils securityUtils;
 
-    public MyPageViewResponseDto domainToResponseDto(MyPage myPage) {
+    public MyPageViewResponseDto domainToResponseDto(MyPage myPage, Long memberId) {
         return MyPageViewResponseDto.of(
                 myPage.getMemberId(),
                 myPage.getImagePreUrl(),
@@ -26,7 +26,9 @@ public class MyPageConverter {
                 myPage.getFollowingCount(),
                 myPage.getFollowerCount(),
                 myPage.getBirth(),
-                myPage.getGender()
+                myPage.getGender(),
+                myPage.getFollowId(),
+                myPage.getMemberId().equals(memberId)
         );
     }
 

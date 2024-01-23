@@ -20,7 +20,13 @@ public class MyPageAdapter implements MyPagePort {
      * 조회에 성공하면 회원 정보를 반환한다.
      */
     @Override
-    public MyPage viewMyPage(Long memberId) {
+    public MyPage viewMyPage(Long memberId, Long targetMemberId) {
+
+        // 조회하려는 마이페이지가 다른 회원의 마이페이지라면 팔로우 id까지 조회
+        if (!memberId.equals(targetMemberId)) {
+            return myPageQueryRepository.viewOtherMyPage(memberId, targetMemberId);
+        }
+        // 조회하려는 마이페이지가 로그인한 계정의 마이페이지라면 팔로우 id 조회는 제거
         return myPageQueryRepository.viewMyPage(memberId);
     }
 
@@ -40,4 +46,5 @@ public class MyPageAdapter implements MyPagePort {
     public Page<FollowListResponseDto> getFollowList(Long targetMemberId, Long loggedMemberId, String type, Pageable pageable) {
         return myPageQueryRepository.getFollowingList(targetMemberId, loggedMemberId, type, pageable);
     }
+
 }
