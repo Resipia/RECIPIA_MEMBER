@@ -53,7 +53,7 @@ class FollowServiceTest {
         Long deletedCount = sut.followRequest(follow);
 
         // then
-        assertThat(deletedCount).isEqualTo(1L);
+        assertThat(deletedCount).isEqualTo(0L);
     }
 
 

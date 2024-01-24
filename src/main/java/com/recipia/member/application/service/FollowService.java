@@ -30,7 +30,8 @@ public class FollowService implements FollowUseCase {
 
         if (alreadyFollowing) {
             // 팔로우 관계라면 팔로우 해제
-            return followPort.unfollow(follow);
+            followPort.unfollow(follow);
+            return 0L;
         } else {
             // 팔로우 관계가 없다면 팔로우 요청
             return followPort.follow(follow);
