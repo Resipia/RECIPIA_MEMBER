@@ -129,7 +129,7 @@ class MyPageServiceTest {
         // then
         assertEquals(updatedCount, 1L);
         verify(memberPort, never()).softDeleteProfileImage(any(MyPage.class));
-        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong());
+        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong(), anyInt());
         verify(memberPort, never()).saveMemberFile(any(MemberFile.class));
     }
 
@@ -148,7 +148,7 @@ class MyPageServiceTest {
         // then
         assertEquals(updatedCount, 1L);
         verify(memberPort, times(1)).softDeleteProfileImage(any(MyPage.class));
-        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong());
+        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong(), anyInt());
         verify(memberPort, never()).saveMemberFile(any(MemberFile.class));
     }
 
@@ -165,7 +165,7 @@ class MyPageServiceTest {
 
         when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
         when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
-        when(imageS3Service.createMemberFile(mockImage, myPage.getMemberId())).thenReturn(memberFile);
+        when(imageS3Service.createMemberFile(mockImage, myPage.getMemberId(), 1)).thenReturn(memberFile);
         when(memberPort.saveMemberFile(memberFile)).thenReturn(2L);
 
         // when
@@ -187,7 +187,7 @@ class MyPageServiceTest {
 
         when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
         when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
-        when(imageS3Service.createMemberFile(mockImage, myPage.getMemberId())).thenReturn(memberFile);
+        when(imageS3Service.createMemberFile(mockImage, myPage.getMemberId(), 1)).thenReturn(memberFile);
         when(memberPort.saveMemberFile(memberFile)).thenReturn(0L);
 
         // when % then
