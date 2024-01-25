@@ -4,6 +4,7 @@ import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.MemberFileEntity;
 import com.recipia.member.adapter.out.persistence.ReportEntity;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
+import com.recipia.member.adapter.out.persistenceAdapter.querydsl.MemberFileQueryRepository;
 import com.recipia.member.adapter.out.persistenceAdapter.querydsl.MemberQueryRepository;
 import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.common.exception.ErrorCode;
@@ -31,6 +32,8 @@ public class MemberAdapter implements MemberPort {
     private final MemberFileRepository memberFileRepository;
     private final ReportConverter reportConverter;
     private final ReportRepository reportRepository;
+
+    private final MemberFileQueryRepository memberFileQueryRepository;
 
     /**
      * [READ] member id로 조회한 멤버 도메인을 반환한다.
@@ -160,6 +163,14 @@ public class MemberAdapter implements MemberPort {
     @Override
     public Long updatePassword(String email, String encryptedTempPassword) {
         return memberQueryRepository.updatePassword(email, encryptedTempPassword);
+    }
+
+    /**
+     * [DELETE] memberId에 해당하는 프로필 이미지를 삭제처리한다.
+     */
+    @Override
+    public Long softDeleteProfileImageByMemberId(Long memberId) {
+        return memberFileQueryRepository.softDeleteProfileImageByMemberId(memberId);
     }
 
 

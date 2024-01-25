@@ -53,4 +53,15 @@ public class FollowAdapter implements FollowPort {
         return followQueryRepository.deleteFollow(follow);
     }
 
+    /**
+     * [DELETE] memberId에 해당하는 팔로우/팔로잉 관계를 삭제한다.
+     */
+    @Override
+    public void deleteFollowsByMemberId(Long memberId) {
+        // 나를 팔로우 하는 관계를 삭제한다.
+        followQueryRepository.deleteFollowingByMemberId(memberId);
+        // 내가 팔로우 하는 관계를 삭제한다.
+        followQueryRepository.deleteFollowerByMemberId(memberId);
+    }
+
 }

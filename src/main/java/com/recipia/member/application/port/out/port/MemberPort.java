@@ -22,4 +22,6 @@ public interface MemberPort {
     String findEmail(Member domain);
     boolean existsByEmailNotInDeactive(String email);
     Long updatePassword(String email, String encryptedTempPassword);
+
+    Long softDeleteProfileImageByMemberId(Long memberId);
 }
