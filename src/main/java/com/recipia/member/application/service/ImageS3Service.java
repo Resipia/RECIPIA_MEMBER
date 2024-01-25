@@ -42,7 +42,7 @@ public class ImageS3Service {
     /**
      * 데이터베이스에 저장할 MemberFile 객체를 생성하여 반환한다.
      */
-    public MemberFile createMemberFile(MultipartFile image, Long savedMemberId) {
+    public MemberFile createMemberFile(MultipartFile image, Long savedMemberId, Integer fileOrder) {
 
         // 1. input 파라미터 검증
         validateInput(image, savedMemberId);
@@ -51,9 +51,6 @@ public class ImageS3Service {
         // 2. 파일 확장자 추출 및 검증
         String fileExtension = getFileExtension(originFileName);
         validateFileExtension(fileExtension);
-
-        // file order는 1부터 시작
-        Integer fileOrder = memberPort.findMaxFileOrder(savedMemberId) + 1;
 
         // 3. 파일 도메인을 만들기 위한 값 세팅
         String storedFileNameWithExtension = changeFileName(fileExtension); // 새로 생성된 이미지 이름 (UUID 적용)

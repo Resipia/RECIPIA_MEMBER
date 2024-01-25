@@ -59,7 +59,7 @@ class ImageS3ServiceTest extends TotalTestSupport {
         Long memberId = 123L;
 
         //when
-        MemberFile memberFile = sut.createMemberFile(mockImage, memberId);
+        MemberFile memberFile = sut.createMemberFile(mockImage, memberId, 1);
 
         //then
         assertNotNull(memberFile);
@@ -79,7 +79,7 @@ class ImageS3ServiceTest extends TotalTestSupport {
                 "file", "test.txt", "text/plain", "This is a text file.".getBytes());
 
         //when & then
-        Assertions.assertThatThrownBy(() -> sut.createMemberFile(mockFile, 1L))
+        Assertions.assertThatThrownBy(() -> sut.createMemberFile(mockFile, 1L, 1))
                 .isInstanceOf(MemberApplicationException.class)
                 .hasMessageContaining("S3에 업로드 할 수 없는 파일 타입입니다.")
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.INVALID_FILE_TYPE);
@@ -93,7 +93,7 @@ class ImageS3ServiceTest extends TotalTestSupport {
                 "image", "empty.jpg", "image/jpeg", new byte[100]);
 
         //when & then
-        Assertions.assertThatThrownBy(() -> sut.createMemberFile(mockImage, null))
+        Assertions.assertThatThrownBy(() -> sut.createMemberFile(mockImage, null, 1))
                 .isInstanceOf(MemberApplicationException.class)
                 .hasMessageContaining("유저를 찾을 수 없습니다.")
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.USER_NOT_FOUND);
@@ -103,10 +103,9 @@ class ImageS3ServiceTest extends TotalTestSupport {
     @DisplayName("[bad] 저장할 파일이 없는 경우 예외가 발생한다.")
     void createMemberFileEntityException3() {
         Long memberId = 123L;
-        Integer fileOrder = 0;
 
         //when & then
-        Assertions.assertThatThrownBy(() -> sut.createMemberFile(null, memberId))
+        Assertions.assertThatThrownBy(() -> sut.createMemberFile(null, memberId, 1))
                 .isInstanceOf(MemberApplicationException.class)
                 .hasMessageContaining("업로드할 파일이 존재하지 않습니다.")
                 .hasFieldOrPropertyWithValue("errorCode", ErrorCode.S3_UPLOAD_FILE_NOT_FOUND);

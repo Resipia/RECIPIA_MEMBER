@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 마이페이지 서비스 클래스
@@ -100,8 +101,12 @@ public class MyPageService implements MyPageUseCase {
 
         // 5. 수정된 profileImage가 있다면 저장한다.
         if (profileImage != null && !profileImage.isEmpty()) {
+
+            // 순차적으로 file order를 올리기 위한 변수 선언
+            AtomicInteger currentMaxFileOrder = new AtomicInteger(memberPort.findMaxFileOrder(myPage.getMemberId()));
+
             // 프로필 파일 저장을 위한 엔티티 생성 (이때 s3에는 이미 이미지가 업로드 완료되고 저장된 경로의 url을 받은 엔티티를 리스트로 생성)
-            MemberFile memberFile = imageS3Service.createMemberFile(profileImage, memberId);
+            MemberFile memberFile = imageS3Service.createMemberFile(profileImage, memberId, currentMaxFileOrder.incrementAndGet());
             Long savedMemberFileId = memberPort.saveMemberFile(memberFile);
 
             if (savedMemberFileId < 1) {

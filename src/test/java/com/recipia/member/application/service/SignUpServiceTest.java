@@ -58,7 +58,7 @@ class SignUpServiceTest {
         verify(signUpPort, times(1)).signUpMember(any(Member.class));
 
         // 검증: 프로필 이미지가 null이므로, imageS3Service.createMemberFile가 호출되지 않았는지 확인
-        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong());
+        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong(), anyInt());
     }
 
 }
