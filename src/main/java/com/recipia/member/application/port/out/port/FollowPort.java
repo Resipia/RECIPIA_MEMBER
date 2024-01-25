@@ -7,4 +7,6 @@ public interface FollowPort {
     Long follow(Follow follow);
 
     Long unfollow(Follow follow);
+
+    void deleteFollowsByMemberId(Long memberId);
 }

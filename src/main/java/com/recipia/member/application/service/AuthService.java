@@ -2,10 +2,7 @@ package com.recipia.member.application.service;
 
 import com.recipia.member.adapter.out.aws.TokyoSnsService;
 import com.recipia.member.application.port.in.AuthUseCase;
-import com.recipia.member.application.port.out.port.JwtPort;
-import com.recipia.member.application.port.out.port.MemberManagementPort;
-import com.recipia.member.application.port.out.port.MemberPort;
-import com.recipia.member.application.port.out.port.SignUpPort;
+import com.recipia.member.application.port.out.port.*;
 import com.recipia.member.common.event.SendVerifyCodeSpringEvent;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
@@ -34,8 +31,8 @@ public class AuthService implements AuthUseCase {
     private final JwtPort jwtPort;
     private final JwtConverter jwtConverter;
     private final MemberPort memberPort;
-    private final SignUpPort signUpPort;
     private final MemberManagementPort memberManagementPort;
+    private final FollowPort followPort;
 
     /**
      * [READ] 전화번호로 인증 코드 전송 메서드 호출
@@ -79,17 +76,6 @@ public class AuthService implements AuthUseCase {
     }
 
     /**
-     * [UPDATE] 회원 탈퇴
-     * 수정된 row 갯수를 반환한다.
-     */
-    @Transactional
-    @Override
-    public Long deactivateMember(Long memberId) {
-        return memberPort.deactivateMember(memberId);
-    }
-
-
-    /**
      * 인증코드 검증
      * 인증코드가 일치하면 true, 틀리면 false 반환한다.
      */
@@ -106,6 +92,27 @@ public class AuthService implements AuthUseCase {
                     return true;
                 })
                 .orElse(false);
+    }
+
+
+    /**
+     * [UPDATE] 회원 탈퇴
+     * 수정된 row 갯수를 반환한다.
+     */
+    @Transactional
+    @Override
+    public Long deactivateMember(Long memberId) {
+        Long updatedCount = memberPort.deactivateMember(memberId);
+
+        // 프로필 사진을 삭제한다.
+        memberPort.softDeleteProfileImageByMemberId(memberId);
+
+        // 팔로잉/팔로우 관계를 삭제한다.
+        followPort.deleteFollowsByMemberId(memberId);
+
+        // todo: 회원 동의는 나중에 탈퇴 경과 1년 후 삭제한다.
+
+        return updatedCount;
     }
 
 

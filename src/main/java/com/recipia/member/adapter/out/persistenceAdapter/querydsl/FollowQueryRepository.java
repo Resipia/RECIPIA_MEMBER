@@ -23,4 +23,23 @@ public class FollowQueryRepository {
                 .execute();
     }
 
+    /**
+     * [DELETE] 나를 팔로우하는 관계를 삭제
+     */
+    public void deleteFollowingByMemberId(Long memberId) {
+        jpaQueryFactory
+                .delete(followEntity)
+                .where(followEntity.followingMember.id.eq(memberId))
+                .execute();
+    }
+
+    /**
+     * [DELETE] 내가 팔로우하는 관계를 삭제
+     */
+    public void deleteFollowerByMemberId(Long memberId) {
+        jpaQueryFactory
+                .delete(followEntity)
+                .where(followEntity.followerMember.id.eq(memberId))
+                .execute();
+    }
 }
