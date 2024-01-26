@@ -3,6 +3,7 @@ package com.recipia.member.adapter.in.listener.springevent;
 import brave.Tracer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.adapter.out.aws.SeoulSnsService;
+import com.recipia.member.common.event.MemberWithdrawSpringEvent;
 import com.recipia.member.common.event.SignUpSpringEvent;
 import com.recipia.member.common.utils.CustomJsonBuilder;
 import com.recipia.member.common.event.NicknameChangeSpringEvent;
@@ -10,6 +11,7 @@ import com.recipia.member.config.aws.SnsConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
@@ -51,6 +53,20 @@ public class SpringEventSnsPublishListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void signUpSnsPublishListener(SignUpSpringEvent event) throws JsonProcessingException {
 
+        // 현재 TraceID 추출
+        String traceId = tracer.currentSpan().context().traceIdString();
+
+        // message에 memberId 주입
+        String messageJson = customJsonBuilder
+                .add("memberId", event.memberId().toString())
+                .build();
+
+        String snsArn = snsConfig.getSignUpArn();
+        seoulSnsService.publishSnsMessage(messageJson, traceId, snsArn);
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void memberWithdrawSnsPublishListener(MemberWithdrawSpringEvent event) throws JsonProcessingException {
         // 현재 TraceID 추출
         String traceId = tracer.currentSpan().context().traceIdString();
 

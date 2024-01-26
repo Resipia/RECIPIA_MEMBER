@@ -11,7 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.ApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("[통합] NicknameChange 스프링 이벤트 리스너 테스트")
@@ -34,7 +33,7 @@ class SpringEventRecordListenerTest extends TotalTestSupport {
         // when
         applicationContext.publishEvent(event);
         // then
-        verify(springEventRecordListener).eventRecordListener(event);
+        verify(springEventRecordListener).nicknameChangeEventRecordListener(event);
     }
 
 }

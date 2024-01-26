@@ -29,6 +29,9 @@ public class SnsConfig {
     @Value("${spring.cloud.aws.sns.topics.signUp}")
     private String signUpArn;
 
+    @Value("${spring.cloud.aws.sns.topics.member-withdraw}")
+    private String memberWithdrawArn;
+
     @Bean
     public SnsClient getSnsClient () {
         return SnsClient.builder()
