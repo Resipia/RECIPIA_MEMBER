@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,6 +79,7 @@ public class MyPageQueryRepository {
                 .set(memberEntity.introduction, requestMyPage.getIntroduction())
                 .set(memberEntity.birth, requestMyPage.getBirth())
                 .set(memberEntity.gender, requestMyPage.getGender())
+                .set(memberEntity.updateDateTime, LocalDateTime.now())
                 .where(memberEntity.id.eq(requestMyPage.getMemberId()))
                 .execute();
     }
