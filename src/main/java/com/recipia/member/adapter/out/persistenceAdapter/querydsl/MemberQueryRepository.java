@@ -7,6 +7,7 @@ import com.recipia.member.domain.TempPassword;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.recipia.member.adapter.out.persistence.QMemberEntity.memberEntity;
@@ -25,6 +26,7 @@ public class MemberQueryRepository {
         return jpaQueryFactory
                 .update(memberEntity)
                 .set(memberEntity.status, MemberStatus.DEACTIVATED)
+                .set(memberEntity.updateDateTime, LocalDateTime.now())
                 .where(memberEntity.id.eq(memberId))
                 .execute();
     }
@@ -36,6 +38,7 @@ public class MemberQueryRepository {
         return jpaQueryFactory
                 .update(memberFileEntity)
                 .set(memberFileEntity.delYn, "Y")
+                .set(memberFileEntity.updateDateTime, LocalDateTime.now())
                 .where(memberFileEntity.memberEntity.id.eq(myPage.getMemberId()), memberFileEntity.fileOrder.eq(myPage.getDeleteFileOrder()))
                 .execute();
     }
@@ -59,6 +62,7 @@ public class MemberQueryRepository {
         return jpaQueryFactory
                 .update(memberEntity)
                 .set(memberEntity.password, encryptedTempPassword)
+                .set(memberEntity.updateDateTime, LocalDateTime.now())
                 .where(memberEntity.email.eq(email))
                 .execute();
     }
