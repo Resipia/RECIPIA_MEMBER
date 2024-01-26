@@ -17,6 +17,8 @@ spring:
         topics:
           nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:NicknameChange
           signUp: arn:aws:sns:${REGION}:${ACCOUNT_ID}:signUp
+          member-withdraw: arn:aws:sns:${REGION}:${ACCOUNT_ID}:member-withdraw
+
       sqs:
         record-sqs-name: member-event-record-sqs
       s3:

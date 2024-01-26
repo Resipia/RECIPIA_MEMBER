@@ -3,6 +3,7 @@ package com.recipia.member.application.service;
 import com.recipia.member.adapter.out.aws.TokyoSnsService;
 import com.recipia.member.application.port.in.AuthUseCase;
 import com.recipia.member.application.port.out.port.*;
+import com.recipia.member.common.event.MemberWithdrawSpringEvent;
 import com.recipia.member.common.event.SendVerifyCodeSpringEvent;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
@@ -97,7 +98,8 @@ public class AuthService implements AuthUseCase {
 
     /**
      * [UPDATE] 회원 탈퇴
-     * 수정된 row 갯수를 반환한다.
+     * 회원이 탈퇴를 하면 관련된 데이터를 삭제하고 '회원 탈퇴' 스프링 이벤트를 발행한다. (외부 서버 알림용)
+     * 그리고 수정된 row 갯수를 반환한다.
      */
     @Transactional
     @Override
@@ -111,6 +113,9 @@ public class AuthService implements AuthUseCase {
         followPort.deleteFollowsByMemberId(memberId);
 
         // todo: 회원 동의는 나중에 탈퇴 경과 1년 후 삭제한다.
+
+        // 회원 탈퇴 스프링 이벤트 발행
+        eventPublisher.publishEvent(new MemberWithdrawSpringEvent(memberId));
 
         return updatedCount;
     }
