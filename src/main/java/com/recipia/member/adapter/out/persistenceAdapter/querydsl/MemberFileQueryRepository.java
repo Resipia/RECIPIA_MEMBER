@@ -4,6 +4,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 import static com.recipia.member.adapter.out.persistence.QMemberFileEntity.memberFileEntity;
 
 @RequiredArgsConstructor
@@ -18,6 +20,7 @@ public class MemberFileQueryRepository {
         return jpaQueryFactory
                 .update(memberFileEntity)
                 .set(memberFileEntity.delYn, "Y")
+                .set(memberFileEntity.updateDateTime, LocalDateTime.now())
                 .where(memberFileEntity.memberEntity.id.eq(memberId))
                 .execute();
     }
