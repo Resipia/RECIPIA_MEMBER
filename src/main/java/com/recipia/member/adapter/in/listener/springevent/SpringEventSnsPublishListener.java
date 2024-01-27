@@ -75,7 +75,7 @@ public class SpringEventSnsPublishListener {
                 .add("memberId", event.memberId().toString())
                 .build();
 
-        String snsArn = snsConfig.getSignUpArn();
+        String snsArn = snsConfig.getMemberWithdrawArn();
         seoulSnsService.publishSnsMessage(messageJson, traceId, snsArn);
     }
 

@@ -42,8 +42,8 @@ public class MemberEventRecord {
      * @param eventType
      * @return
      */
-    public static MemberEventRecord of(Long memberId, String eventType) {
-        return new MemberEventRecord(null, memberId, null, eventType, null, null, false, null);
+    public static MemberEventRecord of(Long memberId, String eventType, String topicName) {
+        return new MemberEventRecord(null, memberId, topicName, eventType, null, null, false, null);
     }
 
     public static MemberEventRecord of(Long memberId, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {

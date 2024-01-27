@@ -5,6 +5,8 @@ import com.recipia.member.application.port.in.MemberEventRecordUseCase;
 import com.recipia.member.common.event.MemberWithdrawSpringEvent;
 import com.recipia.member.common.event.NicknameChangeSpringEvent;
 import com.recipia.member.common.event.SignUpSpringEvent;
+import com.recipia.member.common.utils.MemberStringUtils;
+import com.recipia.member.config.aws.SnsConfig;
 import com.recipia.member.domain.MemberEventRecord;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SpringEventRecordListener {
 
     private final MemberEventRecordUseCase memberEventRecordUseCase;
+    private final SnsConfig snsConfig;
 
     /**
      * 이벤트를 호출한 서비스 코드의 트랜잭션과 묶이게 된다.
@@ -27,7 +30,10 @@ public class SpringEventRecordListener {
     @Transactional
     @EventListener
     public void nicknameChangeEventRecordListener(NicknameChangeSpringEvent event) throws JsonProcessingException {
-        MemberEventRecord memberEventRecord = MemberEventRecord.of(event.memberId(), String.valueOf(NicknameChangeSpringEvent.class));
+        String eventType = event.getClass().getSimpleName();
+        String topicArn = snsConfig.getNicknameChangeArn();
+        String topicName = MemberStringUtils.extractLastPart(topicArn);
+        MemberEventRecord memberEventRecord = MemberEventRecord.of(event.memberId(), eventType, topicName);
         memberEventRecordUseCase.saveNewEventRecord(memberEventRecord);
     }
 
@@ -37,7 +43,10 @@ public class SpringEventRecordListener {
     @Transactional
     @EventListener
     public void signUpEventRecordListener(SignUpSpringEvent event) throws JsonProcessingException {
-        MemberEventRecord memberEventRecord = MemberEventRecord.of(event.memberId(), String.valueOf(SignUpSpringEvent.class));
+        String eventType = event.getClass().getSimpleName();
+        String topicArn = snsConfig.getSignUpArn();
+        String topicName = MemberStringUtils.extractLastPart(topicArn);
+        MemberEventRecord memberEventRecord = MemberEventRecord.of(event.memberId(), eventType, topicName);
         memberEventRecordUseCase.saveNewEventRecord(memberEventRecord);
     }
 
@@ -48,7 +57,9 @@ public class SpringEventRecordListener {
     @EventListener
     public void memberWithdrawEventRecordListener(MemberWithdrawSpringEvent event) throws JsonProcessingException {
         String eventType = event.getClass().getSimpleName();
-        MemberEventRecord memberEventRecord = MemberEventRecord.of(event.memberId(), eventType);
+        String topicArn = snsConfig.getMemberWithdrawArn();
+        String topicName = MemberStringUtils.extractLastPart(topicArn);
+        MemberEventRecord memberEventRecord = MemberEventRecord.of(event.memberId(), eventType, topicName);
         memberEventRecordUseCase.saveNewEventRecord(memberEventRecord);
     }
 
