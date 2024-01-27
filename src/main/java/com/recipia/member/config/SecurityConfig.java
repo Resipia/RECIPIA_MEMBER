@@ -8,7 +8,6 @@ import com.recipia.member.config.handler.CustomAuthFailureHandler;
 import com.recipia.member.config.handler.CustomAuthSuccessHandler;
 import com.recipia.member.config.handler.CustomAuthenticationProvider;
 import com.recipia.member.config.jwt.TokenValidator;
-import com.recipia.member.oauth.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -82,8 +81,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(
             HttpSecurity http,
             CustomAuthenticationFilter customAuthenticationFilter,
-            JwtAuthorizationFilter jwtAuthorizationFilter,
-            CustomOAuth2UserService oAuth2UserService
+            JwtAuthorizationFilter jwtAuthorizationFilter
     ) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
