@@ -23,3 +23,8 @@ spring:
         record-sqs-name: member-event-record-sqs
       s3:
         bucketName: recipia-file
+  redis:
+    host: ${REDIS_HOST}
+    port: 6379
+    password: ${REDIS_PASSWORD}
+    database: ${REDIS_DATABASE}
