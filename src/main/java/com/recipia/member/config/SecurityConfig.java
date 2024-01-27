@@ -91,14 +91,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
                                 new AntPathRequestMatcher("/resources/**"),
-//                                new AntPathRequestMatcher("/member/signUp"),                      // 회원가입 요청
-//                                new AntPathRequestMatcher("/member/auth/phone"),                  // 휴대폰 인증
-//                                new AntPathRequestMatcher("/member/auth/check/verifyCode"),       // 인증코드 검증
-//                                new AntPathRequestMatcher("/member/management/checkDupEmail"),    // 이메일 중복체크
-//                                new AntPathRequestMatcher("/member/management/find/email"),        // 이메일 찾기
-//                                new AntPathRequestMatcher("/member/management/tempPassword"),     // 임시 비밀번호 재발급
+                                new AntPathRequestMatcher("/member/signUp"),                      // 회원가입 요청
+                                new AntPathRequestMatcher("/member/auth/phone"),                  // 휴대폰 인증
+                                new AntPathRequestMatcher("/member/auth/check/verifyCode"),       // 인증코드 검증
+                                new AntPathRequestMatcher("/member/management/checkDupEmail"),    // 이메일 중복체크
+                                new AntPathRequestMatcher("/member/management/find/email"),        // 이메일 찾기
+                                new AntPathRequestMatcher("/member/management/tempPassword"),     // 임시 비밀번호 재발급
 
-                                new AntPathRequestMatcher("/member/**"),
+//                                new AntPathRequestMatcher("/member/**"),
 //                                new AntPathRequestMatcher("/oauth/kakao/callback"),               // kakao 로그인 요청 엔드포인트
                                 new AntPathRequestMatcher("/member/jwt/republish"),               // access token 재발급 요청때는 접근을 허용
                                 new AntPathRequestMatcher("/feign/member/*"),                     // feign 으로 들어온 접근을 허용
