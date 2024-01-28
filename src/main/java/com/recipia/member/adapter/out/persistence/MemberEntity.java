@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /** 회원 */
@@ -62,12 +64,12 @@ public class MemberEntity extends UpdateDateTimeForEntity {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;        // 회원 권한
 
-    @OneToOne(mappedBy = "memberEntity")
-    private MemberFileEntity memberFileEntity;  // 회원 프로필 이미지
+    @OneToMany(mappedBy = "memberEntity")
+    private List<MemberFileEntity> memberFileEntity = new ArrayList<>();  // 회원 프로필 이미지
 
 
     // private 생성자
-    private MemberEntity(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, MemberFileEntity memberFileEntity, String birth, String gender) {
+    private MemberEntity(Long id, String email, String password, String fullName, String nickname, MemberStatus status, String introduction, String telNo, String address1, String address2, RoleType roleType, List<MemberFileEntity> memberFileEntity, String birth, String gender) {
         this.id = id;
         this.email = email;
         this.password = password;
