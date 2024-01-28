@@ -56,11 +56,8 @@ public class SignUpService implements SignUpUseCase {
         // 5. 프로필 이미지가 없으면 파일을 저장하지 않는다.
         if(profileImage != null && !profileImage.isEmpty()) {
 
-            // 순차적으로 file order를 올리기 위한 변수 선언
-            AtomicInteger currentMaxFileOrder = new AtomicInteger(memberPort.findMaxFileOrder(savedMemberId));
-
             // 프로필 파일 저장을 위한 엔티티 생성 (이때 s3에는 이미 이미지가 업로드 완료되고 저장된 경로의 url을 받은 엔티티를 리스트로 생성)
-            MemberFile memberFile = imageS3Service.createMemberFile(profileImage, savedMemberId, currentMaxFileOrder.incrementAndGet());
+            MemberFile memberFile = imageS3Service.createMemberFile(profileImage, savedMemberId);
             Long savedMemberFileId = memberPort.saveMemberFile(memberFile);
 
             if(savedMemberFileId < 0) {

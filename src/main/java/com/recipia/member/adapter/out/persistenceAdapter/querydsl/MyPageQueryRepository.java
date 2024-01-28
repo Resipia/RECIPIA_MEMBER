@@ -39,7 +39,7 @@ public class MyPageQueryRepository {
         JPQLQuery<String> filePathSubQuery = JPAExpressions
                 .select(memberFileEntity.storedFilePath)
                 .from(memberFileEntity)
-                .where(memberFileEntity.memberEntity.id.eq(memberId));
+                .where(memberFileEntity.memberEntity.id.eq(memberId), memberFileEntity.delYn.eq("N"));
 
         // 팔로잉 수 가져오는 서브쿼리
         JPQLQuery<Long> followingCountSubQuery = JPAExpressions
@@ -64,7 +64,7 @@ public class MyPageQueryRepository {
                         ExpressionUtils.as(followingCountSubQuery, "followingCount"),
                         ExpressionUtils.as(followerCountSubQuery, "followerCount")))
                 .from(memberEntity)
-                .leftJoin(memberEntity.memberFileEntity) // 외부 조인 사용
+//                .leftJoin(memberEntity.memberFileEntity) // 외부 조인 사용
                 .where(memberEntity.id.eq(memberId))
                 .fetchOne();
     }
@@ -156,7 +156,7 @@ public class MyPageQueryRepository {
         JPQLQuery<String> filePathSubQuery = JPAExpressions
                 .select(memberFileEntity.storedFilePath)
                 .from(memberFileEntity)
-                .where(memberFileEntity.memberEntity.id.eq(targetMemberId));
+                .where(memberFileEntity.memberEntity.id.eq(targetMemberId), memberFileEntity.delYn.eq("N"));
 
         // 팔로잉 수 가져오는 서브쿼리
         JPQLQuery<Long> followingCountSubQuery = JPAExpressions

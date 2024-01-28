@@ -15,7 +15,6 @@ public interface MemberPort {
     Long deactivateMember(Long memberId);
     Long saveMemberFile(MemberFile memberFile);
     Long softDeleteProfileImage(MyPage myPage);
-    Integer findMaxFileOrder(Long memberId);
     boolean isAllMemberActive(List<Long> memberIdList);
     Long saveReport(Report report);
 

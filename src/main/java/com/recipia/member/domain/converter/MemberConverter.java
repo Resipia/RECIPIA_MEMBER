@@ -70,7 +70,6 @@ public class MemberConverter {
         MemberEntity memberEntity = MemberEntity.of(domain.getMember().getId());
         return MemberFileEntity.of(
                 memberEntity,
-                domain.getFileOrder(),
                 domain.getStoredFilePath(),
                 domain.getObjectUrl(),
                 domain.getOriginFileNm(),

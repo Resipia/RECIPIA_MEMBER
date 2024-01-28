@@ -37,7 +37,6 @@ public class MyPageConverter {
                 securityUtils.getCurrentMemberId(),
                 dto.getNickname(),
                 dto.getIntroduction(),
-                dto.getDeleteFileOrder(),
                 dto.getBirth(),
                 dto.getGender()
         );

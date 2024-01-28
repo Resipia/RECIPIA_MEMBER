@@ -73,9 +73,10 @@ public class MemberAdapter implements MemberPort {
      */
     @Override
     public Optional<Member> findMemberByEmailAndStatus(String email, MemberStatus status) {
-        Optional<MemberEntity> memberEntityOptional = memberRepository.findMemberByEmailAndStatus(email, status);
-        return memberEntityOptional.map(converter::entityToDomain);
 
+//        Optional<MemberEntity> memberEntityOptional = memberRepository.findMemberByEmailAndStatus(email, status);
+        Optional<MemberEntity> memberEntityOptional = memberQueryRepository.findMemberByEmailAndStatus(email, status);
+        return memberEntityOptional.map(converter::entityToDomain);
     }
 
     /**
@@ -105,14 +106,6 @@ public class MemberAdapter implements MemberPort {
         return memberQueryRepository.softDeleteMemberFile(myPage);
     }
 
-    /**
-     * [READ] memberId에 해당하는 파일의 최대 file order값을 반환한다.
-     * 만약에 데이터가 없으면 0을, max값이 존재하면 max값을 반환한다.
-     */
-    @Override
-    public Integer findMaxFileOrder(Long memberId) {
-        return memberFileRepository.findMaxFileOrderByMemberEntity_Id(memberId).orElse(0);
-    }
 
     /**
      * [READ] memberIdList로 들어온 회원이 전부 ACTIVE 상태인지 검증한다.

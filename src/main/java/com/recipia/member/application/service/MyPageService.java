@@ -94,19 +94,13 @@ public class MyPageService implements MyPageUseCase {
         // 3. 기본 정보를 수정한다.
         Long updatedCount = myPagePort.updateMyPage(myPage);
 
-        // 4. 삭제된 프로필 이미지 파일이 있다면 soft delete 처리한다.
-        if (myPage.getDeleteFileOrder() != null) {
-            memberPort.softDeleteProfileImage(myPage);
-        }
-
-        // 5. 수정된 profileImage가 있다면 저장한다.
+        // 4. 수정된 profileImage가 있다면 저장한다.
         if (profileImage != null && !profileImage.isEmpty()) {
 
-            // 순차적으로 file order를 올리기 위한 변수 선언
-            AtomicInteger currentMaxFileOrder = new AtomicInteger(memberPort.findMaxFileOrder(myPage.getMemberId()));
-
+            // 기존 프로필 이미지 전부 삭제처리
+            memberPort.softDeleteProfileImageByMemberId(myPage.getMemberId());
             // 프로필 파일 저장을 위한 엔티티 생성 (이때 s3에는 이미 이미지가 업로드 완료되고 저장된 경로의 url을 받은 엔티티를 리스트로 생성)
-            MemberFile memberFile = imageS3Service.createMemberFile(profileImage, memberId, currentMaxFileOrder.incrementAndGet());
+            MemberFile memberFile = imageS3Service.createMemberFile(profileImage, memberId);
             Long savedMemberFileId = memberPort.saveMemberFile(memberFile);
 
             if (savedMemberFileId < 1) {
@@ -114,7 +108,7 @@ public class MyPageService implements MyPageUseCase {
             }
         }
 
-        // 6. 닉네임이 수정되었으면 외부 서버로 SNS 발행하기 위한 스프링 이벤트 발행
+        // 5. 닉네임이 수정되었으면 외부 서버로 SNS 발행하기 위한 스프링 이벤트 발행
         if (isNicknameChanged) {
             eventPublisher.publishEvent(new NicknameChangeSpringEvent(myPage.getMemberId()));
         }

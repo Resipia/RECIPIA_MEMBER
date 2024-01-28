@@ -42,7 +42,7 @@ public class ImageS3Service {
     /**
      * 데이터베이스에 저장할 MemberFile 객체를 생성하여 반환한다.
      */
-    public MemberFile createMemberFile(MultipartFile image, Long savedMemberId, Integer fileOrder) {
+    public MemberFile createMemberFile(MultipartFile image, Long savedMemberId) {
 
         // 1. input 파라미터 검증
         validateInput(image, savedMemberId);
@@ -62,7 +62,6 @@ public class ImageS3Service {
         // 4. 파일 도메인으로 변환
         return MemberFile.of(
                 Member.of(savedMemberId),
-                fileOrder,                      // 파일 정렬 순서
                 finalPath,                      // s3 파일 저장 경로
                 objectUrl,                      // s3 객체 url
                 originFileName,                 // 파일 원본 이름

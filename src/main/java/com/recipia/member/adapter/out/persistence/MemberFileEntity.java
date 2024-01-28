@@ -24,11 +24,8 @@ public class MemberFileEntity extends UpdateDateTimeForEntity {
 
     @ToString.Exclude
     @JoinColumn(name = "member_id", nullable = false)
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private MemberEntity memberEntity;              // 회원 pk
-
-    @Column(name = "file_order", nullable = false)
-    private Integer fileOrder; // 파일 정렬 조건
 
     @Column(name = "flpth", nullable = false)
     private String storedFilePath; // s3에 저장된 파일 경로 url
@@ -52,10 +49,9 @@ public class MemberFileEntity extends UpdateDateTimeForEntity {
     private String delYn; // 삭제 여부
 
 
-    private MemberFileEntity(Long id, MemberEntity memberEntity, Integer fileOrder, String storedFilePath, String objectUrl, String originFileNm, String storedFileNm, String fileExtension, Integer fileSize, String delYn) {
+    private MemberFileEntity(Long id, MemberEntity memberEntity, String storedFilePath, String objectUrl, String originFileNm, String storedFileNm, String fileExtension, Integer fileSize, String delYn) {
         this.id = id;
         this.memberEntity = memberEntity;
-        this.fileOrder = fileOrder;
         this.storedFilePath = storedFilePath;
         this.objectUrl = objectUrl;
         this.originFileNm = originFileNm;
@@ -66,13 +62,13 @@ public class MemberFileEntity extends UpdateDateTimeForEntity {
     }
 
     // 새 엔티티 생성용 팩토리 메소드
-    public static MemberFileEntity of(MemberEntity memberEntity, Integer fileOrder, String storedFilePath, String objectUrl, String originFileNm, String storedFileNm, String fileExtension, Integer fileSize, String delYn) {
-        return new MemberFileEntity(null, memberEntity, fileOrder, storedFilePath, objectUrl, originFileNm, storedFileNm, fileExtension, fileSize, delYn);
+    public static MemberFileEntity of(MemberEntity memberEntity, String storedFilePath, String objectUrl, String originFileNm, String storedFileNm, String fileExtension, Integer fileSize, String delYn) {
+        return new MemberFileEntity(null, memberEntity, storedFilePath, objectUrl, originFileNm, storedFileNm, fileExtension, fileSize, delYn);
     }
 
     // 기존 엔티티 로드용 팩토리 메소드
-    public static MemberFileEntity of(Long id, MemberEntity memberEntity, Integer fileOrder, String storedFilePath, String objectUrl, String originFileNm, String storedFileNm, String fileExtension, Integer fileSize, String delYn) {
-        return new MemberFileEntity(id, memberEntity, fileOrder, storedFilePath, objectUrl, originFileNm, storedFileNm, fileExtension, fileSize, delYn);
+    public static MemberFileEntity of(Long id, MemberEntity memberEntity, String storedFilePath, String objectUrl, String originFileNm, String storedFileNm, String fileExtension, Integer fileSize, String delYn) {
+        return new MemberFileEntity(id, memberEntity, storedFilePath, objectUrl, originFileNm, storedFileNm, fileExtension, fileSize, delYn);
     }
 
     @Override

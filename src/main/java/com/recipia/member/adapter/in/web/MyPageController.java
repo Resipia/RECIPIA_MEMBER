@@ -44,7 +44,7 @@ public class MyPageController {
      * 마이페이지 수정
      */
     @PostMapping("/update")
-    public ResponseEntity<ResponseDto<Void>> update(@Valid @RequestBody UpdateMyPageRequestDto dto) {
+    public ResponseEntity<ResponseDto<Void>> update(@Valid @ModelAttribute UpdateMyPageRequestDto dto) {
         MultipartFile profileImage = dto.getProfileImage();
         myPageUseCase.updateMyPage(myPageConverter.updateRequestDtoToDomain(dto), profileImage);
         return ResponseEntity.ok(

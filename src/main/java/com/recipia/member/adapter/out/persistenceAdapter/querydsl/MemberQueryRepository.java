@@ -1,6 +1,7 @@
 package com.recipia.member.adapter.out.persistenceAdapter.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.domain.MyPage;
 import com.recipia.member.domain.TempPassword;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static com.recipia.member.adapter.out.persistence.QMemberEntity.memberEntity;
 import static com.recipia.member.adapter.out.persistence.QMemberFileEntity.memberFileEntity;
@@ -32,15 +34,22 @@ public class MemberQueryRepository {
     }
 
     /**
-     * [DELETE] memberId, fileOrder에 해당하는 멤버 파일을 soft delete 처리한다.
+     * [DELETE] memberId 해당하는 멤버 파일을 soft delete 처리한다.
      */
     public Long softDeleteMemberFile(MyPage myPage) {
         return jpaQueryFactory
                 .update(memberFileEntity)
                 .set(memberFileEntity.delYn, "Y")
                 .set(memberFileEntity.updateDateTime, LocalDateTime.now())
-                .where(memberFileEntity.memberEntity.id.eq(myPage.getMemberId()), memberFileEntity.fileOrder.eq(myPage.getDeleteFileOrder()))
+                .where(memberFileEntity.memberEntity.id.eq(myPage.getMemberId()))
                 .execute();
+    }
+
+    public Optional<MemberEntity> findMemberByEmailAndStatus(String email, MemberStatus status) {
+        return Optional.ofNullable(jpaQueryFactory
+                .selectFrom(memberEntity)
+                .where(memberEntity.email.eq(email), memberEntity.status.eq(status))
+                .fetchOne());
     }
 
     /**
