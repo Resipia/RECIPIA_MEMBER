@@ -36,6 +36,8 @@ class MemberManagementControllerTest extends TotalTestSupport {
     private MemberManagementUseCase memberManagementUseCase;
     @MockBean
     private ReportConverter reportConverter;
+    @MockBean
+    private SecurityUtils securityUtils;
 
     @DisplayName("[happy] EmailAvailableRequestDto의 필수 필드값이 전부 채워진채로 요청이 들어오면 중복체크를 검사한다.")
     @Test
@@ -105,6 +107,18 @@ class MemberManagementControllerTest extends TotalTestSupport {
                         .content(asJsonString(dto)))
                 .andExpect(status().isOk())
                 .andDo(print());
+    }
+
+    @DisplayName("[happy] 인증 정보가 있는 회원이 요청하면 성공적으로 프로필 임시 url을 반환한다.")
+    @Test
+    void getProfileImage() throws Exception {
+        // given
+        when(securityUtils.getCurrentMemberId()).thenReturn(1L);
+        //when & then
+        mockMvc.perform(post("/member/management/getProfile"))
+                .andExpect(status().isOk())
+                .andDo(print());
+
     }
 
     // JSON 문자열 변환을 위한 유틸리티 메서드

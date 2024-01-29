@@ -21,12 +21,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("[단위] 회원 관리 서비스 테스트")
@@ -46,6 +44,8 @@ class MemberManagementServiceTest {
     private MailService mailService;
     @Mock
     private JwtPort jwtPort;
+    @Mock
+    private ImageS3Service imageS3Service;
 
 
     @DisplayName("[happy] DB에 없는 이메일이 들어왔을때 true를 리턴한다.")
@@ -192,6 +192,34 @@ class MemberManagementServiceTest {
         boolean isNicknameAvailable = sut.isNicknameAvailable(nickname);
         // then
         assertTrue(isNicknameAvailable);
+    }
+
+    @DisplayName("[happy] 프로필 사진이 있는 회원이 요청하면 null이 아닌 url을 반환한다.")
+    @Test
+    void getProfilePreUrl() {
+        // given
+        Long memberId = 1L;
+        String fullPath = "fullPath";
+        String preUrl = "pre-url";
+        when(memberPort.getFileFullPath(memberId)).thenReturn(fullPath);
+        when(imageS3Service.generatePreSignedUrl(fullPath, 60)).thenReturn(preUrl);
+        // when
+        String profilePreUrl = sut.getProfilePreUrl(memberId);
+        // then
+        assertTrue(profilePreUrl.equals(preUrl));
+    }
+
+    @DisplayName("[happy] 프로필 사진이 없는 사용자가 요청하면 null을 반환하낟.")
+    @Test
+    void getNullProfilePreUrl() {
+        // given
+        Long memberId = 3L;
+        when(memberPort.getFileFullPath(memberId)).thenReturn(null);
+        // when
+        String profilePreUrl = sut.getProfilePreUrl(memberId);
+        // then
+        verify(imageS3Service, never()).generatePreSignedUrl(anyString(), anyInt());
+        assertNull(profilePreUrl);
     }
 
 }
