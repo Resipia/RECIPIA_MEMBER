@@ -82,11 +82,11 @@ class MemberManagementControllerTest extends TotalTestSupport {
                 .andDo(print());
     }
 
-    @DisplayName("[happy] TempPasswordRequestDto의 필수 필드값이 전부 채워진채로 요청이 들어오면 해당 회원의 이메일을 반환한다.")
+    @DisplayName("[happy] TempPasswordRequestDto의 필수 필드값이 전부 채워진채로 요청이 들어오면 성공한다.")
     @Test
     void shouldSuccessWhenRequestDtoIsValid() throws Exception {
         //given
-        TempPasswordRequestDto dto = TempPasswordRequestDto.of("hong1@example.com");
+        TempPasswordRequestDto dto = TempPasswordRequestDto.of("fullName", "01011110000", "example@email.com");
 
         //when & then
         mockMvc.perform(post("/member/management/tempPassword")
