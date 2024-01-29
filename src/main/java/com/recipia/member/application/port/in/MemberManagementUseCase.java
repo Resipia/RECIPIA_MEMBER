@@ -11,4 +11,5 @@ public interface MemberManagementUseCase {
     String findEmail(Member member);
     void sendTempPassword(TempPassword tempPassword);
     boolean isNicknameAvailable(String nickname);
+    String getProfilePreUrl(Long memberId);
 }

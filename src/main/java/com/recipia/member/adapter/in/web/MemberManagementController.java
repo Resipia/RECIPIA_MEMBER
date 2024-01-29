@@ -3,6 +3,7 @@ package com.recipia.member.adapter.in.web;
 import com.recipia.member.adapter.in.web.dto.request.*;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
 import com.recipia.member.application.port.in.MemberManagementUseCase;
+import com.recipia.member.common.utils.SecurityUtils;
 import com.recipia.member.domain.converter.MemberConverter;
 import com.recipia.member.domain.converter.ReportConverter;
 import com.recipia.member.domain.converter.TempPasswordConverter;
@@ -26,6 +27,7 @@ public class MemberManagementController {
     private final ReportConverter reportConverter;
     private final MemberConverter memberConverter;
     private final TempPasswordConverter tempPasswordConverter;
+    private final SecurityUtils securityUtils;
 
     /**
      * 이메일 중복체크 요청
@@ -80,6 +82,13 @@ public class MemberManagementController {
         return ResponseEntity.ok(
                 ResponseDto.success(isNicknameAvailable)
         );
+    }
 
+    @PostMapping("/getProfile")
+    public ResponseEntity<ResponseDto<String>> getProfileImage() {
+        String profilePreUrl = memberManagementUseCase.getProfilePreUrl(securityUtils.getCurrentMemberId());
+        return ResponseEntity.ok(
+                ResponseDto.success(profilePreUrl)
+        );
     }
 }

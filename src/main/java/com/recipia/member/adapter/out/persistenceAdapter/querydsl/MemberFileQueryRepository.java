@@ -25,4 +25,14 @@ public class MemberFileQueryRepository {
                 .execute();
     }
 
+    /**
+     * [READ] memberId에 해당하는 파일의 저장경로를 반환한다.
+     */
+    public String getFileFullPath(Long memberId) {
+        return jpaQueryFactory
+                .select(memberFileEntity.storedFilePath)
+                .from(memberFileEntity)
+                .where(memberFileEntity.memberEntity.id.eq(memberId), memberFileEntity.delYn.eq("N"))
+                .fetchOne();
+    }
 }

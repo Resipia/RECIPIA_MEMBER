@@ -166,5 +166,13 @@ public class MemberAdapter implements MemberPort {
         return memberFileQueryRepository.softDeleteProfileImageByMemberId(memberId);
     }
 
+    /**
+     * [READ] memberId에 해당하는 프로필 이미지 저장 경로를 가져온다.
+     */
+    @Override
+    public String getFileFullPath(Long memberId) {
+        return memberFileQueryRepository.getFileFullPath(memberId);
+    }
+
 
 }

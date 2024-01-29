@@ -33,6 +33,11 @@ public class UpdateMyPageRequestDto {
         this.gender = gender;
     }
 
+    public static UpdateMyPageRequestDto of (String nickname) {
+        return new UpdateMyPageRequestDto(nickname, null, null, null, null);
+
+    }
+
     public static UpdateMyPageRequestDto of(String nickname, String introduction, MultipartFile profileImage,  String birth, String gender) {
         return new UpdateMyPageRequestDto(nickname, introduction, profileImage, birth, gender);
     }
