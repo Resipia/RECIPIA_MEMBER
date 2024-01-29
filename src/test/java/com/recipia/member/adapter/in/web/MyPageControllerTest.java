@@ -18,14 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,17 +74,18 @@ class MyPageControllerTest extends TotalTestSupport {
     @Test
     void whenAuthenticatedUserRequestsMyPageUpdate_thenSuccess() throws Exception {
         // given
-        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.builder().nickname("hello").build();
+        MockMultipartFile mockFile = new MockMultipartFile("file", "filename.txt", "text/plain", "some xml".getBytes());
+        UpdateMyPageRequestDto dto = UpdateMyPageRequestDto.of("nickname");
+
         MyPage myPage = MyPage.builder().memberId(1L).nickname(dto.getNickname()).build();
 
         when(myPageConverter.updateRequestDtoToDomain(dto)).thenReturn(myPage);
 
         // when & then
-        mockMvc.perform(post("/member/myPage/update")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(dto)))
-                .andExpect(status().isOk())
-                .andDo(print());
+        mockMvc.perform(multipart("/member/myPage/update")
+                        .file(mockFile)
+                        .flashAttr("updateMyPageRequestDto", dto))
+                .andExpect(status().isOk());
     }
 
     @DisplayName("[happy] targetMemberId에 해당하는 회원의 팔로우 목록을 요청했을때 정상적으로 페이징된 데이터를 반환한다.")

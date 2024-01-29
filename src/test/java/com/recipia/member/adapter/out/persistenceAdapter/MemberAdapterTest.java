@@ -116,7 +116,7 @@ class MemberAdapterTest extends TotalTestSupport {
     @Test
     void saveMemberFileSuccess() {
         // given
-        MemberFile memberFile = MemberFile.of(Member.of(4L), 0, "path", "object-url", "origin", "stored", "jpg", 10, "N");
+        MemberFile memberFile = MemberFile.of(Member.of(4L), "path", "object-url", "origin", "stored", "jpg", 10, "N");
 
         // when
         Long savedMemberFileId = sut.saveMemberFile(memberFile);
@@ -130,33 +130,11 @@ class MemberAdapterTest extends TotalTestSupport {
     @Test
     void softDeleteProfileImageSuccess() {
         // given
-        MyPage myPage = MyPage.builder().memberId(1L).deleteFileOrder(1).build();
+        MyPage myPage = MyPage.builder().memberId(1L).build();
         // when
         Long updatedCount = sut.softDeleteProfileImage(myPage);
         // then
         assertEquals(1L, updatedCount);
-    }
-
-    @DisplayName("DB에 존재하는 파일의 max값을 반환한다.")
-    @Test
-    void findMaxFileOrderByExistingMemberFileSuccess() {
-        // given
-        Long memberId = 1L;
-        // when
-        Integer maxFileOrder = sut.findMaxFileOrder(memberId);
-        // then
-        assertEquals(maxFileOrder, 1);
-    }
-
-    @DisplayName("DB에 존재하지 않는 파일의 max값은 0으로 반환한다.")
-    @Test
-    void findMaxFileOrderByNonExistingMemberFileSuccess() {
-        // given
-        Long memberId = 4L;
-        // when
-        Integer maxFileOrder = sut.findMaxFileOrder(memberId);
-        // then
-        assertEquals(maxFileOrder, 0);
     }
 
     @DisplayName("[happy] 회원 상태가 전부 ACTIVE인 회원 id 리스트를 주입받았을때 true를 반환한다.")

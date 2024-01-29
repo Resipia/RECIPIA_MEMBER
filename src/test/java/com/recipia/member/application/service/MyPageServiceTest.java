@@ -129,7 +129,7 @@ class MyPageServiceTest {
         // then
         assertEquals(updatedCount, 1L);
         verify(memberPort, never()).softDeleteProfileImage(any(MyPage.class));
-        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong(), anyInt());
+        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong());
         verify(memberPort, never()).saveMemberFile(any(MemberFile.class));
     }
 
@@ -137,7 +137,7 @@ class MyPageServiceTest {
     @Test
     void updateMyPageWithDeleteProfileImage() {
         // given
-        MyPage myPage = MyPage.builder().memberId(1L).nickname("nickname").introduction("intro").deleteFileOrder(1).build();
+        MyPage myPage = MyPage.builder().memberId(1L).nickname("nickname").introduction("intro").build();
         Member member = createMember();
         when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
         when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
@@ -147,8 +147,7 @@ class MyPageServiceTest {
 
         // then
         assertEquals(updatedCount, 1L);
-        verify(memberPort, times(1)).softDeleteProfileImage(any(MyPage.class));
-        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong(), anyInt());
+        verify(imageS3Service, never()).createMemberFile(any(MultipartFile.class), anyLong());
         verify(memberPort, never()).saveMemberFile(any(MemberFile.class));
     }
 
@@ -161,11 +160,11 @@ class MyPageServiceTest {
         MockMultipartFile mockImage = new MockMultipartFile(
                 "image", "test.jpg", "image/jpeg", "test image content".getBytes());
         Member member = createMember();
-        MemberFile memberFile = MemberFile.of(1L, member, 0, "path", "object-url", "origin", "stored", "jpg", 10, "N");
+        MemberFile memberFile = MemberFile.of(1L, member, "path", "object-url", "origin", "stored", "jpg", 10, "N");
 
         when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
         when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
-        when(imageS3Service.createMemberFile(mockImage, myPage.getMemberId(), 1)).thenReturn(memberFile);
+        when(imageS3Service.createMemberFile(mockImage, myPage.getMemberId())).thenReturn(memberFile);
         when(memberPort.saveMemberFile(memberFile)).thenReturn(2L);
 
         // when
@@ -183,11 +182,11 @@ class MyPageServiceTest {
         MockMultipartFile mockImage = new MockMultipartFile(
                 "image", "test.jpg", "image/jpeg", "test image content".getBytes());
         Member member = createMember();
-        MemberFile memberFile = MemberFile.of(1L, member, 0, "path", "object-url", "origin", "stored", "jpg", 10, "N");
+        MemberFile memberFile = MemberFile.of(1L, member,  "path", "object-url", "origin", "stored", "jpg", 10, "N");
 
         when(memberPort.findMemberByIdAndStatus(myPage.getMemberId(), MemberStatus.ACTIVE)).thenReturn(member);
         when(myPagePort.updateMyPage(myPage)).thenReturn(1L);
-        when(imageS3Service.createMemberFile(mockImage, myPage.getMemberId(), 1)).thenReturn(memberFile);
+        when(imageS3Service.createMemberFile(mockImage, myPage.getMemberId())).thenReturn(memberFile);
         when(memberPort.saveMemberFile(memberFile)).thenReturn(0L);
 
         // when % then
