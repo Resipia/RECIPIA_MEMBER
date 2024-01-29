@@ -109,6 +109,19 @@ class MemberManagementControllerTest extends TotalTestSupport {
                 .andDo(print());
     }
 
+    @DisplayName("[happy] ChangePasswordRequestDto의 필수 필드값이 전부 채워진채로 요청이 들어오면 해당 닉네임의 중복 여부를 반환한다.")
+    @Test
+    void updatePassword() throws Exception {
+        // given
+        ChangePasswordRequestDto dto = ChangePasswordRequestDto.of("passWord!@!1");
+        //when & then
+        mockMvc.perform(post("/member/management/updatePassword")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(dto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
     @DisplayName("[happy] 인증 정보가 있는 회원이 요청하면 성공적으로 프로필 임시 url을 반환한다.")
     @Test
     void getProfileImage() throws Exception {
@@ -118,8 +131,8 @@ class MemberManagementControllerTest extends TotalTestSupport {
         mockMvc.perform(post("/member/management/getProfile"))
                 .andExpect(status().isOk())
                 .andDo(print());
-
     }
+
 
     // JSON 문자열 변환을 위한 유틸리티 메서드
     private String asJsonString(final Object obj) {

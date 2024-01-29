@@ -212,7 +212,7 @@ class MemberAdapterTest extends TotalTestSupport {
         String encryptedTempPassword = "encryptedTemp";
 
         // when
-        Long updatedCount = sut.updatePassword(email, encryptedTempPassword);
+        Long updatedCount = sut.updatePasswordByEmail(email, encryptedTempPassword);
         // then
         assertEquals(updatedCount, 1L);
         MemberEntity memberEntity = memberRepository.findMemberByEmailAndStatus(email, MemberStatus.ACTIVE).orElseThrow();

@@ -1,16 +1,18 @@
 package com.recipia.member.adapter.out.persistenceAdapter.querydsl;
 
+import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.MemberFileEntity;
 import com.recipia.member.adapter.out.persistenceAdapter.MemberFileRepository;
+import com.recipia.member.adapter.out.persistenceAdapter.MemberRepository;
 import com.recipia.member.config.TotalTestSupport;
 import com.recipia.member.domain.MyPage;
-import com.recipia.member.domain.TempPassword;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -22,6 +24,8 @@ class MemberQueryRepositoryTest extends TotalTestSupport {
     private MemberQueryRepository sut;
     @Autowired
     private MemberFileRepository memberFileRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
     @DisplayName("[happy] memberId가 들어오면 회원 비활성화 업데이트 성공")
     @Test
@@ -60,13 +64,27 @@ class MemberQueryRepositoryTest extends TotalTestSupport {
 
     @DisplayName("[happy] db에 존재하는 회원의 이메일로 비밀번호를 업데이트한다.")
     @Test
-    void updatePasswordSuccess() {
+    void updatePasswordByEmailSuccess() {
         // given
         String email = "hong1@example.com";
         String encryptedTempPassword = "encryptedTemp";
         // when
-        Long updatedCount = sut.updatePassword(email, encryptedTempPassword);
+        Long updatedCount = sut.updatePasswordByEamil(email, encryptedTempPassword);
         // then
         assertEquals(updatedCount, 1L);
+    }
+
+    @DisplayName("[happy] db에 존재하는 회원의 pk로 비밀번호를 업데이트한다.")
+    @Test
+    void updatePasswordByMemberIdSuccess() {
+        // given
+        Long memberId = 1L;
+        String encryptedTempPassword = "encryptedTemp";
+        // when
+        Long updatedCount = sut.updatepasswordByMemberId(memberId, encryptedTempPassword);
+        // then
+        assertEquals(updatedCount, 1L);
+        Optional<MemberEntity> memberById = memberRepository.findMemberById(memberId);
+        assertEquals(memberById.get().getPassword(), encryptedTempPassword);
     }
 }
