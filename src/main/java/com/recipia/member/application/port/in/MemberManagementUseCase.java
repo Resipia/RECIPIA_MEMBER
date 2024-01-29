@@ -1,5 +1,6 @@
 package com.recipia.member.application.port.in;
 
+import com.recipia.member.domain.ChangePassword;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.Report;
 import com.recipia.member.domain.TempPassword;
@@ -12,5 +13,5 @@ public interface MemberManagementUseCase {
     void sendTempPassword(TempPassword tempPassword);
     boolean isNicknameAvailable(String nickname);
     String getProfilePreUrl(Long memberId);
-    Long changePassword(Member member);
+    Long changePassword(ChangePassword changePassword);
 }

@@ -14,13 +14,16 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ChangePasswordRequestDto {
     @NotBlank
-    private String password;
+    private String originPassword;
+    @NotBlank
+    private String newPassword;
 
-    private ChangePasswordRequestDto(String password) {
-        this.password = password;
+    private ChangePasswordRequestDto(String originPassword, String newPassword) {
+        this.originPassword = originPassword;
+        this.newPassword = newPassword;
     }
 
-    public static ChangePasswordRequestDto of(String password) {
-        return new ChangePasswordRequestDto(password);
+    public static ChangePasswordRequestDto of(String originPassword, String newPassword) {
+        return new ChangePasswordRequestDto(originPassword, newPassword);
     }
 }

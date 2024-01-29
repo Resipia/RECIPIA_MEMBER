@@ -4,6 +4,7 @@ import com.recipia.member.adapter.in.web.dto.request.*;
 import com.recipia.member.adapter.in.web.dto.response.ResponseDto;
 import com.recipia.member.application.port.in.MemberManagementUseCase;
 import com.recipia.member.common.utils.SecurityUtils;
+import com.recipia.member.domain.converter.ChangePasswordConverter;
 import com.recipia.member.domain.converter.MemberConverter;
 import com.recipia.member.domain.converter.ReportConverter;
 import com.recipia.member.domain.converter.TempPasswordConverter;
@@ -28,6 +29,7 @@ public class MemberManagementController {
     private final MemberConverter memberConverter;
     private final TempPasswordConverter tempPasswordConverter;
     private final SecurityUtils securityUtils;
+    private final ChangePasswordConverter changePasswordConverter;
 
     /**
      * 이메일 중복체크 요청
@@ -85,6 +87,9 @@ public class MemberManagementController {
         );
     }
 
+    /**
+     * 닉네임 상세에 보여줄 회원 프로필 사진 요청
+     */
     @PostMapping("/getProfile")
     public ResponseEntity<ResponseDto<String>> getProfileImage() {
         String profilePreUrl = memberManagementUseCase.getProfilePreUrl(securityUtils.getCurrentMemberId());
@@ -93,9 +98,12 @@ public class MemberManagementController {
         );
     }
 
+    /**
+     * 비밀번호 수정
+     */
     @PostMapping("/updatePassword")
     public ResponseEntity<ResponseDto<Long>> updatePassword(@Valid @RequestBody ChangePasswordRequestDto dto) {
-        Long updatedCount = memberManagementUseCase.changePassword(memberConverter.changePasswordDtoToDomain(dto));
+        Long updatedCount = memberManagementUseCase.changePassword(changePasswordConverter.dtoToDomain(dto));
         return ResponseEntity.ok(
                 ResponseDto.success(updatedCount)
         );

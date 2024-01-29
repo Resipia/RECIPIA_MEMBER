@@ -113,7 +113,7 @@ class MemberManagementControllerTest extends TotalTestSupport {
     @Test
     void updatePassword() throws Exception {
         // given
-        ChangePasswordRequestDto dto = ChangePasswordRequestDto.of("passWord!@!1");
+        ChangePasswordRequestDto dto = ChangePasswordRequestDto.of("oldPassword", "passWord!@!1");
         //when & then
         mockMvc.perform(post("/member/management/updatePassword")
                         .contentType(MediaType.APPLICATION_JSON)
