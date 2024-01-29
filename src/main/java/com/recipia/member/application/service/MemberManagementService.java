@@ -33,6 +33,7 @@ public class MemberManagementService implements MemberManagementUseCase {
     private final PasswordEncoder passwordEncoder;
     private final TempPasswordUtil tempPasswordUtil;
     private final MemberManagementPort memberManagementPort;
+    private final ImageS3Service imageS3Service;
 
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
@@ -139,5 +140,18 @@ public class MemberManagementService implements MemberManagementUseCase {
     @Override
     public boolean isNicknameAvailable(String nickname) {
         return memberManagementPort.isNicknameAvailable(nickname);
+    }
+
+    /**
+     * [READ] memberId에 해당하는 프로필 사진의 pre-signed-url을 반환한다.
+     */
+    @Override
+    public String getProfilePreUrl(Long memberId) {
+        String fileFullPath = memberPort.getFileFullPath(memberId);
+        if (fileFullPath != null) {
+            return imageS3Service.generatePreSignedUrl(fileFullPath, 60);
+        } else {
+            return null;
+        }
     }
 }

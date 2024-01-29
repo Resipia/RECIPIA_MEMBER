@@ -38,7 +38,7 @@ class MemberQueryRepositoryTest extends TotalTestSupport {
     @Test
     void softDeleteMemberFileSuccess() {
         // given
-        MyPage myPage = MyPage.builder().memberId(1L).deleteFileOrder(1).build();
+        MyPage myPage = MyPage.builder().memberId(1L).build();
 
         // when
         sut.softDeleteMemberFile(myPage);

@@ -23,4 +23,6 @@ public interface MemberPort {
     Long updatePassword(String email, String encryptedTempPassword);
 
     Long softDeleteProfileImageByMemberId(Long memberId);
+
+    String getFileFullPath(Long memberId);
 }
