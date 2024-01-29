@@ -154,8 +154,8 @@ public class MemberAdapter implements MemberPort {
      */
     @Transactional
     @Override
-    public Long updatePassword(String email, String encryptedTempPassword) {
-        return memberQueryRepository.updatePassword(email, encryptedTempPassword);
+    public Long updatePasswordByEmail(String email, String encryptedTempPassword) {
+        return memberQueryRepository.updatePasswordByEamil(email, encryptedTempPassword);
     }
 
     /**
@@ -172,6 +172,14 @@ public class MemberAdapter implements MemberPort {
     @Override
     public String getFileFullPath(Long memberId) {
         return memberFileQueryRepository.getFileFullPath(memberId);
+    }
+
+    /**
+     * [UPDATE] memberId에 해당하는 회원의 비밀번호를 수정한다.
+     */
+    @Override
+    public Long updatePasswordByMemberId(Long memberId, String password) {
+        return memberQueryRepository.updatepasswordByMemberId(memberId, password);
     }
 
 

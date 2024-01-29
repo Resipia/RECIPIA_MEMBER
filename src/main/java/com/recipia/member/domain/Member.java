@@ -77,6 +77,10 @@ public class Member {
         return new Member(id, null, null, null, null, null, null, null, null, null, null, null, "Y", "Y", null, null);
     }
 
+    public static Member of(Long id, String password) {
+        return new Member(id, null, password, null, null, null, null, null, null, null, null, null, null, null, null, null);
+    }
+
     /**
      * 비밀번호가 영어 대,소문자, 숫자, 특수문자가 하나씩 무조건 포함되어야하고 8글자 이상 20자 이하인지 검증하는 메소드
      * @param password

@@ -1,21 +1,27 @@
 package com.recipia.member.domain.converter;
 
+import com.recipia.member.adapter.in.web.dto.request.ChangePasswordRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.FindEmailRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.MemberFileEntity;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.adapter.out.persistence.constant.RoleType;
+import com.recipia.member.common.utils.SecurityUtils;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 /**
  * dto, entity와 domain을 변환해주는 로직과
  * domain을 entity로 변환해주는 로직을 담당
  */
+@RequiredArgsConstructor
 @Component
 public class MemberConverter {
+
+    private final SecurityUtils securityUtils;
 
     /**
      * MemberEntity를 받아서 Member Domain을 반환 (프로필 이미지 취급X)
@@ -91,4 +97,10 @@ public class MemberConverter {
     }
 
 
+    /**
+     * 비밀번호 수정 request dto to domain
+     */
+    public Member changePasswordDtoToDomain(ChangePasswordRequestDto dto) {
+        return Member.of(securityUtils.getCurrentMemberId(), dto.getPassword());
+    }
 }

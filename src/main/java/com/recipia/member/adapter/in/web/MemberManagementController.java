@@ -73,6 +73,7 @@ public class MemberManagementController {
         );
     }
 
+
     /**
      * 닉네임 중복체크
      */
@@ -89,6 +90,14 @@ public class MemberManagementController {
         String profilePreUrl = memberManagementUseCase.getProfilePreUrl(securityUtils.getCurrentMemberId());
         return ResponseEntity.ok(
                 ResponseDto.success(profilePreUrl)
+        );
+    }
+
+    @PostMapping("/updatePassword")
+    public ResponseEntity<ResponseDto<Long>> updatePassword(@Valid @RequestBody ChangePasswordRequestDto dto) {
+        Long updatedCount = memberManagementUseCase.changePassword(memberConverter.changePasswordDtoToDomain(dto));
+        return ResponseEntity.ok(
+                ResponseDto.success(updatedCount)
         );
     }
 }
