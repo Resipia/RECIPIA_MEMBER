@@ -122,11 +122,10 @@ public class MemberManagementService implements MemberManagementUseCase {
                 .thenAcceptAsync(result -> {
                     if (result) {   // 메일 전송 성공 시
                         // 회원 비밀번호를 임시로 발급된 비밀번호를 암호화 한 데이터로 업데이트
-                        memberPort.updatePassword(email, encryptedPassword);
+                        memberPort.updatePasswordByEmail(email, encryptedPassword);
                         // 임시 비밀번호로 업데이트 완료했으면 계정 로그아웃 처리 (JWT 삭제까지만 진행)
                         jwtPort.deleteRefreshTokenByEmail(email);
                     } else {
-                        // 메일 전송 실패 시, 적절한 예외 처리
                         throw new MemberApplicationException(ErrorCode.MAIL_SEND_FAILED);
                     }
                 });
@@ -153,5 +152,20 @@ public class MemberManagementService implements MemberManagementUseCase {
         } else {
             return null;
         }
+    }
+
+    /**
+     * [UPDATE] memberId에 해당하는 회원의 비밀번호를 수정하고 업데이트된 row의 갯수를 반환한다.
+     */
+    @Transactional
+    @Override
+    public Long changePassword(Member member) {
+        // 유효한 확장자인지 검증한다.
+        boolean isValidPassword = member.isValidPassword(member.getPassword());
+        if (!isValidPassword) {
+            throw new MemberApplicationException(ErrorCode.BAD_REQUEST);
+        }
+        String encodedPassword = passwordEncoder.encode(member.getPassword());
+        return memberPort.updatePasswordByMemberId(member.getId(), encodedPassword);
     }
 }

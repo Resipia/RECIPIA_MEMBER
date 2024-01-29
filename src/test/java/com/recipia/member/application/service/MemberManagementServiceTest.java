@@ -5,6 +5,7 @@ import com.recipia.member.adapter.out.persistence.constant.ReportType;
 import com.recipia.member.adapter.out.persistenceAdapter.MemberManagementAdapter;
 import com.recipia.member.application.port.out.port.JwtPort;
 import com.recipia.member.application.port.out.port.MemberPort;
+import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.common.utils.TempPasswordUtil;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.Report;
@@ -220,6 +221,51 @@ class MemberManagementServiceTest {
         // then
         verify(imageS3Service, never()).generatePreSignedUrl(anyString(), anyInt());
         assertNull(profilePreUrl);
+    }
+
+    @DisplayName("[happy] 유효한 비밀번호가 들어왔을때 비밀번호 변경에 성공한다.")
+    @Test
+    void changePasswordSuccess() {
+        // given
+        Long memberId = 1L;
+        String password = "passworD12!";
+        String encodePassword = "encoded-password";
+
+        Member member = Member.of(memberId, password);
+        Long updateCount = 1L;
+
+        // isValidPassword 메서드는 실제 객체에서 호출
+        assertTrue(member.isValidPassword(password));
+
+        // passwordEncoder.encode에 대한 스터빙
+        when(passwordEncoder.encode(password)).thenReturn(encodePassword);
+
+        // memberPort.updatePasswordByMemberId에 대한 스터빙
+        when(memberPort.updatePasswordByMemberId(memberId, encodePassword)).thenReturn(updateCount);
+
+        // when
+        Long updatedCount = sut.changePassword(member);
+
+        // then
+        assertEquals(updatedCount, updateCount);
+    }
+
+    @DisplayName("[bad] 유효하지 않은 비밀번호가 들어왔을때 비밀번호 변경에 실패한다.")
+    @Test
+    void changePasswordFail() {
+        // given
+        Long memberId = 1L;
+        String password = "password";
+
+        Member member = Member.of(memberId, password);
+
+        // isValidPassword 메서드는 실제 객체에서 호출
+        assertFalse(member.isValidPassword(password));
+
+        // when & then
+        assertThrows(MemberApplicationException.class, () -> {
+            sut.changePassword(member);
+        });
     }
 
 }

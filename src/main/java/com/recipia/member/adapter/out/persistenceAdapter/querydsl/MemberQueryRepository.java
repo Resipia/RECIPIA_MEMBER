@@ -4,7 +4,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.adapter.out.persistence.constant.MemberStatus;
 import com.recipia.member.domain.MyPage;
-import com.recipia.member.domain.TempPassword;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -67,12 +66,24 @@ public class MemberQueryRepository {
      * [UPDATE] email에 해당하는 회원의 비밀번호를 수정한다.
      * 수정된 row의 갯수를 반환한다.
      */
-    public Long updatePassword(String email, String encryptedTempPassword) {
+    public Long updatePasswordByEamil(String email, String encryptedTempPassword) {
         return jpaQueryFactory
                 .update(memberEntity)
                 .set(memberEntity.password, encryptedTempPassword)
                 .set(memberEntity.updateDateTime, LocalDateTime.now())
                 .where(memberEntity.email.eq(email))
+                .execute();
+    }
+
+    /**
+     * [UPDATE] memberId에 해당하는 회원의 비밀번호를 수정한다.
+     */
+    public Long updatepasswordByMemberId(Long memberId, String password) {
+        return jpaQueryFactory
+                .update(memberEntity)
+                .set(memberEntity.password, password)
+                .set(memberEntity.updateDateTime, LocalDateTime.now())
+                .where(memberEntity.id.eq(memberId))
                 .execute();
     }
 }
