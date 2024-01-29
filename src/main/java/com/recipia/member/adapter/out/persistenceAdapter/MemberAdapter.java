@@ -144,8 +144,8 @@ public class MemberAdapter implements MemberPort {
      * 회원이 존재하면 true, 없으면 false를 반환한다.
      */
     @Override
-    public boolean existsByEmailNotInDeactive(String email) {
-        return memberRepository.existsByEmailAndStatusNot(email, MemberStatus.DEACTIVATED);
+    public boolean isMemberNotInDeactive(TempPassword domain) {
+        return memberRepository.existsByFullNameAndTelNoAndEmailAndStatusNot(domain.getName(), domain.getTelNo(), domain.getEmail(), MemberStatus.DEACTIVATED);
     }
 
     /**

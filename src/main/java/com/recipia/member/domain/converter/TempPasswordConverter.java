@@ -14,6 +14,10 @@ import org.springframework.stereotype.Component;
 public class TempPasswordConverter {
 
     public TempPassword dtoToDomain(TempPasswordRequestDto dto) {
-        return TempPassword.of(dto.getEmail());
+        return TempPassword.of(
+                dto.getName(),
+                dto.getTelNo(),
+                dto.getEmail()
+        );
     }
 }

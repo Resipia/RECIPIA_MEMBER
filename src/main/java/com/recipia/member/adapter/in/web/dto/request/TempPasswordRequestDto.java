@@ -16,13 +16,19 @@ import lombok.ToString;
 public class TempPasswordRequestDto {
 
     @NotBlank
+    private String name;
+    @NotBlank
+    private String telNo;
+    @NotBlank
     private String email;
 
-    private TempPasswordRequestDto(String email) {
+    private TempPasswordRequestDto(String name, String telNo, String email) {
+        this.name = name;
+        this.telNo = telNo;
         this.email = email;
     }
 
-    public static TempPasswordRequestDto of(String email) {
-        return new TempPasswordRequestDto(email);
+    public static TempPasswordRequestDto of(String name, String telNo, String email) {
+        return new TempPasswordRequestDto(name, telNo, email);
     }
 }

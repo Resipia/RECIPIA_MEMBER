@@ -8,6 +8,7 @@ import com.recipia.member.config.TotalTestSupport;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.MemberFile;
 import com.recipia.member.domain.MyPage;
+import com.recipia.member.domain.TempPassword;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,13 +171,16 @@ class MemberAdapterTest extends TotalTestSupport {
         assertEquals(email, "hong1@example.com");
     }
 
-    @DisplayName("[happy] db에 존재하는 이메일을 받으면 true를 반환한다.")
+    @DisplayName("[happy] db에 존재하는 이름, 전화번호, 이메일을 받으면 true를 반환한다.")
     @Test
     void existEmail() {
         // given
+        String fullName = "홍길동";
+        String telNo = "01012345678";
         String email = "hong1@example.com";
+        TempPassword domain = TempPassword.of(fullName, telNo, email);
         // when
-        boolean isExist = sut.existsByEmailNotInDeactive(email);
+        boolean isExist = sut.isMemberNotInDeactive(domain);
         // then
         assertTrue(isExist);
     }
@@ -185,9 +189,12 @@ class MemberAdapterTest extends TotalTestSupport {
     @Test
     void nonExistEmail() {
         // given
-        String email = "1212@example.com";
+        String fullName = "name";
+        String telNo = "01011111111";
+        String email = "hong211@example.com";
+        TempPassword domain = TempPassword.of(fullName, telNo, email);
         // when
-        boolean isExist = sut.existsByEmailNotInDeactive(email);
+        boolean isExist = sut.isMemberNotInDeactive(domain);
         // then
         assertFalse(isExist);
     }
@@ -197,9 +204,12 @@ class MemberAdapterTest extends TotalTestSupport {
     @Test
     void deactiveMemberEmail() {
         // given
+        String fullName = "name";
+        String telNo = "01011111111";
         String email = "jung5@example.com";
+        TempPassword domain = TempPassword.of(fullName, telNo, email);
         // when
-        boolean isExist = sut.existsByEmailNotInDeactive(email);
+        boolean isExist = sut.isMemberNotInDeactive(domain);
         // then
         assertFalse(isExist);
     }

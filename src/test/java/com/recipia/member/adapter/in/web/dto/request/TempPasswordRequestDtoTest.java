@@ -18,7 +18,7 @@ class TempPasswordRequestDtoTest {
     @Test
     void validData() {
         //given
-        TempPasswordRequestDto dto = TempPasswordRequestDto.of("email@naver.com");
+        TempPasswordRequestDto dto = TempPasswordRequestDto.of("fullname", "01011110000", "email@naver.com");
 
         //when
         Set<ConstraintViolation<TempPasswordRequestDto>> violations = validator.validate(dto);
@@ -31,7 +31,7 @@ class TempPasswordRequestDtoTest {
     @Test
     void nullEmail() {
         //given
-        TempPasswordRequestDto dto = TempPasswordRequestDto.of(null);
+        TempPasswordRequestDto dto = TempPasswordRequestDto.of("fullname", "01011110000", null);
 
         //when
         Set<ConstraintViolation<TempPasswordRequestDto>> violations = validator.validate(dto);

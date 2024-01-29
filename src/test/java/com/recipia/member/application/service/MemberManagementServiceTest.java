@@ -140,10 +140,12 @@ class MemberManagementServiceTest {
     @Test
     void sendTempPasswordTest() {
         // given
+        String fullName = "name";
+        String telNo = "01011111111";
         String email = "hong1@example.com";
+        TempPassword domain = TempPassword.of(fullName, telNo, email);
         String createdTempPassword = "tempPassword";
-        TempPassword domain = TempPassword.of(email);
-        when(memberPort.existsByEmailNotInDeactive(email)).thenReturn(true);
+        when(memberPort.isMemberNotInDeactive(domain)).thenReturn(true);
         when(tempPasswordUtil.generateTempPassword()).thenReturn(createdTempPassword);
 
         // CompletableFuture를 반환하도록 스터빙
