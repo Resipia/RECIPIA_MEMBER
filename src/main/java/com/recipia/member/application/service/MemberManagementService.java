@@ -107,7 +107,7 @@ public class MemberManagementService implements MemberManagementUseCase {
         String email = tempPassword.getEmail();
 
         // 탈퇴계정이 아닌 회원중에서 존재하는 이메일인지 검증
-        boolean isMemberExist = memberPort.existsByEmailNotInDeactive(email);
+        boolean isMemberExist = memberPort.isMemberNotInDeactive(tempPassword);
 
         // 존재하는 이메일이 아니면 에러 발생
         if (!isMemberExist) {

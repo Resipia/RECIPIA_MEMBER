@@ -52,6 +52,7 @@ public class TokyoSnsService {
             // fixme: 테스트할때는 일단 제외 (비용 문제)
 //            PublishResponse response = tokyoSnsClient().publish(request);
 //            log.info("Sent message {} to {} with messageId {}", message, phoneNumber, response.messageId());
+            log.info("Sent message {} to {}", message, phoneNumber);
         } catch (Exception e) {
             log.error("Error sending SMS: {}", e.getMessage());
         }

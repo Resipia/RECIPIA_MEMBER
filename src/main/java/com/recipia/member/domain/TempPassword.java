@@ -2,7 +2,6 @@ package com.recipia.member.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * 임시 비밀번호 도메인 객체
@@ -11,20 +10,24 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @NoArgsConstructor
 public class TempPassword {
 
+    private String name;
+    private String telNo;
     private String email;
     private String tempPassword;
 
-    private TempPassword(String email, String tempPassword) {
+    private TempPassword(String name, String telNo, String email, String tempPassword) {
+        this.name = name;
+        this.telNo = telNo;
         this.email = email;
         this.tempPassword = tempPassword;
     }
 
-    public static TempPassword of(String email, String tempPassword) {
-        return new TempPassword(email, tempPassword);
+    public static TempPassword of(String name, String telNo, String email, String tempPassword) {
+        return new TempPassword(name, telNo, email, tempPassword);
     }
 
-    public static TempPassword of(String email) {
-        return new TempPassword(email, null);
+    public static TempPassword of(String name, String telNo, String email) {
+        return new TempPassword(name, telNo, email, null);
     }
 
 }

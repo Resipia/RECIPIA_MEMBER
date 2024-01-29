@@ -19,7 +19,7 @@ public interface MemberPort {
     Long saveReport(Report report);
 
     String findEmail(Member domain);
-    boolean existsByEmailNotInDeactive(String email);
+    boolean isMemberNotInDeactive(TempPassword tempPassword);
     Long updatePasswordByEmail(String email, String encryptedTempPassword);
 
     Long softDeleteProfileImageByMemberId(Long memberId);
