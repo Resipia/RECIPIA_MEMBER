@@ -7,10 +7,12 @@ import com.recipia.member.application.port.out.port.MemberPort;
 import com.recipia.member.common.exception.ErrorCode;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.common.utils.TempPasswordUtil;
+import com.recipia.member.domain.ChangePassword;
 import com.recipia.member.domain.Member;
 import com.recipia.member.domain.Report;
 import com.recipia.member.domain.TempPassword;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,7 @@ public class MemberManagementService implements MemberManagementUseCase {
     private final TempPasswordUtil tempPasswordUtil;
     private final MemberManagementPort memberManagementPort;
     private final ImageS3Service imageS3Service;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
@@ -159,13 +162,22 @@ public class MemberManagementService implements MemberManagementUseCase {
      */
     @Transactional
     @Override
-    public Long changePassword(Member member) {
+    public Long changePassword(ChangePassword changePassword) {
+
+        Member member = memberPort.findMemberById(changePassword.getMemberId());
+
+        // 기존 비밀번호가 일치하는지 검증한다.
+        // matches 메서드는 첫 번째 파라미터에 평문 비밀번호를, 두 번째 파라미터로 인코딩된 비밀번호를 받아야한다.
+        if (!bCryptPasswordEncoder.matches(changePassword.getOriginPassword(), member.getPassword())) {
+            throw new MemberApplicationException(ErrorCode.USER_NOT_FOUND);
+        }
+
         // 유효한 확장자인지 검증한다.
-        boolean isValidPassword = member.isValidPassword(member.getPassword());
+        boolean isValidPassword = member.isValidPassword(changePassword.getNewPassword());
         if (!isValidPassword) {
             throw new MemberApplicationException(ErrorCode.BAD_REQUEST);
         }
-        String encodedPassword = passwordEncoder.encode(member.getPassword());
-        return memberPort.updatePasswordByMemberId(member.getId(), encodedPassword);
+        String encodedPassword = passwordEncoder.encode(changePassword.getNewPassword());
+        return memberPort.updatePasswordByMemberId(changePassword.getMemberId(), encodedPassword);
     }
 }

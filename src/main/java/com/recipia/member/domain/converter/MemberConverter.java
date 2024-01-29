@@ -1,6 +1,5 @@
 package com.recipia.member.domain.converter;
 
-import com.recipia.member.adapter.in.web.dto.request.ChangePasswordRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.FindEmailRequestDto;
 import com.recipia.member.adapter.in.web.dto.request.SignUpRequestDto;
 import com.recipia.member.adapter.out.persistence.MemberEntity;
@@ -96,11 +95,4 @@ public class MemberConverter {
                 null, req.getEmail(), req.getPassword(), req.getFullName(), req.getNickname(), MemberStatus.ACTIVE, req.getIntroduction(), req.getTelNo(), req.getAddress1(), req.getAddress2(), RoleType.MEMBER, req.getIsPersonalInfoConsent(), req.getIsDataRetentionConsent(), req.getBirth(), req.getGender());
     }
 
-
-    /**
-     * 비밀번호 수정 request dto to domain
-     */
-    public Member changePasswordDtoToDomain(ChangePasswordRequestDto dto) {
-        return Member.of(securityUtils.getCurrentMemberId(), dto.getPassword());
-    }
 }
