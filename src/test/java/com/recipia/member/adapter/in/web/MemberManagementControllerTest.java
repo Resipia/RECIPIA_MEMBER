@@ -127,8 +127,13 @@ class MemberManagementControllerTest extends TotalTestSupport {
     void getProfileImage() throws Exception {
         // given
         when(securityUtils.getCurrentMemberId()).thenReturn(1L);
+        MemberProfileRequestDto memberProfileRequestDto = MemberProfileRequestDto.of(1L);
+
         //when & then
-        mockMvc.perform(post("/member/management/getProfile"))
+        mockMvc.perform(post("/member/management/getProfile")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(memberProfileRequestDto))
+                )
                 .andExpect(status().isOk())
                 .andDo(print());
     }

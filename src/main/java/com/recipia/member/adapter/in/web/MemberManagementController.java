@@ -11,10 +11,7 @@ import com.recipia.member.domain.converter.TempPasswordConverter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 회원 관리 컨트롤러
@@ -91,8 +88,8 @@ public class MemberManagementController {
      * 닉네임 상세에 보여줄 회원 프로필 사진 요청
      */
     @PostMapping("/getProfile")
-    public ResponseEntity<ResponseDto<String>> getProfileImage() {
-        String profilePreUrl = memberManagementUseCase.getProfilePreUrl(securityUtils.getCurrentMemberId());
+    public ResponseEntity<ResponseDto<String>> getProfileImage(@Valid @RequestBody MemberProfileRequestDto dto) {
+        String profilePreUrl = memberManagementUseCase.getProfilePreUrl(dto.getMemberId());
         return ResponseEntity.ok(
                 ResponseDto.success(profilePreUrl)
         );
