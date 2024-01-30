@@ -2,6 +2,7 @@ package com.recipia.member.adapter.out.persistenceAdapter.querydsl;
 
 import com.recipia.member.adapter.in.web.dto.response.AskListResponseDto;
 import com.recipia.member.config.TotalTestSupport;
+import com.recipia.member.domain.Ask;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("[통합] 문의사항 querydsl 테스트")
 class AskQueryRepositoryTest extends TotalTestSupport {
@@ -46,4 +46,25 @@ class AskQueryRepositoryTest extends TotalTestSupport {
         assertThat(result.getTotalElements()).isEqualTo(0L);
     }
 
+    @DisplayName("[happy] 존재하는 askId가 들어왔을때 해당 문의사항의 상세정보를 가져온다.")
+    @Test
+    void getAskDetail() {
+        // given
+        Ask domain = Ask.of(1L, 1L);
+        // when
+        Ask askDetail = sut.getAskDetail(domain);
+        // then
+        assertThat(askDetail).isNotNull();
+    }
+
+    @DisplayName("[happy] 존재하지 않는 askId가 들어왔을때 null을 반환한다.")
+    @Test
+    void getNoneAskDetail() {
+        // given
+        Ask domain = Ask.of(99L, 1L);
+        // when
+        Ask askDetail = sut.getAskDetail(domain);
+        // then
+        assertThat(askDetail).isNull();
+    }
 }

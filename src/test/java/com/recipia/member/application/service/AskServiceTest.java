@@ -67,4 +67,17 @@ class AskServiceTest {
         assertThat(result.getTotalCount()).isEqualTo(2L);
     }
 
+    @DisplayName("[happy] 유효한 askId가 들어왔을때 문의사항 상세내용을 반환한다.")
+    @Test
+    void getAskDetail() {
+        // given
+        Ask domain = Ask.of(1L, 1L);
+        Ask result = Ask.of(1L, 1L, "title", "content", "N", "2022-11-22", "2022-11-22");
+        when(askPort.getAskDetail(domain)).thenReturn(result);
+        // when
+        Ask askDetail = sut.getAskDetail(domain);
+        // then
+        assertThat(askDetail).isNotNull();
+    }
+
 }

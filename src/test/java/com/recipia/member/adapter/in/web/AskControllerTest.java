@@ -1,7 +1,8 @@
 package com.recipia.member.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.recipia.member.adapter.in.web.dto.request.AskRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.CreateAskRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.ViewAskRequestDto;
 import com.recipia.member.adapter.in.web.dto.response.AskListResponseDto;
 import com.recipia.member.adapter.in.web.dto.response.PagingResponseDto;
 import com.recipia.member.application.port.in.AskUseCase;
@@ -41,7 +42,7 @@ class AskControllerTest extends TotalTestSupport {
     @Test
     void createAsk() throws Exception {
         // given
-        AskRequestDto dto = AskRequestDto.of("title", "content");
+        CreateAskRequestDto dto = CreateAskRequestDto.of("title", "content");
         //when & then
         mockMvc.perform(post("/member/ask/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,6 +71,17 @@ class AskControllerTest extends TotalTestSupport {
                 .andExpect(jsonPath("$.totalCount").value(pagingResponseDto.getTotalCount()));
     }
 
+    @DisplayName("[happy] 유효한 memberId와 askId가 들어왔을때 성공한다.")
+    @Test
+    void getDetail() throws Exception {
+        // given
+        ViewAskRequestDto requestDto = ViewAskRequestDto.of(1L);
+        // when & then
+        mockMvc.perform(post("/member/ask/detail")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(requestDto)))
+                .andExpect(status().isOk());
+    }
 
     // JSON 문자열 변환을 위한 유틸리티 메서드
     private String asJsonString(final Object obj) {
