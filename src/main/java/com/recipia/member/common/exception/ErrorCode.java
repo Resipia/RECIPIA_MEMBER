@@ -36,6 +36,9 @@ public enum ErrorCode {
     ALREADY_FOLLOWING(400, 3001, "이미 팔로우 하고 있는 회원입니다."),
     NOT_ACTIVE_USER(400, 3002, "활성화 상태인 회원이 아닙니다."),
 
+    // 31. 문의사항 관련 에러
+    ASK_NOT_FOUND(400, 3101, "문의사항을 찾을 수 없습니다."),
+
     // 4. S3 관련 에러
     S3_UPLOAD_ERROR(500, 4001, "AWS S3 서비스 에러"),
     S3_UPLOAD_FILE_NOT_FOUND(404, 4002, "업로드할 파일이 존재하지 않습니다."),
