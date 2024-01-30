@@ -62,3 +62,9 @@ VALUES (1, 2, CURRENT_TIMESTAMP),
        (3, 4, CURRENT_TIMESTAMP),
        (4, 2, CURRENT_TIMESTAMP),
        (5, 1, CURRENT_TIMESTAMP);
+
+-- ask 데이터 추가
+INSERT INTO ask(ask_id, member_id, title, content, answer, create_dttm, update_dttm)
+VALUES (1, 1, 'title1', 'content1', null, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (2, 1, 'title2', 'content2', 'answer222', CURRENT_TIMESTAMP, DATEADD(MONTH, 1, CURRENT_DATE())),
+       (3, 2, 'title3', 'content3', 'answer333', CURRENT_TIMESTAMP, DATEADD(MONTH, 1, CURRENT_DATE()));;
