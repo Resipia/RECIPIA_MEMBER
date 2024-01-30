@@ -48,4 +48,12 @@ public class AskService implements AskUseCase {
 
         return PagingResponseDto.of(askList.getContent(), askList.getTotalElements());
     }
+
+    /**
+     * [READ] 문의사항의 상세 내용을 가져온다.
+     */
+    @Override
+    public Ask getAskDetail(Ask domain) {
+        return askPort.getAskDetail(domain);
+    }
 }

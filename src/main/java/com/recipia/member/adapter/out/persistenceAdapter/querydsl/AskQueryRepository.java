@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.recipia.member.adapter.in.web.dto.response.AskListResponseDto;
+import com.recipia.member.domain.Ask;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
@@ -49,5 +50,24 @@ public class AskQueryRepository {
         ).orElse(0L);
 
         return new PageImpl<>(result, pageable, totalCount);
+    }
+
+    /**
+     * [READ] askId에 해당하는 문의사항 상세내용을 가져온다.
+     */
+    public Ask getAskDetail(Ask domain) {
+        return jpaQueryFactory
+                .select(Projections.constructor(Ask.class,
+                        askEntity.id,
+                        askEntity.memberEntity.id,
+                        askEntity.title,
+                        askEntity.content,
+                        askEntity.answer,
+                        Expressions.stringTemplate("TO_CHAR({0}, 'YYYY-MM-DD')", askEntity.createDateTime),
+                        Expressions.stringTemplate("TO_CHAR({0}, 'YYYY-MM-DD')", askEntity.updateDateTime)
+                ))
+                .from(askEntity)
+                .where(askEntity.id.eq(domain.getId()), askEntity.memberEntity.id.eq(domain.getMemberId()))
+                .fetchOne();
     }
 }

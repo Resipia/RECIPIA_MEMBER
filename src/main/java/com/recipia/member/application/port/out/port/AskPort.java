@@ -9,4 +9,6 @@ public interface AskPort {
     Long createAsk(Ask ask);
 
     Page<AskListResponseDto> getAskList(Long memberId, Pageable pageable);
+
+    Ask getAskDetail(Ask ask);
 }

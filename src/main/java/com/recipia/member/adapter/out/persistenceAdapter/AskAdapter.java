@@ -4,6 +4,8 @@ import com.recipia.member.adapter.in.web.dto.response.AskListResponseDto;
 import com.recipia.member.adapter.out.persistence.AskEntity;
 import com.recipia.member.adapter.out.persistenceAdapter.querydsl.AskQueryRepository;
 import com.recipia.member.application.port.out.port.AskPort;
+import com.recipia.member.common.exception.ErrorCode;
+import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Ask;
 import com.recipia.member.domain.converter.AskConverter;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +31,23 @@ public class AskAdapter implements AskPort {
     }
 
     /**
-     * [READ] 내가 작성한 문의 목록 가져오기
+     * [READ] 내가 작성한 문의내역을 가져온다.
      */
     @Override
     public Page<AskListResponseDto> getAskList(Long memberId, Pageable pageable) {
         return askQueryRepository.getAskList(memberId, pageable);
+    }
+
+    /**
+     * [READ] 문의사항 상세 내용을 가져온다.
+     */
+    @Override
+    public Ask getAskDetail(Ask doamin) {
+        Ask askDetail = askQueryRepository.getAskDetail(doamin);
+        // id로 문의사항을 찾을 수 없다면 에러 발생
+        if (null == askDetail) {
+            throw new MemberApplicationException(ErrorCode.ASK_NOT_FOUND);
+        }
+        return askDetail;
     }
 }

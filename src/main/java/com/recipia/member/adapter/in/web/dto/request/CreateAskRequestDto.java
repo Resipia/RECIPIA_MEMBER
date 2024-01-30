@@ -11,19 +11,19 @@ import lombok.ToString;
 @ToString
 @Getter
 @NoArgsConstructor
-public class AskRequestDto {
+public class CreateAskRequestDto {
 
     @NotBlank
     private String title;
     @NotBlank
     private String content;
 
-    private AskRequestDto(String title, String content) {
+    private CreateAskRequestDto(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
-    public static AskRequestDto of(String title, String content) {
-        return new AskRequestDto(title, content);
+    public static CreateAskRequestDto of(String title, String content) {
+        return new CreateAskRequestDto(title, content);
     }
 }

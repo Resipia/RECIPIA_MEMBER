@@ -1,6 +1,8 @@
 package com.recipia.member.domain.converter;
 
-import com.recipia.member.adapter.in.web.dto.request.AskRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.CreateAskRequestDto;
+import com.recipia.member.adapter.in.web.dto.request.ViewAskRequestDto;
+import com.recipia.member.adapter.in.web.dto.response.AskViewResponseDto;
 import com.recipia.member.adapter.out.persistence.AskEntity;
 import com.recipia.member.adapter.out.persistence.MemberEntity;
 import com.recipia.member.common.utils.SecurityUtils;
@@ -23,9 +25,18 @@ public class AskConverter {
         return AskEntity.of(memberEntity, domain.getTitle(), domain.getContent());
     }
 
-    public Ask dtoToDomain(AskRequestDto dto) {
+    public Ask createDtoToDomain(CreateAskRequestDto dto) {
         Long memberId = securityUtils.getCurrentMemberId();
         return Ask.of(memberId, dto.getTitle(), dto.getContent());
+    }
+
+    public Ask viewRequestDtoToDomain(ViewAskRequestDto dto) {
+        Long memberId = securityUtils.getCurrentMemberId();
+        return Ask.of(dto.getAskId(), memberId);
+    }
+
+    public AskViewResponseDto domainToViewResponseDto(Ask domain) {
+        return AskViewResponseDto.of(domain.getId(), domain.getTitle(), domain.getContent(), domain.getAnswer(), domain.getCreateDate(), domain.getAnswerCreateDate());
     }
 
 }

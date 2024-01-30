@@ -7,4 +7,5 @@ import com.recipia.member.domain.Ask;
 public interface AskUseCase {
     Long createAsk(Ask ask);
     PagingResponseDto<AskListResponseDto> getAskList(int page, int size);
+    Ask getAskDetail(Ask domain);
 }
