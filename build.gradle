@@ -98,6 +98,8 @@ dependencies {
 	// Mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+	// s3 오류
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 
 }
 
