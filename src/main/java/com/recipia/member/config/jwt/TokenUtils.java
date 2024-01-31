@@ -41,9 +41,8 @@ public class TokenUtils {
     private static final String ACCESS_TOKEN_TYPE = "access";
     private static final String REFRESH_TOKEN_TYPE = "refresh";
 
-    // fixme: 나중에 상용배포할땐 30분으로 줄이기
-//    private static final long ACCESS_TOKEN_EXPIRATION_SECONDS = 30 * 60; // 30분
-    private static final long ACCESS_TOKEN_EXPIRATION_SECONDS = 60 * 60 * 24 * 30; // 개발용 1개월
+    private static final long ACCESS_TOKEN_EXPIRATION_SECONDS = 30 * 60; // 30분
+//    private static final long ACCESS_TOKEN_EXPIRATION_SECONDS = 60 * 60 * 24 * 30; // 개발용 1개월
     private static final long REFRESH_TOKEN_EXPIRATION_SECONDS = 60 * 60 * 24 * 30 * 6; // 6개월
 
     /**

@@ -9,6 +9,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
+import software.amazon.awssdk.services.sns.model.PublishResponse;
 
 import java.util.Optional;
 
@@ -49,10 +50,8 @@ public class TokyoSnsService {
                 .build();
 
         try {
-            // fixme: 테스트할때는 일단 제외 (비용 문제)
-//            PublishResponse response = tokyoSnsClient().publish(request);
-//            log.info("Sent message {} to {} with messageId {}", message, phoneNumber, response.messageId());
-            log.info("Sent message {} to {}", message, phoneNumber);
+            PublishResponse response = tokyoSnsClient().publish(request);
+            log.info("Sent message {} to {} with messageId {}", message, phoneNumber, response.messageId());
         } catch (Exception e) {
             log.error("Error sending SMS: {}", e.getMessage());
         }
