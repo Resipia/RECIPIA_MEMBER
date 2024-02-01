@@ -29,6 +29,17 @@ public class MemberManagementController {
     private final ChangePasswordConverter changePasswordConverter;
 
     /**
+     * 전화번호 중복체크 요청
+     */
+    @PostMapping("/checkDupTelNo")
+    public ResponseEntity<ResponseDto<Boolean>> checkDupTelNo(@Valid @RequestBody TelNoAvailableRequestDto dto) {
+        boolean isTelNoAvailable = memberManagementUseCase.isTelNoAvailable(dto.getTelNo());
+        return ResponseEntity.ok(
+                ResponseDto.success(isTelNoAvailable)
+        );
+    }
+
+    /**
      * 이메일 중복체크 요청
      */
     @PostMapping("/checkDupEmail")
