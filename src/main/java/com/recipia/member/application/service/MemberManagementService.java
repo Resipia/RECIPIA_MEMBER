@@ -12,6 +12,7 @@ import com.recipia.member.domain.Member;
 import com.recipia.member.domain.Report;
 import com.recipia.member.domain.TempPassword;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.regex.Pattern;
 /**
  * 회원 관리 서비스 클래스
  */
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -128,9 +130,12 @@ public class MemberManagementService implements MemberManagementUseCase {
                         memberPort.updatePasswordByEmail(email, encryptedPassword);
                         // 임시 비밀번호로 업데이트 완료했으면 계정 로그아웃 처리 (JWT 삭제까지만 진행)
                         jwtPort.deleteRefreshTokenByEmail(email);
-                    } else {
-                        throw new MemberApplicationException(ErrorCode.MAIL_SEND_FAILED);
                     }
+                })
+                .exceptionally(ex -> {
+                    // 로깅 및 에러 처리
+                    log.error("{} 로 메일 전송 과정에서 예외 발생: {}", tempPassword.getTempPassword(), ex.getMessage());
+                    return null;
                 });
 
     }
