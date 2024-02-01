@@ -53,6 +53,20 @@ class MemberManagementAdapterTest extends TotalTestSupport {
 
     }
 
+    @DisplayName("[happy] 탈퇴한 회원의 전화번호가 들어왔을때에는 true를 반환한다.")
+    @Test
+    void checkTelForDeactiveTestSuccess() {
+        //given
+        String telNo = "01056789012";
+
+        //when
+        boolean isTelNoAvailable = sut.isTelNoAvailable(telNo);
+
+        //then
+        assertThat(isTelNoAvailable).isTrue();
+
+    }
+
     @DisplayName("[bad] DB에 이미 존재하는 휴대폰 번호가 들어왔을때 false를 리턴한다.")
     @Test
     void checkTelNoDuplicationTestFail() {
