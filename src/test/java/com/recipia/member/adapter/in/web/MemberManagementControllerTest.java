@@ -39,6 +39,18 @@ class MemberManagementControllerTest extends TotalTestSupport {
     @MockBean
     private SecurityUtils securityUtils;
 
+    @DisplayName("[happy] TelNoAvailableRequestDto의 필수 필드값이 전부 채워진채로 요청이 들어오면 중복체크를 검사한다.")
+    @Test
+    void shouldCheckTelNoWhenRequestDtoIsValid() throws Exception {
+        //given
+        TelNoAvailableRequestDto dto = TelNoAvailableRequestDto.of("01011111111");
+        //when & then
+        mockMvc.perform(post("/member/management/checkDupTelNo")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(dto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
     @DisplayName("[happy] EmailAvailableRequestDto의 필수 필드값이 전부 채워진채로 요청이 들어오면 중복체크를 검사한다.")
     @Test
     void shouldCheckEmailWhenRequestDtoIsValid() throws Exception {
