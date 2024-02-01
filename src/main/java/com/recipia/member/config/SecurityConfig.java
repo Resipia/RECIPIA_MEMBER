@@ -91,6 +91,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/member/signUp"),                      // 회원가입 요청
                                 new AntPathRequestMatcher("/member/auth/phone"),                  // 휴대폰 인증
                                 new AntPathRequestMatcher("/member/auth/check/verifyCode"),       // 인증코드 검증
+                                new AntPathRequestMatcher("/member/management/checkDupTelNo"),    // 전화번호 중복체크
                                 new AntPathRequestMatcher("/member/management/checkDupEmail"),    // 이메일 중복체크
                                 new AntPathRequestMatcher("/member/management/find/email"),        // 이메일 찾기
                                 new AntPathRequestMatcher("/member/management/tempPassword"),     // 임시 비밀번호 재발급
