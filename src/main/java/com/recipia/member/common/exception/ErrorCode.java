@@ -23,7 +23,7 @@ public enum ErrorCode {
     JWT_NOT_FOUND(404, 1104, "JWT를 찾을 수 없습니다."),
 
     // 12. Security 관련 에러
-    MEMBER_INFO_NOT_FOUND_IN_SECURITY(404, 1201, "인증된 사용자의 정보를 찾을 수 없습니다."),
+    MEMBER_INFO_NOT_FOUND_IN_SECURITY(401, 1201, "인증된 사용자의 정보를 찾을 수 없습니다."),
 
     // 2. 회원가입 관련 에러
     EMAIL_ALREADY_EXISTS(400, 2001, "이미 존재하는 이메일입니다."),
