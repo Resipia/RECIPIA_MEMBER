@@ -13,8 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import net.coobird.thumbnailator.Thumbnails;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -76,24 +80,57 @@ public class ImageS3Service {
     /**
      * 이미지를 S3에 업로드하고 저장된 s3 객체(이미지) url을 반환한다.
      * [MultipartFile] image 객체와 확장자, 이미지가 저장될 s3의 경로를 매게변수로 받는다.
+     * 이미지 압축 및 크기 조정 로직을 수정하여 파일 사이즈에 따라 동적으로 조절한다.
      */
     public String uploadImageToS3(MultipartFile image, String extension, String finalPath) {
 
-        ObjectMetadata metadata = new ObjectMetadata();
-        // todo 만약 파일이면 image/ 만으로는 처리 불가 (추후 파일용 메타 데이터도 추가해 주기)
-        metadata.setContentType("image/" + extension.substring(1));
-
-        // 이미지를 s3에 업로드(PutObject) 한다.
         try {
-            amazonS3.putObject(new PutObjectRequest(
-                    bucketName, finalPath, image.getInputStream(), metadata
-            ).withCannedAcl(CannedAccessControlList.PublicRead));
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            // 원본 이미지 사이즈 확인
+            long originalSize = image.getSize();
+
+            // 원본 이미지 스트림
+            InputStream originalInputStream = image.getInputStream();
+
+            // 원본 사이즈가 10MB를 초과하는 경우 사이즈 조정 로직 실행
+            if (originalSize > 10485760) { // 10MB in bytes
+                // 이미지 사이즈 조정
+                Thumbnails.of(originalInputStream)
+                        .size(720, 1280) // 기본 해상도 설정
+                        .outputQuality(0.75) // 품질 조정
+                        .toOutputStream(outputStream);
+
+                // 조정된 이미지 바이트 배열
+                byte[] compressedImageBytes = outputStream.toByteArray();
+                // 조정된 이미지 스트림
+                ByteArrayInputStream inputStream = new ByteArrayInputStream(compressedImageBytes);
+
+                // 메타데이터 설정
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentType("image/" + extension.substring(1));
+                metadata.setContentLength(compressedImageBytes.length); // 압축된 이미지 길이 설정
+
+                // S3에 업로드
+                amazonS3.putObject(new PutObjectRequest(bucketName, finalPath, inputStream, metadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+
+                // 스트림 닫기
+                inputStream.close();
+            } else {
+                // 원본 사이즈가 10MB 이하인 경우, 원본 이미지를 직접 업로드
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentType("image/" + extension.substring(1));
+                metadata.setContentLength(originalSize); // 원본 이미지 길이 설정
+
+                amazonS3.putObject(new PutObjectRequest(bucketName, finalPath, originalInputStream, metadata)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
+            }
+
+            // 저장된 객체의 URL 반환
+            return amazonS3.getUrl(bucketName, finalPath).toString();
         } catch (IOException e) {
             throw new MemberApplicationException(ErrorCode.S3_UPLOAD_ERROR);
         }
-
-        // 저장된 객체의 url 반환
-        return amazonS3.getUrl(bucketName, finalPath).toString();
     }
 
     /**
