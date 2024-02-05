@@ -109,6 +109,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
             switch (item.getSnsTopic()) {
                 case "NicknameChange" -> seoulSnsService.publishSnsMessage(item.getAttribute(), item.getTraceId(), snsConfig.getNicknameChangeArn());
                 case "signUp" -> seoulSnsService.publishSnsMessage(item.getAttribute(), item.getTraceId(), snsConfig.getSignUpArn());
+                case "member-withdraw" -> seoulSnsService.publishSnsMessage(item.getAttribute(), item.getTraceId(), snsConfig.getMemberWithdrawArn());
             }
             return item;
         };
