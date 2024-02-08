@@ -35,6 +35,7 @@ spring:
           nickname-change: arn:aws:sns:${REGION}:${ACCOUNT_ID}:NicknameChange
           signUp: arn:aws:sns:${REGION}:${ACCOUNT_ID}:dev-sns-test
           member-withdraw: arn:aws:sns:${REGION}:${ACCOUNT_ID}:dev-sns-test
+          member-follow: arn:aws:sns:${REGION}:${ACCOUNT_ID}:dev-sns-test
       sqs:
         record-sqs-name: member-event-record-sqs
       s3:

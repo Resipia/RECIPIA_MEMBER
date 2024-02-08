@@ -29,19 +29,19 @@ class MemberEventRecordServiceTest {
     @InjectMocks
     private MemberEventRecordService memberEventRecordService;
 
-    @DisplayName("[happy] memberId, topicName에 해당하는 가장 최근 이벤트 발행 처리(published = true) 업데이트 성공")
+    @DisplayName("[happy] message, topicName에 해당하는 가장 최근 이벤트 발행 처리(published = true) 업데이트 성공")
     @Test
     void testChangePublishedToTrue() {
         // given
-        Long memberId = 1L;
+        String message = "message";
         String topicName = "topicName";
-        when(memberEventRecordPort.changePublishedToTrue(memberId, topicName)).thenReturn(1L);
+        when(memberEventRecordPort.changePublishedToTrue(message, topicName)).thenReturn(1L);
 
         // when
-        memberEventRecordService.changePublishedToTrue(memberId, topicName);
+        memberEventRecordService.changePublishedToTrue(message, topicName);
 
         // then
-        verify(memberEventRecordPort).changePublishedToTrue(memberId, topicName);
+        verify(memberEventRecordPort).changePublishedToTrue(message, topicName);
     }
 
 

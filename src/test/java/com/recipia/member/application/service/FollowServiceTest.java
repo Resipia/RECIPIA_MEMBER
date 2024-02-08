@@ -1,6 +1,8 @@
 package com.recipia.member.application.service;
 
 import com.recipia.member.application.port.out.port.FollowPort;
+import com.recipia.member.common.event.MemberFollowSpringEvent;
+import com.recipia.member.common.event.NicknameChangeSpringEvent;
 import com.recipia.member.common.exception.MemberApplicationException;
 import com.recipia.member.domain.Follow;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -20,7 +23,8 @@ class FollowServiceTest {
 
     @InjectMocks
     private FollowService sut;
-
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
     @Mock
     private FollowPort followPort;
 
@@ -39,6 +43,8 @@ class FollowServiceTest {
         assertNotNull(savedFollowId);
         assertEquals(1L, savedFollowId);
         verify(followPort, times(1)).follow(follow);
+        verify(eventPublisher, times(1)).publishEvent(any(MemberFollowSpringEvent.class));
+
     }
 
     @DisplayName("[bad] 이미 팔로우 관계인 상태에서 팔로우 해제 성공")

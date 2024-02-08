@@ -14,16 +14,16 @@ class MemberEventRecordAdapterTest extends TotalTestSupport {
     @Autowired
     private MemberEventRecordAdapter sut;
 
-    @DisplayName("[happy] memberId, topciName을 받아와서 published = false인 이벤트중 가장 최신 이벤트의 published = true로 바꿔준다.")
+    @DisplayName("[happy] message, topciName을 받아와서 published = false인 이벤트중 가장 최신 이벤트의 published = true로 바꿔준다.")
     @Test
     public void changePublishedToTrue () {
 
         //given
-        Long memberId = 1L;
+        String message = "attribute1";
         String topicName = "topic1";
 
         //when
-        Long changedCount = sut.changePublishedToTrue(memberId, topicName);
+        Long changedCount = sut.changePublishedToTrue(message, topicName);
 
         //then
         Assertions.assertThat(changedCount).isEqualTo(1L);
