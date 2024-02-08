@@ -37,10 +37,10 @@ public class BatchConfig extends DefaultBatchConfiguration {
 
 
     // 배치 작업에서 사용할 chunkSize 값 설정. 기본값은 1000
-    @Value("${chunkSize:2}")
-//    @Value("${chunkSize:1000}")
+//    @Value("${chunkSize:2}")
+    @Value("${chunkSize:100}")
     private int chunkSize;
-    @Value("${pageSize:4}")
+    @Value("${pageSize:10}")
     private int pageSize;
 
     /**
@@ -80,11 +80,11 @@ public class BatchConfig extends DefaultBatchConfiguration {
 
         String jpql = """
                   SELECT mer
-                  FROM MemberEventRecord mer
+                  FROM MemberEventRecordEntity mer
                   WHERE mer.published = false
                   AND mer.id IN (
                       SELECT MAX(innerMer.id)
-                      FROM MemberEventRecord innerMer
+                      FROM MemberEventRecordEntity innerMer
                       WHERE innerMer.published = false
                       GROUP BY innerMer.member.id, innerMer.snsTopic
                   )
