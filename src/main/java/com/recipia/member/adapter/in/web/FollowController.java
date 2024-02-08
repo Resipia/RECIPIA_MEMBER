@@ -26,7 +26,7 @@ public class FollowController {
     /**
      * 팔로우/언팔로우 요청
      */
-    @PostMapping("/totalFollow")
+    @PostMapping("/totalFollow")        // fixme: totalFollow 말고 request로 수정!! 테스트 코드도 수정!!
     public ResponseEntity<ResponseDto<Long>> requestFollowUnfollow (@Valid @RequestBody FollowRequestDto dto) {
         Long successId = followUseCase.followRequest(followConverter.requestDtoToDomain(dto));
         return ResponseEntity.ok(

@@ -18,7 +18,7 @@ public class MemberEventRecordQueryRepository {
     /**
      * [UPDATE] 가장 최근에 발행 성공한 이벤트를 published = true로 업데이트한다.
      */
-    public Long changePublishedToTrue(Long memberId, String snsTopic) {
+    public Long changePublishedToTrue(String attribute, String snsTopic) {
         return jpaQueryFactory
                 .update(memberEventRecordEntity)
                 .set(memberEventRecordEntity.published, true)
@@ -30,7 +30,7 @@ public class MemberEventRecordQueryRepository {
                                         .select(memberEventRecordEntity.id.max())
                                         .from(memberEventRecordEntity)
                                         .where(
-                                                memberEventRecordEntity.member.id.eq(memberId),
+                                                memberEventRecordEntity.attribute.eq(attribute),
                                                 memberEventRecordEntity.snsTopic.eq(snsTopic),
                                                 memberEventRecordEntity.published.isFalse()
                                         )

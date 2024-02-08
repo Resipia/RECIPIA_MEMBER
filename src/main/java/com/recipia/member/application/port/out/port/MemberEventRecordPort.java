@@ -4,7 +4,7 @@ import com.recipia.member.domain.MemberEventRecord;
 
 public interface MemberEventRecordPort {
 
-    Long changePublishedToTrue(Long memberId, String topicName);
+    Long changePublishedToTrue(String attribute, String topicName);
     Long changeBeforeEventAllPublishedToTrue(Long memberId, String topicName);
     void save(MemberEventRecord memberEventRecordNew);
 }

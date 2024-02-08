@@ -19,8 +19,8 @@ public class MemberEventRecordAdapter implements MemberEventRecordPort {
      * [UPDATE] 가장 최근에 발행 성공한 이벤트를 published = true로 업데이트한다.
      */
     @Override
-    public Long changePublishedToTrue(Long memberId, String topicName) {
-        return memberEventRecordQueryRepository.changePublishedToTrue(memberId, topicName);
+    public Long changePublishedToTrue(String attribute, String topicName) {
+        return memberEventRecordQueryRepository.changePublishedToTrue(attribute, topicName);
     }
 
     /**

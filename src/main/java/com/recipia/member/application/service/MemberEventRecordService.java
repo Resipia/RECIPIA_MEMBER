@@ -1,12 +1,8 @@
 package com.recipia.member.application.service;
 
 import brave.Tracer;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.recipia.member.application.port.in.MemberEventRecordUseCase;
 import com.recipia.member.application.port.out.port.MemberEventRecordPort;
-import com.recipia.member.common.utils.CustomJsonBuilder;
-import com.recipia.member.common.utils.MemberStringUtils;
-import com.recipia.member.config.aws.SnsConfig;
 import com.recipia.member.domain.MemberEventRecord;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberEventRecordService implements MemberEventRecordUseCase {
 
     private final MemberEventRecordPort memberEventRecordPort;
-    private final SnsConfig snsConfig;
-    private final CustomJsonBuilder customJsonBuilder;
     private final Tracer tracer;
 
     /**
@@ -31,8 +25,8 @@ public class MemberEventRecordService implements MemberEventRecordUseCase {
      */
     @Transactional
     @Override
-    public void changePublishedToTrue(Long memberId, String topicName) {
-        Long changedCount = memberEventRecordPort.changePublishedToTrue(memberId, topicName);
+    public void changePublishedToTrue(String attribute, String topicName) {
+        Long changedCount = memberEventRecordPort.changePublishedToTrue(attribute, topicName);
     }
 
     /**
@@ -41,23 +35,18 @@ public class MemberEventRecordService implements MemberEventRecordUseCase {
      */
     @Transactional
     @Override
-    public void saveNewEventRecord(MemberEventRecord memberEventRecord) throws JsonProcessingException {
+    public void saveNewEventRecord(MemberEventRecord memberEventRecord) {
 
         Long memberId = memberEventRecord.getMemberId();
 
         // 현재 TraceID 추출
         String traceId = tracer.currentSpan().context().traceIdString();
 
-        // attribute에 memberId 주입
-        String attribute = customJsonBuilder
-                .add("memberId", memberId)
-                .build();
-
         // 이벤트 저장소에 이벤트 저장하기 전에 기존에 누락되었던(published = false) 동일한 이벤트는 전부 발행 처리(published = true)로 수정
         memberEventRecordPort.changeBeforeEventAllPublishedToTrue(memberId, memberEventRecord.getSnsTopic());
 
         // 이전에 발행된 이벤트가 전부 발행처리 되면 새로운 이벤트 저장
-        MemberEventRecord memberEventRecordNew = MemberEventRecord.of(memberId, memberEventRecord.getSnsTopic(), memberEventRecord.getEventType(), attribute, traceId, false, null);
+        MemberEventRecord memberEventRecordNew = MemberEventRecord.of(memberId, memberEventRecord.getSnsTopic(), memberEventRecord.getEventType(), memberEventRecord.getAttribute(), traceId, false, null);
         memberEventRecordPort.save(memberEventRecordNew);
     }
 
