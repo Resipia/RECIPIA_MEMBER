@@ -25,7 +25,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -179,9 +178,10 @@ public class SecurityConfig {
      * 과정: CustomAuthenticationFilter → AuthenticationManager(interface) → CustomAuthenticationProvider(implements)
      */
     @Bean
-    public CustomAuthenticationProvider customAuthenticationProvider(UserDetailsService userDetailsService) {
+    public CustomAuthenticationProvider customAuthenticationProvider(UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         return new CustomAuthenticationProvider(
-                userDetailsService
+                userDetailsService,
+                bCryptPasswordEncoder
         );
     }
 
@@ -226,14 +226,5 @@ public class SecurityConfig {
                         .contains(new SimpleGrantedAuthority("ADMIN"))
         );
     }
-
-    /**
-     * 받아온 비밀번호를 BCrypt로 암호화하여 저장하려면 BCryptPasswordEncoder를 사용하면 된다.
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 
 }

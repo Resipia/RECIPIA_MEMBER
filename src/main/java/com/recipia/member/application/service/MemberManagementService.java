@@ -38,7 +38,7 @@ public class MemberManagementService implements MemberManagementUseCase {
     private final TempPasswordUtil tempPasswordUtil;
     private final MemberManagementPort memberManagementPort;
     private final ImageS3Service imageS3Service;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
