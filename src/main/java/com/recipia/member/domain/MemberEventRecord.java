@@ -38,12 +38,9 @@ public class MemberEventRecord {
 
     /**
      * Listener에서 Service로 넘길때 사용할 도메인 팩토리 메서드
-     * @param memberId
-     * @param eventType
-     * @return
      */
-    public static MemberEventRecord of(Long memberId, String eventType, String topicName) {
-        return new MemberEventRecord(null, memberId, topicName, eventType, null, null, false, null);
+    public static MemberEventRecord of(Long memberId, String eventType, String topicName, String attribute) {
+        return new MemberEventRecord(null, memberId, topicName, eventType, attribute, null, false, null);
     }
 
     public static MemberEventRecord of(Long memberId, String snsTopic, String eventType, String attribute, String traceId, boolean published, LocalDateTime publishedAt) {

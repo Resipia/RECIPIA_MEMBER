@@ -30,13 +30,11 @@ public class SqsEventRecordListener {
     public void receiveSnsPublishedMessage(String messageJson) throws JsonProcessingException {
 
         SnsNotificationDto snsNotificationDto = objectMapper.readValue(messageJson, SnsNotificationDto.class);
-        MessageMemberIdDto messageMemberIdDto = objectMapper.readValue(snsNotificationDto.Message(), MessageMemberIdDto.class);
 
         String topicName = MemberStringUtils.extractLastPart(snsNotificationDto.TopicArn());
-        Long memberId = messageMemberIdDto.memberId();
 
-        // SNS 받으면 해당 이벤트는 이벤트 저장소에서 published=true로 바꿔주기
-        memberEventRecordUseCase.changePublishedToTrue(memberId, topicName);
+        // SNS 받으면 동일한 메세지와 토픽으로 발행된 이벤트는 이벤트 저장소에서 published=true로 바꿔주기
+        memberEventRecordUseCase.changePublishedToTrue(snsNotificationDto.Message(), topicName);
 
     }
 }
