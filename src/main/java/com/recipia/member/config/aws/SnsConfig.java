@@ -32,6 +32,9 @@ public class SnsConfig {
     @Value("${spring.cloud.aws.sns.topics.member-withdraw}")
     private String memberWithdrawArn;
 
+    @Value("${spring.cloud.aws.sns.topics.member-follow}")
+    private String memberFollowArn;
+
     @Bean
     public SnsClient getSnsClient () {
         return SnsClient.builder()
