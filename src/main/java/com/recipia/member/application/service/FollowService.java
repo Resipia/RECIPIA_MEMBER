@@ -2,8 +2,10 @@ package com.recipia.member.application.service;
 
 import com.recipia.member.application.port.in.FollowUseCase;
 import com.recipia.member.application.port.out.port.FollowPort;
+import com.recipia.member.common.event.MemberFollowSpringEvent;
 import com.recipia.member.domain.Follow;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class FollowService implements FollowUseCase {
 
     private final FollowPort followPort;
+    private final ApplicationEventPublisher eventPublisher;
+
 
     /**
      * [CREATE/DELETE]
@@ -34,7 +38,18 @@ public class FollowService implements FollowUseCase {
             return 0L;
         } else {
             // 팔로우 관계가 없다면 팔로우 요청
-            return followPort.follow(follow);
+            Long followId = followPort.follow(follow);
+
+            // 팔로우에 성공했으면 알림 서버에 알리기 위한 팔로우 이벤트 발행
+            eventPublisher.publishEvent(MemberFollowSpringEvent.of(
+                    follow.getFollowerMemberId(),
+                    follow.getFollowingMemberId())
+            );
+
+            return followId;
         }
+
+
+
     }
 }
