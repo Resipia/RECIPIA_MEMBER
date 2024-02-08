@@ -42,7 +42,7 @@ class MemberManagementServiceTest {
     @Mock
     private TempPasswordUtil tempPasswordUtil;
     @Mock
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
     @Mock
     private MailService mailService;
     @Mock

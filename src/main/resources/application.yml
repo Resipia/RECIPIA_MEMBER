@@ -31,11 +31,16 @@ spring:
         default_batch_fetch_size: 10
         highlight_sql: true
 
-  # kakao OAuth2 정보 추가
-#  security:
-#    oauth2:
-#      client:
-#        registration:
+  # OAuth2 정보 추가
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            scope:
+              - email
+              - profile
 #          kakao:
 #            client-id: ${KAKAO_OAUTH_CLIENT_ID}
 #            client-secret: ${KAKAO_OAUTH_CLIENT_SECRET}
