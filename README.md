@@ -3,6 +3,9 @@
 - 배포 URL (원스토어): https://m.onestore.co.kr/mobilepoc/apps/appsDetail.omp?prodId=0000774118
 - 소개 페이지 (노션): https://upbeat-willow-06b.notion.site/7ece9e5f602a43f583d7f4cf101e7d69?pvs=4
 
+
+![프레젠테이션2](https://github.com/Resipia/RECIPIA_MEMBER/assets/79524077/384d51fa-da3b-4727-9d4e-ee2d9e6988be)
+
 ## 🔸 프로젝트 소개
 - 레시피아는 레시피를 이미지와 함께 작성하고 공유할 수 있는 SNS입니다.
 - 검색을 통해 찾고싶은 레시피 이름을 검색하여 구경할 수 있습니다.
