@@ -29,51 +29,94 @@
 - 멤버 서버는 그중 회원 관련 프로세스를 담당하고 있습니다.
 
 ## 🔸 개발 기간
-- 2023.05 ~ 현재 진행 중
+- 2023.05 ~ 2023.02 (베타버전 출시)
+- 계속해서 추가개발을 진행중입니다.
 
 ## 🔸 개발 환경
 - Java 17
-- Spring Boot 3.1.2
+- Spring Boot 3.1.2, Spring Security6
 - IDE: Intellij, Datagrip
-- Database: RDS(PostgreSQL)
+- Database: RDS(PostgreSQL), Redis
 - ORM: JPA
+- 협업 툴: Jira, Confluence, Notion, Slack
 
 ## 🔸 인프라
-- 프로젝트는 MSA로 구성되어있으며 ECS 클러스터에 MEMBER 서버를 구축하였습니다.
-- 외부 서비스는 RDS(PostgreSQL), S3, SNS, SQS, Redis를 사용합니다.
+### MSA 인프라 구성
+- 프로젝트는 MSA로 구성되어있으며 총 세개(멤버, 레시피, 지프킨)의 서비스로 이루어져있습니다.
+- 그 중 멤버서버 ECS 클러스터에 MEMBER 서버를 구축하였습니다.
+- 외부 데이터베이스는 RDS(PostgreSQL), Redis, S3를 사용합니다.
+- 이벤트 드리븐, 메시지 드리븐으로는 SNS, SQS를 사용합니다.
 
 ![스크린샷 2024-02-10 오후 3 49 57](https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/d9f049f7-dc00-480a-8bec-c7d8284e48ef)
 
-
+### ECS 구성
 - ECS 인프라는 다음과 같이 ECR에 저장된 스프링부트 이미지를 받아서 컨테이너로 동작시킵니다.
+- 하나의 ECS에는 하나의 서비스, 하나의 태스크 정의로 실행됩니다.
 - SpringBoot에는 Zipkin서버로 로그를 전송하도록 설계하였습니다.
 
 ![image (1)](https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/a4f16700-3bde-4f42-bab1-ea0bd86f6048)
 
-
+### CI/CD 설계
 - CI/CD는 AWS의 CodePipeline으로 구축하였습니다.
-- GitHub와 CodeBuild를 연결했고 CodeDeploy에서는 ECR에 접근해서 빌드된 이미지를 사용해서 배포하도록 했습니다.
-- 이렇게 설계하여 만약 main 브랜치에 merge가 발생하면 Github 훅이 동작하여 CodePipeline이 동작합니다.
+- main 브랜치에 merge 발생 시 AWS CodePipeline이 자동으로 활성화됩니다. 이 과정은 GitHub 웹훅을 통해 이루어지며, GitHub의 변경 사항을 감지하여 트리거합니다.
+- CodeBuild를 사용해 Docker 이미지를 생성한 후 ECR에 저장합니다. 이 단계에서는 소스 코드를 Docker 이미지로 빌드하고, 생성된 이미지를 ECR에 안전하게 업로드합니다.
+- CodePipeline이 ECR에 저장된 Docker 이미지를 감지하고, ECS에 롤링 업데이트 방식을 사용하여 무중단 배포를 진행합니다. 롤링 업데이트를 통해 새 버전의 애플리케이션을 점진적으로 배포하면서 서비스 중단 없이 업데이트를 완료할 수 있습니다.
 
 ![image](https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/cb4b7c3b-0807-44df-9be3-0652725bc8fd)
 
+## 🔸 ERD
+#### AQuery를 사용하여 멤버 서버의 ERD를 설계하였습니다.
+
+![image](https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/0bd1a36c-862f-4400-9a82-3f9f41f7c21f)
 
 
-## 🔸 아키텍처, 기술 스택
-- 이벤트 드리븐, 메세지 드리븐 아키텍처 (AWS SNS,SQS)
-<img width="1009" alt="spring-event" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/c51540ec-ab46-4be5-b493-3ef0823af92c">
 
-- Feign Client (zero-payload)
-<img width="364" alt="zero-payload" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/cbff50e7-9136-4b70-9b1e-676ebb5b8c4f">
+## 🔸 아키텍처
 
-- 미발행된 이벤트 처리 (transactional outbox pattern)
-<img width="1034" alt="batch-event" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/b17da5e9-4953-4764-b8af-36d7c8e9945d">
+### MSA 환경에서 DB 정합성 보장 과정
+- 유저가 닉네임을 변경하면 멤버 서버에서는 닉네임 변경사항을 멤버 DB에 반영하고 Spring Event를 발행합니다. (이벤트 리스너는 2개를 선언)
+- 스프링 이벤트 리스너중 1개가 동작하여 멤버 DB의 Outbox 테이블에 이벤트 발행 여부를 기록하고 DB 커밋을 합니다.(트랜잭션 커밋완료)
+- 트랜잭션 커밋이 완료되면 AFTER_COMMIT을 적어준 또다른 스프링 이벤트 리스너가 동작하여 닉네임 변경 토픽으로 SNS 메시지를 발행합니다.
+- SNS 메시지가 발행되면 2개의 SQS리스너가 동시에 동작하게 됩니다.
+  - 레시피 서버에서 닉네임 변경 토픽을 리스닝하고있던 SQS가 실행됩니다.
+  - 멤버 서버에서 닉네임 변경 토픽을 리스닝하고 있던 SQS가 실행됩니다. 이때 Outbox 테이블에 이벤트 발행 여부(published 컬럼)를 true로 업데이트합니다.
+- 레시피 서버의 SQS 리스너가 동작할때 FeignClient를 사용하여 멤버 서버에 가장 최신의 유저 닉네임 정보를 요청합니다.
+- 멤버 서버로부터 받아온 가장 최신의 유저 닉네임 정보를 레시피DB에 반영합니다.
 
-- 로그인 (JWT)
-<img width="883" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/e75cf16f-0b9f-4407-81d4-9ab71e4a9374">
+<img width="1009" alt="spring-event" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/1d620490-b118-472c-b63f-3e8417a299a9">
 
-- Access Token 재발행
-<img width="883" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/078e73d5-71a3-4ef4-9a43-e4e34c2bfb04">
+### ZERO-PAYLOAD 정책
+- 데이터 전송시 메시지 내부에는 memberId만을 포함하도록 합니다.
+- 분산추적을 위한 traceId는 SNS의 messageAttributes를 사용하여 전송합니다.
+
+<img width="364" alt="zero-payload" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/0255f90c-a803-430e-bb06-b96d777dacb7">
+
+
+### 미발행된 SNS 메시지 재발행
+- Spring Batch를 사용하여 5분마다 미발행된 메시지를 재발행 합니다.
+- Outbox 테이블에 저장된 발행여부(published)가 false것을 조회하여 배치가 동작합니다.
+
+<img width="1034" alt="batch-event" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/7f452133-23c7-4f99-96b0-a3ceda4faf06">
+
+
+## 🔸 주요 기능
+#### 김이준, 최진안 (페어)
+1. 로그인 (Spring Security, JWT)
+2. Access Token 재발행
+3. 회원가입 (휴대폰 번호/이메일/닉네임 중복체크, S3 이미지 저장, SNS)
+
+#### 김이준
+1. 로그아웃
+2. 이메일 찾기
+3. 비밀번호 재설정 (Java Mail Sender로 메일 전송)
+4. 회원 탈퇴 (SNS)
+5. 마이페이지 조회/수정 (SNS)
+6. 팔로우 요청(SNS)/팔로우 취소
+7. 팔로우/팔로잉 목록 조회
+8. 회원 신고
+9. 비밀번호 수정
+10. 문의사항 등록/조회
+
 
 ## 🔸 개발 전략
 #### 1. 테스트 코드
@@ -91,25 +134,13 @@
 
 
 
-## 🔸 주요 기능
-#### 김이준, 최진안 (페어)
-1. 로그인 (Spring Security, JWT)
-2. 회원가입 (휴대폰 번호/이메일/닉네임 중복체크, S3 이미지 저장, SNS)
-
-#### 김이준
-1. 로그아웃
-2. 이메일 찾기
-3. 비밀번호 재설정 (Java Mail Sender로 메일 전송)
-4. Access Token 재발행
-5. 회원 탈퇴 (SNS)
-6. 마이페이지 조회/수정 (SNS)
-7. 팔로우 요청/팔로우 취소
-8. 팔로우/팔로잉 목록 조회
-9. 회원 신고
-10. 비밀번호 수정
-11. 문의사항 등록/조회
-
 
 ## 🔸 기능 설명
 
+#### 1️⃣ 로그인
 
+<img width="883" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/e75cf16f-0b9f-4407-81d4-9ab71e4a9374">
+
+#### 2️⃣ Access Token 재발행
+
+<img width="883" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/078e73d5-71a3-4ef4-9a43-e4e34c2bfb04">
