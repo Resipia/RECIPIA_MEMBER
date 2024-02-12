@@ -7,20 +7,6 @@
 ![레시피아_인트로](https://github.com/Resipia/RECIPIA_MEMBER/assets/79524077/23b05f73-9ae3-4751-be58-44c4aa38b2bb)
 
 
-## 목차
-- [프로젝트 소개](#-프로젝트-소개)
-- [개발 기간](#-개발-기간)
-- [개발 환경](#-개발-환경)
-- [인프라](#-인프라)
-- [아키텍처, 기술 스택](#-아키텍처-기술-스택)
-- [개발 전략](#-개발-전략)
-  - [테스트 코드](#1-테스트-코드)
-  - [에러 중앙 처리](#2-에러-중앙-처리)
-- [주요 기능](#-주요-기능)
-  - [김이준, 최진안 (페어)](#김이준-최진안-페어)
-  - [김이준](#김이준)
-- [기능 설명](#-기능-설명)
-
 
 ## 🔸 프로젝트 소개
 - 레시피아는 레시피를 이미지와 함께 작성하고 공유할 수 있는 SNS입니다.
@@ -140,17 +126,27 @@
 
 ## 🔸 기능 설명
 
-#### 1️⃣ 로그인
+#### 1️. 로그인
 
 <img width="1024" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/a9539525-2a94-4a19-af84-96e9b929ca1e">
 
-#### 2️⃣ Access Token, Refresh Token 발행
+#### 2. Access Token, Refresh Token 발행
 
 <img width="1024" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/e75cf16f-0b9f-4407-81d4-9ab71e4a9374">
 
-#### 2️⃣ Access Token 재발행
+#### 3. Access Token 재발행
 
 <img width="1024" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/078e73d5-71a3-4ef4-9a43-e4e34c2bfb04">
+
+#### 4. 회원가입
+
+![image](https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/0318b2ee-c2cd-4624-bbf1-60a369426644)
+
+
+#### 5. 임시 비밀번호 발급
+
+![image](https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/72295aa9-a6d6-483b-8253-56bc17cf0022)
+
 
 
 ## 🔸 테스트 코드
