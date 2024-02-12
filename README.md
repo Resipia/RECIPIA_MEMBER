@@ -72,6 +72,10 @@
 
 
 ## 🔸 아키텍처
+### 헥사고날 아키텍처 도입
+
+![image (5)](https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/ed15fcb5-cb71-4023-850a-0cd4c372c4af)
+
 
 ### MSA 환경에서 DB 정합성 보장 과정
 - 유저가 닉네임을 변경하면 멤버 서버에서는 닉네임 변경사항을 멤버 DB에 반영하고 Spring Event를 발행합니다. (이벤트 리스너는 2개를 선언)
@@ -83,20 +87,20 @@
 - 레시피 서버의 SQS 리스너가 동작할때 FeignClient를 사용하여 멤버 서버에 가장 최신의 유저 닉네임 정보를 요청합니다.
 - 멤버 서버로부터 받아온 가장 최신의 유저 닉네임 정보를 레시피DB에 반영합니다.
 
-<img width="1009" alt="spring-event" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/1d620490-b118-472c-b63f-3e8417a299a9">
+<img width="1024" alt="spring-event" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/1d620490-b118-472c-b63f-3e8417a299a9">
 
 ### ZERO-PAYLOAD 정책
 - 데이터 전송시 메시지 내부에는 memberId만을 포함하도록 합니다.
 - 분산추적을 위한 traceId는 SNS의 messageAttributes를 사용하여 전송합니다.
 
-<img width="364" alt="zero-payload" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/0255f90c-a803-430e-bb06-b96d777dacb7">
+<img width="1024" alt="zero-payload" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/0255f90c-a803-430e-bb06-b96d777dacb7">
 
 
 ### 미발행된 SNS 메시지 재발행
 - Spring Batch를 사용하여 5분마다 미발행된 메시지를 재발행 합니다.
 - Outbox 테이블에 저장된 발행여부(published)가 false것을 조회하여 배치가 동작합니다.
 
-<img width="1034" alt="batch-event" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/7f452133-23c7-4f99-96b0-a3ceda4faf06">
+<img width="1024" alt="batch-event" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/7f452133-23c7-4f99-96b0-a3ceda4faf06">
 
 
 ## 🔸 주요 기능
@@ -109,8 +113,8 @@
 1. 로그아웃
 2. 이메일 찾기
 3. 비밀번호 재설정 (Java Mail Sender로 메일 전송)
-4. 회원 탈퇴 (SNS)
-5. 마이페이지 조회/수정 (SNS)
+4. 회원 탈퇴(SNS)
+5. 마이페이지 조회/수정(SNS)
 6. 팔로우 요청(SNS)/팔로우 취소
 7. 팔로우/팔로잉 목록 조회
 8. 회원 신고
@@ -119,18 +123,17 @@
 
 
 ## 🔸 개발 전략
-#### 1. 테스트 코드
-171개의 테스트 케이스 성공
+#### 1. 스프링 시큐리티와 JWT를 통한 인증 및 인가
 
-<img width="1297" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/5565f559-f9b8-44b7-9a74-113f64655261">
+<img width="1024" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/21a7d578-cf14-4334-98d5-a163115b2a35">
+
 
 #### 2. 에러 중앙 처리
-이 프로젝트의 에러 처리 전략은 @RestControllerAdvice를 활용하여 모든 예외를 중앙에서 처리합니다. 
+- 이 프로젝트의 에러 처리 전략은 @RestControllerAdvice를 활용하여 모든 예외를 중앙에서 처리합니다. 
+- 이를 통해, 커스텀으로 정의된 ErrorCode 클래스를 사용하여 에러 코드 및 메시지 관리를 효율적으로 수행합니다.
 
+![image (6)](https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/0396b5cf-9f07-4efc-80e0-4934cd0b912a)
 
-이를 통해, 커스텀으로 정의된 ErrorCode 클래스를 사용하여 에러 코드 및 메시지 관리를 효율적으로 수행합니다.
-
-<img width="641" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/08987059-a918-459b-81bb-c4713232df3a">
 
 
 
@@ -139,8 +142,20 @@
 
 #### 1️⃣ 로그인
 
-<img width="883" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/e75cf16f-0b9f-4407-81d4-9ab71e4a9374">
+<img width="1024" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/a9539525-2a94-4a19-af84-96e9b929ca1e">
+
+#### 2️⃣ Access Token, Refresh Token 발행
+
+<img width="1024" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/e75cf16f-0b9f-4407-81d4-9ab71e4a9374">
 
 #### 2️⃣ Access Token 재발행
 
-<img width="883" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/078e73d5-71a3-4ef4-9a43-e4e34c2bfb04">
+<img width="1024" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/078e73d5-71a3-4ef4-9a43-e4e34c2bfb04">
+
+
+## 🔸 테스트 코드
+- 단위/통합 테스트 진행 (171개)
+- Junit5, mockito, S3Mock, BddMockito 사용
+- 외부 DB (Redis)를 사용한 테스트도 진행했습니다.
+
+<img width="1024" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/5565f559-f9b8-44b7-9a74-113f64655261">
