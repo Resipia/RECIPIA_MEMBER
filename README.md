@@ -173,3 +173,21 @@
 - 외부 DB (Redis)를 사용한 테스트도 진행했습니다.
 
 <img width="1024" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/5565f559-f9b8-44b7-9a74-113f64655261">
+
+## 🔸 성능 테스트
+- 상용 서버 성능 테스트 결과
+
+<img width="1220" alt="image (3)" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/1c7dce2f-af58-460e-b4aa-8c26eca10ff2">
+
+
+- 다양한 환경에서의 성능 테스트 결과 분석
+
+<img width="1024" alt="image" src="https://github.com/Resipia/RECIPIA_MEMBER/assets/74906042/6de7490e-31a8-4c89-8d76-31d260af48f1">
+
+- **하드웨어 성능의 영향**: 로컬 M2 Max 64GB 환경에서의 성능이 M1 16GB 환경보다 월등히 높다. 이는 M2 Max의 더 높은 CPU 성능과 더 많은 메모리 용량이 성능 향상에 기여했음을 시사한다. TPS(Transactions Per Second) 평균과 최고치 모두에서 M2 Max 환경이 M1 환경을 크게 앞서며, 평균 테스트 시간도 상당히 단축된다.
+
+- **상용 환경에서의 성능 제약**: EC2 t4g.small 환경에서의 성능은 로컬 환경과 비교하여 현저히 낮다. TPS 평균과 최고치가 매우 낮고, 평균 테스트 시간이 크게 증가한다. 이는 EC2 t4g.small 인스턴스의 리소스 제약과 네트워크 지연 시간 등 외부 요인 때문일 가능성이 높다.
+
+- **성공한 테스트 비율**: 모든 환경에서 에러 없이 성공한 테스트의 비율이 100%로, 애플리케이션의 안정성은 환경에 관계없이 일관되게 유지되고 있다는 것을 나타낸다.
+
+- **성능 최적화의 중요성**: 특히 상용 환경에서 애플리케이션을 배포할 때, 하드웨어 성능, 네트워크 설정, JVM 최적화 등 다양한 요소들을 고려하여 성능을 최적화하는 것이 중요하다.
