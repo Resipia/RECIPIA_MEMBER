@@ -52,7 +52,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         Pair<String, LocalDateTime> refreshTokenPair = TokenUtils.generateRefreshToken(tokenMemberInfoDto);
 
         // Refresh Token DB에 저장
-        // 기존에 로그인 되어있는 회원인지 검장
+        // 기존에 로그인 되어있는 회원인지 검증
         boolean isLoggedIn = jwtUseCase.isLoggedIn(tokenMemberInfoDto.id());
         // 로그인된 회원이라면 로그아웃 처리
         if (isLoggedIn) {

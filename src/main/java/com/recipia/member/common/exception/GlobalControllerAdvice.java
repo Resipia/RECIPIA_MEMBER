@@ -1,8 +1,10 @@
 package com.recipia.member.common.exception;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,8 +19,11 @@ import java.util.stream.Collectors;
  * RestController를 사용중이니 Advice도 @RestControllerAdvice를 사용한다.
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestControllerAdvice
 public class GlobalControllerAdvice {
+
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     /**
      * MemberApplicationException 처리
@@ -26,6 +31,9 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(MemberApplicationException.class)
     public ResponseEntity<?> handleMemberApplicationException(MemberApplicationException e) {
         log.error("MemberApplicationException occurred", e);
+        if (e.getErrorCode().getStatus() == 500) {
+            kafkaTemplate.send("error-messages", "(MemberApplicationException) Internal Server Error Occurred: " + e);
+        }
         return buildErrorResponse(e.getErrorCode(), null);
     }
 
@@ -35,6 +43,9 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<?> handleNullPointerException(NullPointerException e) {
         log.error("NullPointerException occurred", e);
+
+        kafkaTemplate.send("error-messages", "(NullPointerException) Internal Server Error Occurred: " + e);
+
         return buildErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR, "Null reference accessed");
     }
 
@@ -44,6 +55,9 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
         log.error("IllegalArgumentException occurred", e);
+
+        kafkaTemplate.send("error-messages", "(IllegalArgumentException) Bad Request Error Occurred: " + e);
+
         return buildErrorResponse(ErrorCode.BAD_REQUEST, "Invalid argument provided");
     }
 
@@ -68,6 +82,9 @@ public class GlobalControllerAdvice {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
         log.error("RuntimeException occurred", e);
+
+        kafkaTemplate.send("error-messages", "(RuntimeException) Internal Server Error Occurred: " + e);
+
         return buildErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 
