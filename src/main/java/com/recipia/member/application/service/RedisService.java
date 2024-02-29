@@ -28,15 +28,24 @@ public class RedisService {
         stringRedisTemplate.opsForValue().set(key, data);
     }
 
+    /**
+     * key, value를 duration까지 지정헤서 저장하는 메서드
+     */
     public void setValues(String key, String data, Duration duration) {
         stringRedisTemplate.opsForValue().set(key, data, duration);
     }
 
+    /**
+     * key값으로 value 가져오기
+     */
     @Transactional(readOnly = true)
     public String getValues(String key) {
         return stringRedisTemplate.opsForValue().get(key);
     }
 
+    /**
+     * key값으로 value 삭제하기
+     */
     public void deleteValues(String key) {
         stringRedisTemplate.delete(key);
     }

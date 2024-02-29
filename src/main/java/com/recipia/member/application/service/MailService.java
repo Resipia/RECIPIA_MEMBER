@@ -19,6 +19,9 @@ public class MailService {
 
     private final JavaMailSender emailSender;
 
+    /**
+     * 메일 전송을 비동기로 처리하기 위한 메서드
+     */
     @Async
     public CompletableFuture<Boolean> sendTemporaryPassword(String to, String temporaryPassword) {
         try {

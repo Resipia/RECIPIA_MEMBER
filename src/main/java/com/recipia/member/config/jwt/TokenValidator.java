@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+/**
+ * 유효한 access token인지 검증하는 클래스
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component

@@ -9,6 +9,9 @@ import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
+/**
+ * AWS SQS 설정 클래스
+ */
 @Getter
 @Configuration
 public class SqsConfig {

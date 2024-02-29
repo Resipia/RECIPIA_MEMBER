@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Json 문자열을 동적으로 생성해주는 유틸리티 클래스
+ *
+ */
 @Component
 public class CustomJsonBuilder {
 
