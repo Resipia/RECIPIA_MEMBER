@@ -3,7 +3,6 @@ package com.recipia.member.adapter.in.listener.aws;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.recipia.member.adapter.in.listener.aws.dto.MessageMemberIdDto;
 import com.recipia.member.adapter.in.listener.aws.dto.SnsNotificationDto;
 import com.recipia.member.application.port.in.MemberEventRecordUseCase;
 import com.recipia.member.common.utils.MemberStringUtils;

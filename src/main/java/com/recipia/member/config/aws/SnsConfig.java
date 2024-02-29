@@ -9,7 +9,9 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
 
-
+/**
+ * AWS SNS 설정 클래스
+ */
 @Getter
 @Configuration
 public class SnsConfig {

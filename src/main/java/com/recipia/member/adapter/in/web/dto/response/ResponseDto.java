@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * 공통으로 사용되는 ResponseDTO
+ */
 @Getter
 @AllArgsConstructor
 public class ResponseDto<T> {

@@ -96,7 +96,7 @@ public class MemberManagementController {
     }
 
     /**
-     * 닉네임 상세에 보여줄 회원 프로필 사진 요청
+     * 레시피 상세에 보여줄 회원 프로필 사진 요청
      */
     @PostMapping("/getProfile")
     public ResponseEntity<ResponseDto<String>> getProfileImage(@Valid @RequestBody MemberProfileRequestDto dto) {
